@@ -1,4 +1,4 @@
-// src/App.tsx – FULLY UPDATED WITH ALL NEW DASHBOARD PAGES + FIXES
+// src/App.tsx – FULLY UPDATED WITH FAQ PAGE ROUTING
 import React, { Component, Suspense, type ReactNode, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
@@ -18,6 +18,7 @@ const GenerateModelPage = React.lazy(() => import("./pages/GenerateModelPage"));
 const UploadIFCPage = React.lazy(() => import("./pages/UploadIFCPage"));           // Public /upload
 const FeaturesPage = React.lazy(() => import("./pages/FeaturesPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
+const FAQPage = React.lazy(() => import("./pages/FAQPage")); // ADDED FAQ PAGE
 const ProjectsPageLanding = React.lazy(() => import("./pages/ProjectsPage"));
 const BlogPage = React.lazy(() => import("./pages/BlogPage"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage"));
@@ -36,7 +37,7 @@ const DashboardTemplates = React.lazy(() => import("./pages/dashboard/TemplatesP
 const DashboardSettings = React.lazy(() => import("./pages/dashboard/SettingsPage"));
 const DashboardProfile = React.lazy(() => import("./pages/dashboard/ProfilePage"));
 
-// === NEW DASHBOARD PAGES (ALL IMPORTED) ===
+// Dashboard Pages
 const ApiAccessPage = React.lazy(() => import("./pages/dashboard/ApiAccessPage"));
 const ClashDetectionPage = React.lazy(() => import("./pages/dashboard/ClashDetectionPage"));
 const CostEstimationPage = React.lazy(() => import("./pages/dashboard/CostEstimationPage"));
@@ -45,7 +46,7 @@ const DashboardUploadIFCPage = React.lazy(() => import("./pages/dashboard/Upload
 const ProjectSchedulingPage = React.lazy(() => import("./pages/dashboard/ProjectSchedulingPage"));
 const ScenarioManagerPage = React.lazy(() => import("./pages/dashboard/ScenarioManagerPage"));
 
-// Error Boundary, ScrollToTop, LoadingFallback (unchanged)
+// Error Boundary, ScrollToTop, LoadingFallback
 interface ErrorBoundaryState { hasError: boolean; }
 class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
   constructor(props: { children: ReactNode }) { super(props); this.state = { hasError: false }; }
@@ -112,6 +113,7 @@ const AppContent: React.FC = () => {
             <Route path="/upload" element={<UploadIFCPage />} />
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/faq" element={<FAQPage />} /> {/* ADDED FAQ ROUTE */}
             <Route path="/projects" element={<ProjectsPageLanding />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
@@ -121,7 +123,7 @@ const AppContent: React.FC = () => {
             <Route path="/book-demo" element={<BookDemoPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-            {/* DASHBOARD – ALL NEW PAGES ADDED */}
+            {/* DASHBOARD */}
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<DashboardOverview />} />
               <Route path="projects" element={<DashboardProjects />} />
@@ -132,7 +134,7 @@ const AppContent: React.FC = () => {
               <Route path="settings" element={<DashboardSettings />} />
               <Route path="profile" element={<DashboardProfile />} />
 
-              {/* === NEW ROUTES === */}
+              {/* Dashboard Routes */}
               <Route path="api" element={<ApiAccessPage />} />
               <Route path="clash-detection" element={<ClashDetectionPage />} />
               <Route path="cost-estimation" element={<CostEstimationPage />} />

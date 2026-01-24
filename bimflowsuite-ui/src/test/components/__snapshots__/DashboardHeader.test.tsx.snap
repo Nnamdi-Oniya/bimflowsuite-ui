@@ -1,0 +1,231 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DashboardHeader snapshot 1`] = `
+<div>
+  <header
+    class="dashboard-header"
+  >
+    <div
+      class="dashboard-header__container"
+    >
+      <div
+        class="header-left"
+      >
+        <button
+          aria-label="Toggle sidebar"
+          class="menu-toggle"
+        >
+          <svg
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+          >
+            <line
+              x1="3"
+              x2="21"
+              y1="12"
+              y2="12"
+            />
+            <line
+              x1="3"
+              x2="21"
+              y1="6"
+              y2="6"
+            />
+            <line
+              x1="3"
+              x2="21"
+              y1="18"
+              y2="18"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="dashboard-actions"
+      >
+        <button
+          class="action-btn"
+          title="Notifications"
+        >
+          <svg
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+          >
+            <path
+              d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+            />
+            <path
+              d="M13.73 21a2 2 0 0 1-3.46 0"
+            />
+          </svg>
+          <span
+            class="notification-badge"
+          />
+        </button>
+        <button
+          aria-label="Toggle dark mode"
+          class="action-btn theme-toggle-btn"
+          title="Toggle theme"
+        >
+          <svg
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+          >
+            <path
+              d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="user-profile-wrapper"
+        >
+          <button
+            aria-expanded="false"
+            aria-label="User menu"
+            class="user-profile "
+          >
+            <img
+              alt="Nnamdi Oniya"
+              class="avatar"
+              src="https://ui-avatars.com/api/?name=Nnamdi+Oniya&background=4ade80&color=1f2937&bold=true"
+            />
+            <svg
+              class="chevron-icon "
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.5"
+              style="transition: transform 0.25s ease;"
+              viewBox="0 0 24 24"
+              width="16"
+            >
+              <polyline
+                points="6 9 12 15 18 9"
+              />
+            </svg>
+          </button>
+          <div
+            class="user-dropdown "
+          >
+            <div
+              class="dropdown-header"
+            >
+              <div
+                class="dropdown-user-name"
+              >
+                Nnamdi Oniya
+              </div>
+              <div
+                class="dropdown-user-email"
+              >
+                nnamdi.oniya@bimflow.com
+              </div>
+            </div>
+            <div
+              class="dropdown-menu"
+            >
+              <a
+                class="dropdown-item"
+                data-discover="true"
+                href="/dashboard/profile"
+              >
+                <svg
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                >
+                  <path
+                    d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                  />
+                  <circle
+                    cx="12"
+                    cy="7"
+                    r="4"
+                  />
+                </svg>
+                <span>
+                  Profile
+                </span>
+              </a>
+              <a
+                class="dropdown-item"
+                data-discover="true"
+                href="/dashboard/settings"
+              >
+                <svg
+                  fill="none"
+                  height="20"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="20"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                  />
+                </svg>
+                <span>
+                  Settings
+                </span>
+              </a>
+              <div
+                class="dropdown-divider"
+              />
+              <button
+                class="dropdown-item logout"
+              >
+                <svg
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                >
+                  <path
+                    d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+                  />
+                  <polyline
+                    points="16 17 21 12 16 7"
+                  />
+                  <line
+                    x1="21"
+                    x2="9"
+                    y1="12"
+                    y2="12"
+                  />
+                </svg>
+                <span>
+                  Sign Out
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+`;

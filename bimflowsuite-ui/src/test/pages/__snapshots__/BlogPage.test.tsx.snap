@@ -1,0 +1,754 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BlogPage snapshot 1`] = `
+<div>
+  <div
+    class="app-container"
+  >
+    <main
+      class="main-content"
+      role="main"
+    >
+      <div
+        class="blog-page"
+      >
+        <section
+          class="blog-hero"
+          style="background-image: linear-gradient(rgba(78, 68, 60, 0.6), rgba(42, 36, 32, 0.6)), url("/src/assets/images/blog-hero.jpg"); background-size: cover; background-position: center center; background-attachment: fixed;"
+        >
+          <div
+            class="blog-hero__overlay"
+          />
+          <div
+            class="blog-hero__content"
+          >
+            <div
+              class="hero-badge"
+            >
+              <span
+                class="badge-icon"
+              >
+                📝
+              </span>
+              <span>
+                Insights & Tutorials
+              </span>
+            </div>
+            <h1
+              class="blog-hero__title"
+            >
+              BIMFlow Suite Blog
+            </h1>
+            <p
+              class="blog-hero__subtitle"
+            >
+              Expert insights, tutorials, and industry news about BIM automation, digital construction, and open-source innovation.
+            </p>
+          </div>
+        </section>
+        <section
+          class="featured-post-section"
+        >
+          <div
+            class="section-container"
+          >
+            <h2
+              class="section-label"
+            >
+              Featured Article
+            </h2>
+            <div
+              class="featured-post"
+            >
+              <div
+                class="featured-post__image-wrapper"
+              >
+                <img
+                  alt="Getting Started with BIMFlow Suite: A Complete Guide"
+                  class="featured-post__image"
+                  src="/src/assets/images/blog-tutorial.jpg"
+                />
+                <div
+                  class="featured-badge"
+                >
+                  ⭐ Featured
+                </div>
+              </div>
+              <div
+                class="featured-post__content"
+              >
+                <div
+                  class="post-meta"
+                >
+                  <span
+                    class="post-category"
+                  >
+                    tutorials
+                  </span>
+                  <span
+                    class="post-date"
+                  >
+                    November 15, 2025
+                  </span>
+                  <span
+                    class="post-read-time"
+                  >
+                    ⏱️ 
+                    8 min read
+                  </span>
+                </div>
+                <h2
+                  class="featured-post__title"
+                >
+                  Getting Started with BIMFlow Suite: A Complete Guide
+                </h2>
+                <p
+                  class="featured-post__excerpt"
+                >
+                  Learn how to create your first BIM model using intent-driven modeling. This comprehensive guide covers everything from installation to your first project.
+                </p>
+                <div
+                  class="featured-post__footer"
+                >
+                  <div
+                    class="post-author"
+                  >
+                    <div
+                      class="author-avatar"
+                    >
+                      👤
+                    </div>
+                    <span
+                      class="author-name"
+                    >
+                      Nnamdi Oniya
+                    </span>
+                  </div>
+                  <button
+                    class="read-more-btn"
+                  >
+                    Read Article →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="category-filter-section"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="category-filters"
+            >
+              <button
+                class="category-btn category-btn--active"
+              >
+                All Posts
+              </button>
+              <button
+                class="category-btn "
+              >
+                Tutorials
+              </button>
+              <button
+                class="category-btn "
+              >
+                Industry News
+              </button>
+              <button
+                class="category-btn "
+              >
+                Case Studies
+              </button>
+              <button
+                class="category-btn "
+              >
+                Technical
+              </button>
+            </div>
+          </div>
+        </section>
+        <section
+          class="blog-posts-section"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="blog-posts-grid"
+            >
+              <article
+                class="blog-post-card"
+              >
+                <div
+                  class="blog-post-card__image-wrapper"
+                >
+                  <img
+                    alt="The Future of BIM: Open Standards and SME Adoption"
+                    class="blog-post-card__image"
+                    src="/src/assets/images/DigitalConstruction.jpg"
+                  />
+                  <span
+                    class="post-category-badge"
+                  >
+                    industry
+                  </span>
+                </div>
+                <div
+                  class="blog-post-card__content"
+                >
+                  <div
+                    class="post-meta"
+                  >
+                    <span
+                      class="post-date"
+                    >
+                      November 10, 2025
+                    </span>
+                    <span
+                      class="post-read-time"
+                    >
+                      ⏱️ 
+                      6 min read
+                    </span>
+                  </div>
+                  <h3
+                    class="blog-post-card__title"
+                  >
+                    The Future of BIM: Open Standards and SME Adoption
+                  </h3>
+                  <p
+                    class="blog-post-card__excerpt"
+                  >
+                    Exploring how open-source BIM tools are democratizing digital construction and enabling SMEs to compete in the modern construction landscape.
+                  </p>
+                  <div
+                    class="blog-post-card__tags"
+                  >
+                    <span
+                      class="post-tag"
+                    >
+                      Industry
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Open Source
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Trends
+                    </span>
+                  </div>
+                  <div
+                    class="blog-post-card__footer"
+                  >
+                    <div
+                      class="post-author-small"
+                    >
+                      <span
+                        class="author-icon"
+                      >
+                        👤
+                      </span>
+                      <span>
+                        Engineering Team
+                      </span>
+                    </div>
+                    <button
+                      class="read-link"
+                    >
+                      Read More →
+                    </button>
+                  </div>
+                </div>
+              </article>
+              <article
+                class="blog-post-card"
+              >
+                <div
+                  class="blog-post-card__image-wrapper"
+                >
+                  <img
+                    alt="How SME Contractors Reduced Project Time by 40%"
+                    class="blog-post-card__image"
+                    src="/src/assets/images/BIMWorkflow.jpg"
+                  />
+                  <span
+                    class="post-category-badge"
+                  >
+                    case-studies
+                  </span>
+                </div>
+                <div
+                  class="blog-post-card__content"
+                >
+                  <div
+                    class="post-meta"
+                  >
+                    <span
+                      class="post-date"
+                    >
+                      November 5, 2025
+                    </span>
+                    <span
+                      class="post-read-time"
+                    >
+                      ⏱️ 
+                      10 min read
+                    </span>
+                  </div>
+                  <h3
+                    class="blog-post-card__title"
+                  >
+                    How SME Contractors Reduced Project Time by 40%
+                  </h3>
+                  <p
+                    class="blog-post-card__excerpt"
+                  >
+                    Real-world case study of a UK construction firm that automated their BIM workflow using BIMFlow Suite, achieving significant time and cost savings.
+                  </p>
+                  <div
+                    class="blog-post-card__tags"
+                  >
+                    <span
+                      class="post-tag"
+                    >
+                      Case Study
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      ROI
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Success Story
+                    </span>
+                  </div>
+                  <div
+                    class="blog-post-card__footer"
+                  >
+                    <div
+                      class="post-author-small"
+                    >
+                      <span
+                        class="author-icon"
+                      >
+                        👤
+                      </span>
+                      <span>
+                        Success Stories
+                      </span>
+                    </div>
+                    <button
+                      class="read-link"
+                    >
+                      Read More →
+                    </button>
+                  </div>
+                </div>
+              </article>
+              <article
+                class="blog-post-card"
+              >
+                <div
+                  class="blog-post-card__image-wrapper"
+                >
+                  <img
+                    alt="Understanding IFC 4.3: What's New for Infrastructure"
+                    class="blog-post-card__image"
+                    src="/src/assets/images/Infrastructure.jpg"
+                  />
+                  <span
+                    class="post-category-badge"
+                  >
+                    technical
+                  </span>
+                </div>
+                <div
+                  class="blog-post-card__content"
+                >
+                  <div
+                    class="post-meta"
+                  >
+                    <span
+                      class="post-date"
+                    >
+                      October 28, 2025
+                    </span>
+                    <span
+                      class="post-read-time"
+                    >
+                      ⏱️ 
+                      12 min read
+                    </span>
+                  </div>
+                  <h3
+                    class="blog-post-card__title"
+                  >
+                    Understanding IFC 4.3: What's New for Infrastructure
+                  </h3>
+                  <p
+                    class="blog-post-card__excerpt"
+                  >
+                    Deep dive into IFC 4.3 standards and how BIMFlow Suite leverages these for multi-asset support across buildings, bridges, and roads.
+                  </p>
+                  <div
+                    class="blog-post-card__tags"
+                  >
+                    <span
+                      class="post-tag"
+                    >
+                      IFC
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Standards
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Infrastructure
+                    </span>
+                  </div>
+                  <div
+                    class="blog-post-card__footer"
+                  >
+                    <div
+                      class="post-author-small"
+                    >
+                      <span
+                        class="author-icon"
+                      >
+                        👤
+                      </span>
+                      <span>
+                        Technical Team
+                      </span>
+                    </div>
+                    <button
+                      class="read-link"
+                    >
+                      Read More →
+                    </button>
+                  </div>
+                </div>
+              </article>
+              <article
+                class="blog-post-card"
+              >
+                <div
+                  class="blog-post-card__image-wrapper"
+                >
+                  <img
+                    alt="Automated Compliance Checking: Step-by-Step Guide"
+                    class="blog-post-card__image"
+                    src="/src/assets/images/Compliance.jpg"
+                  />
+                  <span
+                    class="post-category-badge"
+                  >
+                    tutorials
+                  </span>
+                </div>
+                <div
+                  class="blog-post-card__content"
+                >
+                  <div
+                    class="post-meta"
+                  >
+                    <span
+                      class="post-date"
+                    >
+                      October 20, 2025
+                    </span>
+                    <span
+                      class="post-read-time"
+                    >
+                      ⏱️ 
+                      15 min read
+                    </span>
+                  </div>
+                  <h3
+                    class="blog-post-card__title"
+                  >
+                    Automated Compliance Checking: Step-by-Step Guide
+                  </h3>
+                  <p
+                    class="blog-post-card__excerpt"
+                  >
+                    Master the compliance engine with this detailed tutorial on setting up rule packs and running automated validation checks on your BIM models.
+                  </p>
+                  <div
+                    class="blog-post-card__tags"
+                  >
+                    <span
+                      class="post-tag"
+                    >
+                      Compliance
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Tutorial
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Automation
+                    </span>
+                  </div>
+                  <div
+                    class="blog-post-card__footer"
+                  >
+                    <div
+                      class="post-author-small"
+                    >
+                      <span
+                        class="author-icon"
+                      >
+                        👤
+                      </span>
+                      <span>
+                        Nnamdi Oniya
+                      </span>
+                    </div>
+                    <button
+                      class="read-link"
+                    >
+                      Read More →
+                    </button>
+                  </div>
+                </div>
+              </article>
+              <article
+                class="blog-post-card"
+              >
+                <div
+                  class="blog-post-card__image-wrapper"
+                >
+                  <img
+                    alt="BIM Adoption Trends in 2025: What SMEs Need to Know"
+                    class="blog-post-card__image"
+                    src="/src/assets/images/SMETrends.jpg"
+                  />
+                  <span
+                    class="post-category-badge"
+                  >
+                    industry
+                  </span>
+                </div>
+                <div
+                  class="blog-post-card__content"
+                >
+                  <div
+                    class="post-meta"
+                  >
+                    <span
+                      class="post-date"
+                    >
+                      October 12, 2025
+                    </span>
+                    <span
+                      class="post-read-time"
+                    >
+                      ⏱️ 
+                      7 min read
+                    </span>
+                  </div>
+                  <h3
+                    class="blog-post-card__title"
+                  >
+                    BIM Adoption Trends in 2025: What SMEs Need to Know
+                  </h3>
+                  <p
+                    class="blog-post-card__excerpt"
+                  >
+                    Analysis of current BIM adoption rates, barriers facing SMEs, and how open-source solutions are changing the game.
+                  </p>
+                  <div
+                    class="blog-post-card__tags"
+                  >
+                    <span
+                      class="post-tag"
+                    >
+                      Trends
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      SME
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Market Analysis
+                    </span>
+                  </div>
+                  <div
+                    class="blog-post-card__footer"
+                  >
+                    <div
+                      class="post-author-small"
+                    >
+                      <span
+                        class="author-icon"
+                      >
+                        👤
+                      </span>
+                      <span>
+                        Industry Insights
+                      </span>
+                    </div>
+                    <button
+                      class="read-link"
+                    >
+                      Read More →
+                    </button>
+                  </div>
+                </div>
+              </article>
+              <article
+                class="blog-post-card"
+              >
+                <div
+                  class="blog-post-card__image-wrapper"
+                >
+                  <img
+                    alt="Open Source BIM: Revolutionizing Construction Workflows"
+                    class="blog-post-card__image"
+                    src="/src/assets/images/OpenSourceBIM.jpg"
+                  />
+                  <span
+                    class="post-category-badge"
+                  >
+                    case-studies
+                  </span>
+                </div>
+                <div
+                  class="blog-post-card__content"
+                >
+                  <div
+                    class="post-meta"
+                  >
+                    <span
+                      class="post-date"
+                    >
+                      October 5, 2025
+                    </span>
+                    <span
+                      class="post-read-time"
+                    >
+                      ⏱️ 
+                      9 min read
+                    </span>
+                  </div>
+                  <h3
+                    class="blog-post-card__title"
+                  >
+                    Open Source BIM: Revolutionizing Construction Workflows
+                  </h3>
+                  <p
+                    class="blog-post-card__excerpt"
+                  >
+                    Case study on how open-source BIM tools like BIMFlow Suite are transforming traditional construction processes for global teams.
+                  </p>
+                  <div
+                    class="blog-post-card__tags"
+                  >
+                    <span
+                      class="post-tag"
+                    >
+                      Open Source
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Case Study
+                    </span>
+                    <span
+                      class="post-tag"
+                    >
+                      Workflow
+                    </span>
+                  </div>
+                  <div
+                    class="blog-post-card__footer"
+                  >
+                    <div
+                      class="post-author-small"
+                    >
+                      <span
+                        class="author-icon"
+                      >
+                        👤
+                      </span>
+                      <span>
+                        Case Studies Team
+                      </span>
+                    </div>
+                    <button
+                      class="read-link"
+                    >
+                      Read More →
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+        <section
+          class="newsletter-section"
+        >
+          <div
+            class="newsletter-container"
+          >
+            <div
+              class="newsletter-content"
+            >
+              <h2
+                class="newsletter-title"
+              >
+                Stay Updated
+              </h2>
+              <p
+                class="newsletter-text"
+              >
+                Get the latest BIM insights, tutorials, and industry news delivered to your inbox. Join 1,000+ construction professionals.
+              </p>
+              <form
+                class="newsletter-form"
+              >
+                <input
+                  class="newsletter-input"
+                  placeholder="Enter your email address"
+                  type="email"
+                />
+                <button
+                  class="newsletter-btn"
+                  type="submit"
+                >
+                  Subscribe
+                </button>
+              </form>
+              <p
+                class="newsletter-privacy"
+              >
+                We respect your privacy. Unsubscribe anytime.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+`;

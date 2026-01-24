@@ -1,0 +1,117 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CTANewsSection snapshot 1`] = `
+<div>
+  <section
+    class="cta-section"
+  >
+    <div
+      class="cta-section__overlay"
+    />
+    <div
+      class="cta-section__container"
+    >
+      <div
+        class="cta-section__content"
+      >
+        <h2
+          class="cta-section__title"
+        >
+          Ready to Automate Your BIM Workflow?
+        </h2>
+        <p
+          class="cta-section__text"
+        >
+          Join thousands of SMEs already saving time and money with open-source BIM automation.
+        </p>
+        <button
+          class="cta-section__btn"
+        >
+          Get Started — It's Free
+        </button>
+      </div>
+    </div>
+  </section>
+  <section
+    class="latest-news"
+  >
+    <div
+      class="latest-news__container"
+    >
+      <h2
+        class="latest-news__title"
+      >
+        Latest Updates
+      </h2>
+      <div
+        class="latest-news__grid"
+      >
+        <div
+          class="latest-news__card"
+        >
+          <div
+            class="latest-news__date"
+          >
+            <span
+              class="latest-news__day"
+            >
+              18
+            </span>
+            <span
+              class="latest-news__month"
+            >
+              NOV
+            </span>
+          </div>
+          <div
+            class="latest-news__content"
+          >
+            <h3
+              class="latest-news__heading"
+            >
+              BIMFlow Suite v1.2 Released
+            </h3>
+            <p
+              class="latest-news__excerpt"
+            >
+              Full IFC 4.3 support, bridge & road asset packs, and enhanced compliance engine now live.
+            </p>
+          </div>
+        </div>
+        <div
+          class="latest-news__card"
+        >
+          <div
+            class="latest-news__date"
+          >
+            <span
+              class="latest-news__day"
+            >
+              05
+            </span>
+            <span
+              class="latest-news__month"
+            >
+              NOV
+            </span>
+          </div>
+          <div
+            class="latest-news__content"
+          >
+            <h3
+              class="latest-news__heading"
+            >
+              50+ GitHub Stars Achieved
+            </h3>
+            <p
+              class="latest-news__excerpt"
+            >
+              The community is growing fast — thank you for your support and contributions!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+`;

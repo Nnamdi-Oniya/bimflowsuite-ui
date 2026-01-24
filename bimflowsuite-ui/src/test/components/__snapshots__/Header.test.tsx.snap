@@ -1,0 +1,170 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Header snapshot 1`] = `
+<div>
+  <header
+    class="header"
+    role="banner"
+  >
+    <div
+      class="header__container"
+    >
+      <a
+        aria-label="BIMFlow Suite Home"
+        class="logo"
+        data-discover="true"
+        href="/"
+      >
+        <img
+          alt="BIMFlow Suite"
+          class="logo__image"
+          src="/src/assets/images/bimflow-logo.png"
+        />
+        <span
+          class="logo__text"
+        >
+          BIMFlow Suite
+        </span>
+      </a>
+      <nav
+        aria-label="Primary navigation"
+        class="nav"
+      >
+        <a
+          class="nav__link nav__link--active"
+          data-discover="true"
+          href="/"
+        >
+          Home
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/about"
+        >
+          About
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/features"
+        >
+          Features
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/projects"
+        >
+          Projects
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/blog"
+        >
+          Blog
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/faq"
+        >
+          FAQ
+        </a>
+      </nav>
+      <div
+        class="actions"
+      >
+        <a
+          class="btn btn--secondary"
+          data-discover="true"
+          href="/login"
+        >
+          Login
+        </a>
+        <button
+          class="btn btn--primary"
+        >
+          Get Started
+        </button>
+      </div>
+      <button
+        aria-expanded="false"
+        aria-label="Open menu"
+        class="menu-toggle"
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+    </div>
+    <div
+      class="mobile-menu "
+    >
+      <nav
+        class="mobile-nav"
+      >
+        <a
+          class="nav__link nav__link--active"
+          data-discover="true"
+          href="/"
+        >
+          Home
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/about"
+        >
+          About
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/features"
+        >
+          Features
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/projects"
+        >
+          Projects
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/blog"
+        >
+          Blog
+        </a>
+        <a
+          class="nav__link "
+          data-discover="true"
+          href="/faq"
+        >
+          FAQ
+        </a>
+        <div
+          class="mobile-actions"
+        >
+          <a
+            class="btn btn--secondary"
+            data-discover="true"
+            href="/login"
+          >
+            Login
+          </a>
+          <button
+            class="btn btn--primary"
+          >
+            Get Started
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+</div>
+`;

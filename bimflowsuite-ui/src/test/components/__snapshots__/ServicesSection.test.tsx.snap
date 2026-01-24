@@ -1,0 +1,241 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ServicesSection snapshot 1`] = `
+<div>
+  <section
+    class="services"
+    id="services"
+  >
+    <div
+      class="services__container"
+    >
+      <div
+        class="services__image-wrapper"
+      >
+        <img
+          alt="BIM model showing detailed architectural design with structural elements"
+          class="services__image"
+          src="/src/assets/images/Livingdrawing.png"
+        />
+        <div
+          class="services__image-overlay"
+        >
+          <div
+            class="services__badge"
+          >
+            <span
+              class="services__badge-icon"
+            >
+              🏗️
+            </span>
+            <span>
+              Live BIM Preview
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="services__content"
+      >
+        <h2
+          class="services__title"
+        >
+          Revolutionize Construction with
+          <span
+            class="services__title-accent"
+          >
+             BIMFlow Suite
+          </span>
+        </h2>
+        <p
+          class="services__description"
+        >
+          BIMFlow Suite transforms how architects, engineers, and contractors work. Generate IFC-compliant models from simple descriptions, automate compliance checks, and collaborate in real-time—all in one open-source platform built for the future of digital construction.
+        </p>
+        <div
+          class="services__buttons"
+        >
+          <button
+            class="services__btn services__btn--primary services__btn--gradient"
+          >
+            Try Interactive Demo
+          </button>
+          <button
+            class="services__btn services__btn--secondary"
+          >
+            Generate BIM Model
+          </button>
+        </div>
+        <div
+          class="services__cards"
+        >
+          <div
+            class="services__card"
+            data-3d="true"
+          >
+            <div
+              class="services__card-icon"
+            >
+              <svg
+                fill="none"
+                height="48"
+                viewBox="0 0 48 48"
+                width="48"
+              >
+                <rect
+                  fill="none"
+                  height="32"
+                  rx="4"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                  width="32"
+                  x="8"
+                  y="8"
+                />
+                <path
+                  d="M16 16L24 24L32 16"
+                  fill="none"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                />
+                <path
+                  d="M16 32L24 24L32 32"
+                  fill="none"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="24"
+                  cy="24"
+                  fill="#F8780F"
+                  r="3"
+                />
+              </svg>
+            </div>
+            <h3
+              class="services__card-title"
+            >
+              Intent Driven Modeling
+            </h3>
+            <p
+              class="services__card-text"
+            >
+              Describe your project in plain language and instantly generate IFC 4.3 compliant 3D models for buildings, bridges, and infrastructure.
+            </p>
+          </div>
+          <div
+            class="services__card"
+            data-3d="true"
+          >
+            <div
+              class="services__card-icon"
+            >
+              <svg
+                fill="none"
+                height="48"
+                viewBox="0 0 48 48"
+                width="48"
+              >
+                <path
+                  d="M24 4L8 14V34H40V14L24 4Z"
+                  fill="none"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                />
+                <path
+                  d="M18 24L22 28L30 20"
+                  stroke="#F8780F"
+                  stroke-linecap="round"
+                  stroke-width="3"
+                />
+                <rect
+                  fill="none"
+                  height="8"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                  width="16"
+                  x="16"
+                  y="32"
+                />
+              </svg>
+            </div>
+            <h3
+              class="services__card-title"
+            >
+              Automated Compliance
+            </h3>
+            <p
+              class="services__card-text"
+            >
+              Run thousands of regulatory checks in seconds with our rule-based engine. Ensure projects meet building codes and standards automatically.
+            </p>
+          </div>
+          <div
+            class="services__card"
+            data-3d="true"
+          >
+            <div
+              class="services__card-icon"
+            >
+              <svg
+                fill="none"
+                height="48"
+                viewBox="0 0 48 48"
+                width="48"
+              >
+                <rect
+                  fill="none"
+                  height="24"
+                  rx="3"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                  width="36"
+                  x="6"
+                  y="12"
+                />
+                <path
+                  d="M12 18H36"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                />
+                <path
+                  d="M12 24H36"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                />
+                <path
+                  d="M12 30H36"
+                  stroke="#F8780F"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="18"
+                  cy="36"
+                  fill="#F8780F"
+                  r="2"
+                />
+                <circle
+                  cx="30"
+                  cy="36"
+                  fill="#F8780F"
+                  r="2"
+                />
+              </svg>
+            </div>
+            <h3
+              class="services__card-title"
+            >
+              Multi Asset Support
+            </h3>
+            <p
+              class="services__card-text"
+            >
+              Handle buildings, roads, bridges, and high-rise structures with unified workflows. One platform for all your construction needs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+`;

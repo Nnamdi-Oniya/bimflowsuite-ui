@@ -1,8 +1,8 @@
-// src/components/Header.tsx – FINAL NOV 2025 (Image Logo Version)
+// src/components/Header.tsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GetStartedModal from "./GetStartedModal";
-import logo from "../assets/images/bimflow-logo.png";   // ← YOUR LOGO HERE
+import logo from "../assets/images/bimflow-logo.png";
 import "../assets/Header.css";
 
 type NavLink = { href: string; label: string };
@@ -18,42 +18,28 @@ const Header: React.FC = () => {
     { href: "/features", label: "Features" },
     { href: "/projects", label: "Projects" },
     { href: "/blog", label: "Blog" },
-    { href: "/#faq-section", label: "Faq" }, // CHANGED: "FAQ" to "Faq"
+    { href: "/faq", label: "FAQ" }, // Updated to point to FAQ page
   ];
 
   const toggleMobile = () => setOpen(prev => !prev);
   const openGetStartedModal = () => setIsGetStartedModalOpen(true);
 
-  // Effect to scroll to the hash section when the URL changes (e.g., after clicking Faq)
   useEffect(() => {
     if (location.hash) {
       const element = document.getElementById(location.hash.substring(1));
       if (element) {
-        // Use setTimeout to ensure the element is rendered and DOM is ready
-        // especially important if navigating from a different page to a hash on this page
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth' });
         }, 100); 
       }
-    } else {
-      // Optional: if you want to scroll to top when hash is cleared or on a new page without hash
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [location]); // Rerun this effect when location changes
+  }, [location]);
 
   const NavItem = ({ href, label }: NavLink) => {
-    // For hash links, check if the base path matches and the hash is present
-    const isActive = location.pathname === href.split('#')[0] && 
-                     (location.hash === (href.split('#')[1] ? `#${href.split('#')[1]}` : '')) ||
-                     (location.pathname === href && !href.includes('#'));
+    const isActive = location.pathname === href;
     
     const handleClick = () => {
-      setOpen(false); // Close mobile menu
-      if (href.includes('#')) {
-        // If it's a hash link, use Link component's default behavior,
-        // which will update location.hash and trigger the useEffect above.
-        // We don't need manual scroll here as useEffect handles it.
-      }
+      setOpen(false);
     };
 
     return (

@@ -1,0 +1,1056 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DashboardPage snapshot 1`] = `
+<div>
+  <section
+    class="dashboard-hero"
+  >
+    <div
+      class="dashboard-hero__content"
+    >
+      <div
+        class="dashboard-hero__welcome"
+      >
+        <h1>
+          Welcome back, Nnamdi
+        </h1>
+        <p>
+          Your open-source BIM automation hub — generate, validate, analyze, and deliver faster than ever.
+        </p>
+      </div>
+      <div
+        class="dashboard-hero__quick-actions"
+      >
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M21 15V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V15"
+              />
+              <path
+                d="M17 8L12 3L7 8"
+              />
+              <path
+                d="M12 3V15"
+              />
+            </svg>
+          </span>
+          Upload & Validate IFC
+        </button>
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M12 2L2 7L12 12L22 7L12 2Z"
+              />
+              <path
+                d="M2 17L12 22L22 17"
+              />
+              <path
+                d="M2 12L12 17L22 12"
+              />
+            </svg>
+          </span>
+          Generate New Model
+        </button>
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+              <path
+                d="M9 12L11 14L15 10"
+              />
+            </svg>
+          </span>
+          Run Compliance Check
+        </button>
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+              <path
+                d="M12 8V16"
+              />
+              <path
+                d="M8 12H16"
+              />
+            </svg>
+          </span>
+          Clash Detection
+        </button>
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M12 1V23"
+              />
+              <path
+                d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6"
+              />
+            </svg>
+          </span>
+          Cost Estimation
+        </button>
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <rect
+                height="18"
+                rx="2"
+                ry="2"
+                width="18"
+                x="3"
+                y="4"
+              />
+              <line
+                x1="16"
+                x2="16"
+                y1="2"
+                y2="6"
+              />
+              <line
+                x1="8"
+                x2="8"
+                y1="2"
+                y2="6"
+              />
+              <line
+                x1="3"
+                x2="21"
+                y1="10"
+                y2="10"
+              />
+            </svg>
+          </span>
+          Project Scheduling
+        </button>
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
+              />
+              <path
+                d="M14 2V8H20"
+              />
+              <path
+                d="M16 13H8"
+              />
+              <path
+                d="M16 17H8"
+              />
+              <path
+                d="M10 9H8"
+              />
+            </svg>
+          </span>
+          Reports Center
+        </button>
+        <button
+          class="quick-action-btn"
+        >
+          <span
+            class="quick-action-icon"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+              />
+              <path
+                d="M14 2V8H20"
+              />
+            </svg>
+          </span>
+          Asset Packs
+        </button>
+      </div>
+    </div>
+  </section>
+  <section
+    class="dashboard-stats"
+  >
+    <h2
+      class="section-title"
+    >
+      Your BIMFlow Performance
+    </h2>
+    <div
+      class="stats-grid"
+    >
+      <div
+        class="stat-card"
+        style="animation-delay: 0s;"
+      >
+        <div
+          class="stat-card__inner"
+        >
+          <div
+            class="stat-card__header"
+          >
+            <span
+              class="stat-icon"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="3"
+                />
+                <path
+                  d="M3 9H21"
+                />
+                <path
+                  d="M9 21V9"
+                />
+              </svg>
+            </span>
+            <div>
+              <h3
+                class="stat-label"
+              >
+                Active Projects
+              </h3>
+              <div
+                class="stat-card__value"
+              >
+                <span
+                  class="stat-number"
+                >
+                  18
+                </span>
+                <span
+                  class="stat-trend"
+                >
+                  +4
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="stat-card"
+        style="animation-delay: 0.1s;"
+      >
+        <div
+          class="stat-card__inner"
+        >
+          <div
+            class="stat-card__header"
+          >
+            <span
+              class="stat-icon"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <path
+                  d="M12 2L2 7L12 12L22 7L12 2Z"
+                />
+                <path
+                  d="M2 17L12 22L22 17"
+                />
+                <path
+                  d="M2 12L12 17L22 12"
+                />
+              </svg>
+            </span>
+            <div>
+              <h3
+                class="stat-label"
+              >
+                IFC Models Generated
+              </h3>
+              <div
+                class="stat-card__value"
+              >
+                <span
+                  class="stat-number"
+                >
+                  42
+                </span>
+                <span
+                  class="stat-trend"
+                >
+                  +12
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="stat-card"
+        style="animation-delay: 0.2s;"
+      >
+        <div
+          class="stat-card__inner"
+        >
+          <div
+            class="stat-card__header"
+          >
+            <span
+              class="stat-icon"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <path
+                  d="M9 12L11 14L15 10"
+                />
+              </svg>
+            </span>
+            <div>
+              <h3
+                class="stat-label"
+              >
+                Avg. Compliance Rate
+              </h3>
+              <div
+                class="stat-card__value"
+              >
+                <span
+                  class="stat-number"
+                >
+                  97%
+                </span>
+                <span
+                  class="stat-trend"
+                >
+                  +2.3%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="stat-card"
+        style="animation-delay: 0.30000000000000004s;"
+      >
+        <div
+          class="stat-card__inner"
+        >
+          <div
+            class="stat-card__header"
+          >
+            <span
+              class="stat-icon"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <path
+                  d="M12 1V23"
+                />
+                <path
+                  d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6"
+                />
+              </svg>
+            </span>
+            <div>
+              <h3
+                class="stat-label"
+              >
+                Total Cost Savings
+              </h3>
+              <div
+                class="stat-card__value"
+              >
+                <span
+                  class="stat-number"
+                >
+                  $128K
+                </span>
+                <span
+                  class="stat-trend"
+                >
+                  +28%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="stat-card"
+        style="animation-delay: 0.4s;"
+      >
+        <div
+          class="stat-card__inner"
+        >
+          <div
+            class="stat-card__header"
+          >
+            <span
+              class="stat-icon"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <path
+                  d="M12 8V16"
+                />
+                <path
+                  d="M8 12H16"
+                />
+              </svg>
+            </span>
+            <div>
+              <h3
+                class="stat-label"
+              >
+                Clashes Resolved
+              </h3>
+              <div
+                class="stat-card__value"
+              >
+                <span
+                  class="stat-number"
+                >
+                  156
+                </span>
+                <span
+                  class="stat-trend"
+                >
+                  +31
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="stat-card"
+        style="animation-delay: 0.5s;"
+      >
+        <div
+          class="stat-card__inner"
+        >
+          <div
+            class="stat-card__header"
+          >
+            <span
+              class="stat-icon"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <rect
+                  height="18"
+                  rx="2"
+                  ry="2"
+                  width="18"
+                  x="3"
+                  y="4"
+                />
+                <line
+                  x1="16"
+                  x2="16"
+                  y1="2"
+                  y2="6"
+                />
+                <line
+                  x1="8"
+                  x2="8"
+                  y1="2"
+                  y2="6"
+                />
+                <line
+                  x1="3"
+                  x2="21"
+                  y1="10"
+                  y2="10"
+                />
+              </svg>
+            </span>
+            <div>
+              <h3
+                class="stat-label"
+              >
+                On-Time Projects
+              </h3>
+              <div
+                class="stat-card__value"
+              >
+                <span
+                  class="stat-number"
+                >
+                  94%
+                </span>
+                <span
+                  class="stat-trend"
+                >
+                  +5%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section
+    class="dashboard-recent"
+  >
+    <div
+      class="section-header"
+    >
+      <h2
+        class="section-title"
+      >
+        Recent Projects
+      </h2>
+      <button
+        class="see-all-btn"
+      >
+        View All Projects →
+      </button>
+    </div>
+    <div
+      class="projects-grid"
+    >
+      <div
+        class="project-card"
+        style="animation-delay: 0s;"
+      >
+        <div
+          class="project-card__image"
+        >
+          <img
+            alt="Victoria High-Rise Complex"
+            src="/src/assets/images/office-tower.jpg"
+          />
+          <div
+            class="project-status-badge status-cost-estimation"
+          >
+            Cost Estimation
+          </div>
+        </div>
+        <div
+          class="project-card__details"
+        >
+          <h3>
+            Victoria High-Rise Complex
+          </h3>
+          <p
+            class="project-type"
+          >
+            High-Rise Building
+          </p>
+          <div
+            class="project-meta"
+          >
+            <div
+              class="compliance-meter"
+            >
+              <span>
+                Compliance: 
+                99%
+              </span>
+              <div
+                class="compliance-bar"
+              >
+                <div
+                  class="compliance-progress"
+                  style="width: 99%;"
+                />
+              </div>
+            </div>
+            <span
+              class="updated-time"
+            >
+              1 hour ago
+            </span>
+          </div>
+          <div
+            class="project-actions"
+          >
+            <button
+              class="project-action primary"
+            >
+              Open Project
+            </button>
+            <button
+              class="project-action secondary"
+            >
+              View Report
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="project-card"
+        style="animation-delay: 0.1s;"
+      >
+        <div
+          class="project-card__image"
+        >
+          <img
+            alt="River Bridge Extension"
+            src="/src/assets/images/bridge-expansion.jpg"
+          />
+          <div
+            class="project-status-badge status-clash-detection"
+          >
+            Clash Detection
+          </div>
+        </div>
+        <div
+          class="project-card__details"
+        >
+          <h3>
+            River Bridge Extension
+          </h3>
+          <p
+            class="project-type"
+          >
+            Bridge Infrastructure
+          </p>
+          <div
+            class="project-meta"
+          >
+            <div
+              class="compliance-meter"
+            >
+              <span>
+                Compliance: 
+                96%
+              </span>
+              <div
+                class="compliance-bar"
+              >
+                <div
+                  class="compliance-progress"
+                  style="width: 96%;"
+                />
+              </div>
+            </div>
+            <span
+              class="updated-time"
+            >
+              3 hours ago
+            </span>
+          </div>
+          <div
+            class="project-actions"
+          >
+            <button
+              class="project-action primary"
+            >
+              Open Project
+            </button>
+            <button
+              class="project-action secondary"
+            >
+              View Report
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="project-card"
+        style="animation-delay: 0.2s;"
+      >
+        <div
+          class="project-card__image"
+        >
+          <img
+            alt="Smart City Road Network"
+            src="/src/assets/images/urban-road.jpg"
+          />
+          <div
+            class="project-status-badge status-gantt-generated"
+          >
+            Gantt Generated
+          </div>
+        </div>
+        <div
+          class="project-card__details"
+        >
+          <h3>
+            Smart City Road Network
+          </h3>
+          <p
+            class="project-type"
+          >
+            Road Infrastructure
+          </p>
+          <div
+            class="project-meta"
+          >
+            <div
+              class="compliance-meter"
+            >
+              <span>
+                Compliance: 
+                94%
+              </span>
+              <div
+                class="compliance-bar"
+              >
+                <div
+                  class="compliance-progress"
+                  style="width: 94%;"
+                />
+              </div>
+            </div>
+            <span
+              class="updated-time"
+            >
+              6 hours ago
+            </span>
+          </div>
+          <div
+            class="project-actions"
+          >
+            <button
+              class="project-action primary"
+            >
+              Open Project
+            </button>
+            <button
+              class="project-action secondary"
+            >
+              View Report
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div
+    class="dashboard-columns"
+  >
+    <section
+      class="dashboard-tasks"
+    >
+      <h2
+        class="section-title"
+      >
+        Next Actions
+      </h2>
+      <div
+        class="tasks-list"
+      >
+        <div
+          class="task-item"
+        >
+          <div
+            class="task-icon"
+          >
+            📤
+          </div>
+          <div
+            class="task-details"
+          >
+            <h4>
+              Upload IFC for Bridge Project
+            </h4>
+            <p>
+              Run validation, clash detection and cost analysis
+            </p>
+          </div>
+          <div
+            class="task-meta"
+          >
+            <span
+              class="task-time"
+            >
+              Due today
+            </span>
+            <button
+              class="task-action"
+            >
+              Upload Now
+            </button>
+          </div>
+        </div>
+        <div
+          class="task-item"
+        >
+          <div
+            class="task-icon"
+          >
+            📐
+          </div>
+          <div
+            class="task-details"
+          >
+            <h4>
+              Generate High-Rise Model
+            </h4>
+            <p>
+              From intent: 45 floors, glass facade, green roof
+            </p>
+          </div>
+          <div
+            class="task-meta"
+          >
+            <span
+              class="task-time"
+            >
+              Due in 2 days
+            </span>
+            <button
+              class="task-action"
+            >
+              Generate
+            </button>
+          </div>
+        </div>
+        <div
+          class="task-item"
+        >
+          <div
+            class="task-icon"
+          >
+            📊
+          </div>
+          <div
+            class="task-details"
+          >
+            <h4>
+              Review Cost Report
+            </h4>
+            <p>
+              Road project estimate ready for approval
+            </p>
+          </div>
+          <div
+            class="task-meta"
+          >
+            <span
+              class="task-time"
+            >
+              Due in 3 days
+            </span>
+            <button
+              class="task-action"
+            >
+              Review
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="dashboard-insights"
+    >
+      <h2
+        class="section-title"
+      >
+        BIMFlow Insights
+      </h2>
+      <div
+        class="insights-grid"
+      >
+        <div
+          class="insight-card"
+        >
+          <h3>
+            Compliance Trends
+          </h3>
+          <div
+            class="insight-chart"
+          >
+            <div
+              class="chart-bars"
+            >
+              <div
+                class="chart-bar"
+                style="height: 78%;"
+              />
+              <div
+                class="chart-bar"
+                style="height: 92%;"
+              />
+              <div
+                class="chart-bar"
+                style="height: 96%;"
+              />
+              <div
+                class="chart-bar"
+                style="height: 99%;"
+              />
+            </div>
+          </div>
+          <p>
+            Average compliance up 21% since using BIMFlow Suite
+          </p>
+        </div>
+        <div
+          class="insight-card"
+        >
+          <h3>
+            Time Saved
+          </h3>
+          <div
+            class="insight-chart"
+          >
+            <div
+              class="chart-dots"
+            >
+              <div
+                class="chart-dot"
+                style="left: 20%; bottom: 25%;"
+              />
+              <div
+                class="chart-dot"
+                style="left: 40%; bottom: 55%;"
+              />
+              <div
+                class="chart-dot"
+                style="left: 60%; bottom: 70%;"
+              />
+              <div
+                class="chart-dot"
+                style="left: 80%; bottom: 90%;"
+              />
+            </div>
+          </div>
+          <p>
+            Automation saves 40+ hours per project
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+`;

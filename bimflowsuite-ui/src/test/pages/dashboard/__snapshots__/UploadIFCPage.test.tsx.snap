@@ -1,0 +1,320 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UploadIFCPage snapshot 1`] = `
+<div>
+  <div
+    class="upload-ifc-pro"
+  >
+    <div
+      class="upload-header-pro"
+    >
+      <h1>
+        Upload IFC Model
+      </h1>
+      <p>
+        Drop your .ifc file to instantly validate structure and generate 5D insights
+      </p>
+    </div>
+    <div
+      class="upload-card-pro"
+    >
+      <div
+        class="upload-dropzone"
+        role="presentation"
+        tabindex="0"
+      >
+        <input
+          accept="model/ifc,.ifc,.IFC,application/octet-stream,.ifc,.IFC"
+          multiple=""
+          style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+          tabindex="-1"
+          type="file"
+        />
+        <div
+          class="dropzone-content "
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-cloud-upload upload-icon"
+            fill="none"
+            height="64"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="64"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 13v8"
+            />
+            <path
+              d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"
+            />
+            <path
+              d="m8 17 4-4 4 4"
+            />
+          </svg>
+          <h3>
+            Drag & drop your IFC file
+          </h3>
+          <p>
+            or 
+            <span
+              class="browse-link"
+            >
+              click to browse
+            </span>
+          </p>
+          <small>
+            Supports .ifc • Max 100MB • Auto 3D model generation
+          </small>
+        </div>
+      </div>
+      <div
+        class="features-pro"
+      >
+        <h3>
+          Automatic Analysis Includes
+        </h3>
+        <div
+          class="features-grid-pro"
+        >
+          <div
+            class="feature-item active"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              IFC Schema Validation
+            </span>
+          </div>
+          <div
+            class="feature-item active"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              3D Model Generation
+            </span>
+          </div>
+          <div
+            class="feature-item"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              Clash Detection (Hard/Soft)
+            </span>
+          </div>
+          <div
+            class="feature-item"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              Compliance Checking
+            </span>
+          </div>
+          <div
+            class="feature-item"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              Quantity Takeoff
+            </span>
+          </div>
+          <div
+            class="feature-item"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              5D Cost Estimation
+            </span>
+          </div>
+          <div
+            class="feature-item"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              4D Schedule Generation
+            </span>
+          </div>
+          <div
+            class="feature-item"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-circle-check-big"
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.801 10A10 10 0 1 1 17 3.335"
+              />
+              <path
+                d="m9 11 3 3L22 4"
+              />
+            </svg>
+            <span>
+              BCF & PDF Reports
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="upload-actions-pro"
+      >
+        <button
+          class="btn outline"
+        >
+          ← Back to Dashboard
+        </button>
+        <button
+          class="btn primary large"
+          disabled=""
+        >
+          🚀 Generate 3D Model & Analyze
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,241 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProjectsTestimonialsSection snapshot 1`] = `
+<div>
+  <section
+    class="latest-projects"
+  >
+    <div
+      class="latest-projects__container"
+    >
+      <h2
+        class="latest-projects__title"
+      >
+        Our Latest Projects
+      </h2>
+      <div
+        class="latest-projects__grid"
+      >
+        <div
+          class="latest-projects__item"
+        >
+          <img
+            alt="Modern living room with refined textures"
+            class="latest-projects__image"
+            src="/src/assets/images/ModernLivingRoom.jpg"
+          />
+        </div>
+        <div
+          class="latest-projects__item"
+        >
+          <img
+            alt="Elegant and serene bedroom design"
+            class="latest-projects__image"
+            src="/src/assets/images/Bedroom.jpg"
+          />
+        </div>
+        <div
+          class="latest-projects__item"
+        >
+          <img
+            alt="Spacious living area with minimal aesthetic"
+            class="latest-projects__image"
+            src="/src/assets/images/LivingSpace.jpg"
+          />
+        </div>
+        <div
+          class="latest-projects__item"
+        >
+          <img
+            alt="Minimalist interior with sleek details"
+            class="latest-projects__image"
+            src="/src/assets/images/MinimalistInterior.jpg"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section
+    class="unique-design"
+  >
+    <div
+      class="unique-design__container"
+    >
+      <div
+        class="unique-design__images"
+      >
+        <div
+          class="unique-design__image-large"
+        >
+          <img
+            alt="Unique interior design showcase"
+            class="unique-design__img"
+            src="/src/assets/images/InteriorDesign.jpg"
+          />
+        </div>
+        <div
+          class="unique-design__image-grid"
+        >
+          <img
+            alt="Modern design perspective"
+            class="unique-design__img"
+            src="/src/assets/images/ModernDesign.jpg"
+          />
+          <img
+            alt="Contemporary living inspiration"
+            class="unique-design__img"
+            src="/src/assets/images/ContemporaryDesign.jpg"
+          />
+          <img
+            alt="Luxury interior detail"
+            class="unique-design__img"
+            src="/src/assets/images/InteriorDesign.jpg"
+          />
+        </div>
+      </div>
+      <div
+        class="unique-design__content"
+      >
+        <h2
+          class="unique-design__title"
+        >
+          We Create Distinctive Spaces
+        </h2>
+        <p
+          class="unique-design__text"
+        >
+          we believe every space tells a story. Our designs blend functionality with elegance — balancing natural textures, modern aesthetics, and sustainable materials to craft experiences that feel as good as they look.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section
+    class="testimonials"
+  >
+    <div
+      class="testimonials__container"
+    >
+      <h2
+        class="testimonials__title"
+      >
+        What Our Clients Say
+      </h2>
+      <div
+        class="testimonials__grid"
+      >
+        <div
+          class="testimonials__card"
+        >
+          <div
+            class="testimonials__quote-icon"
+          >
+            <svg
+              fill="#F8780F"
+              height="32"
+              viewBox="0 0 40 32"
+              width="40"
+            >
+              <path
+                d="M0 32V16C0 7.168 4.8 0 16 0v6.4C10.4 6.4 8 10.4 8 16h8v16H0zm24 0V16c0-8.832 4.8-16 16-16v6.4c-5.6 0-8 4-8 9.6h8v16H24z"
+              />
+            </svg>
+          </div>
+          <p
+            class="testimonials__text"
+          >
+            “Elefthéros completely transformed our home. Every detail feels intentional and inspiring — it’s more than design, it’s a lifestyle upgrade.”
+          </p>
+          <div
+            class="testimonials__author"
+          >
+            <h4
+              class="testimonials__name"
+            >
+              Giaza Zakarberg
+            </h4>
+            <p
+              class="testimonials__role"
+            >
+              Homeowner
+            </p>
+          </div>
+        </div>
+        <div
+          class="testimonials__card"
+        >
+          <div
+            class="testimonials__quote-icon"
+          >
+            <svg
+              fill="#F8780F"
+              height="32"
+              viewBox="0 0 40 32"
+              width="40"
+            >
+              <path
+                d="M0 32V16C0 7.168 4.8 0 16 0v6.4C10.4 6.4 8 10.4 8 16h8v16H0zm24 0V16c0-8.832 4.8-16 16-16v6.4c-5.6 0-8 4-8 9.6h8v16H24z"
+              />
+            </svg>
+          </div>
+          <p
+            class="testimonials__text"
+          >
+            “Their creativity and attention to detail exceeded our expectations. Our new office now reflects who we are — sleek, modern, and efficient.”
+          </p>
+          <div
+            class="testimonials__author"
+          >
+            <h4
+              class="testimonials__name"
+            >
+              Robert Arejino
+            </h4>
+            <p
+              class="testimonials__role"
+            >
+              Product Manager
+            </p>
+          </div>
+        </div>
+        <div
+          class="testimonials__card"
+        >
+          <div
+            class="testimonials__quote-icon"
+          >
+            <svg
+              fill="#F8780F"
+              height="32"
+              viewBox="0 0 40 32"
+              width="40"
+            >
+              <path
+                d="M0 32V16C0 7.168 4.8 0 16 0v6.4C10.4 6.4 8 10.4 8 16h8v16H0zm24 0V16c0-8.832 4.8-16 16-16v6.4c-5.6 0-8 4-8 9.6h8v16H24z"
+              />
+            </svg>
+          </div>
+          <p
+            class="testimonials__text"
+          >
+            “From consultation to execution, delivered perfection. The ambiance they created is both timeless and breathtaking.”
+          </p>
+          <div
+            class="testimonials__author"
+          >
+            <h4
+              class="testimonials__name"
+            >
+              Mahmud Pardo
+            </h4>
+            <p
+              class="testimonials__role"
+            >
+              CEO, Pardo Group
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+`;

@@ -1,0 +1,124 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProjectSchedulingPage snapshot 1`] = `
+<div>
+  <div
+    class="dashboard-schedule-pro"
+  >
+    <div
+      class="dashboard-schedule-pro__header"
+    >
+      <h1>
+        Project Scheduling
+      </h1>
+      <p>
+        Interactive 18-month construction schedule auto-generated from IFC elements and 4D logic
+      </p>
+      <div
+        class="schedule-summary"
+      >
+        <div
+          class="summary-item"
+        >
+          <span>
+            Start Date
+          </span>
+          <strong>
+            January 1, 2026
+          </strong>
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span>
+            Planned Finish
+          </span>
+          <strong>
+            June 30, 2027
+          </strong>
+        </div>
+        <div
+          class="summary-item"
+        >
+          <span>
+            Total Duration
+          </span>
+          <strong>
+            546 days
+          </strong>
+        </div>
+        <div
+          class="summary-item critical"
+        >
+          <span>
+            Critical Path
+          </span>
+          <strong>
+            482 days
+          </strong>
+        </div>
+      </div>
+    </div>
+    <div
+      class="gantt-container"
+    >
+      <div
+        style="width: 100%; height: 100%;"
+      />
+    </div>
+    <div
+      class="gantt-actions-pro"
+    >
+      <button
+        class="btn primary"
+      >
+        Export as PDF
+      </button>
+      <button
+        class="btn secondary"
+      >
+        Export CSV
+      </button>
+      <button
+        class="btn outline"
+      >
+        Link to Primavera P6
+      </button>
+    </div>
+    <div
+      class="legend"
+    >
+      <span>
+        <i
+          style="background: rgb(239, 68, 68);"
+        />
+         Critical Path
+      </span>
+      <span>
+        <i
+          style="background: rgb(16, 185, 129);"
+        />
+         Foundation
+      </span>
+      <span>
+        <i
+          style="background: rgb(59, 130, 246);"
+        />
+         Structure
+      </span>
+      <span>
+        <i
+          style="background: rgb(139, 92, 246);"
+        />
+         MEP
+      </span>
+      <span>
+        <i
+          style="background: rgb(245, 158, 11);"
+        />
+         Finishes
+      </span>
+    </div>
+  </div>
+</div>
+`;
