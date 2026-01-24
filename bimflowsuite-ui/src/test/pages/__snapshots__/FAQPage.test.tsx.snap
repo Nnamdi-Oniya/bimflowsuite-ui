@@ -1,0 +1,371 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FAQPage snapshot 1`] = `
+<div>
+  <div
+    class="app-container"
+  >
+    <main
+      class="main-content"
+      role="main"
+    >
+      <div
+        class="faq-page"
+      >
+        <section
+          class="faq-hero"
+          style="background-image: linear-gradient(rgba(78, 68, 60, 0.6), rgba(42, 36, 32, 0.6)), url("/src/assets/images/faq-hero.jpg"); background-size: cover; background-position: center center; background-attachment: fixed;"
+        >
+          <div
+            class="faq-hero__overlay"
+          />
+          <div
+            class="faq-hero__content"
+          >
+            <h1
+              class="faq-hero__title"
+            >
+              Frequently Asked Questions
+            </h1>
+            <p
+              class="faq-hero__subtitle"
+            >
+              Find answers to common questions about BIMFlow Suite, from technical specifications to licensing and support.
+            </p>
+          </div>
+        </section>
+        <section
+          class="faq-content"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="faq-categories"
+            >
+              <button
+                class="category-btn category-btn--active"
+              >
+                All Questions
+              </button>
+              <button
+                class="category-btn "
+              >
+                General
+              </button>
+              <button
+                class="category-btn "
+              >
+                Technical
+              </button>
+              <button
+                class="category-btn "
+              >
+                Pricing & Licensing
+              </button>
+              <button
+                class="category-btn "
+              >
+                Support
+              </button>
+            </div>
+            <div
+              class="faq-list"
+            >
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    What is BIMFlow Suite?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    Is BIMFlow Suite really free?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    What IFC versions does BIMFlow Suite support?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    What are the system requirements?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    How does the model generation work?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    What types of compliance checks are available?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    Can I use BIMFlow Suite for commercial projects?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    How accurate are the validation and compliance checks?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    What support is available for users?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    Can I contribute to the project?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    How often is BIMFlow Suite updated?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+              <div
+                class="faq-item"
+              >
+                <button
+                  aria-expanded="false"
+                  class="faq-question"
+                >
+                  <span
+                    class="faq-question-text"
+                  >
+                    Does BIMFlow Suite integrate with other BIM software?
+                  </span>
+                  <span
+                    class="faq-icon"
+                  >
+                    +
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div
+              class="faq-support"
+            >
+              <div
+                class="support-card"
+              >
+                <div
+                  class="support-icon"
+                >
+                  💬
+                </div>
+                <h3>
+                  Still have questions?
+                </h3>
+                <p>
+                  Can't find the answer you're looking for? Our team is here to help. Reach out to us through our community channels or start your free trial today.
+                </p>
+                <div
+                  class="support-buttons"
+                >
+                  <button
+                    class="support-btn support-btn--primary"
+                  >
+                    Start Free Trial
+                  </button>
+                  <button
+                    class="support-btn support-btn--secondary"
+                  >
+                    Contact Support
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="faq-cta"
+        >
+          <div
+            class="cta-container"
+          >
+            <h2>
+              Ready to Get Started?
+            </h2>
+            <p>
+              Join thousands of construction professionals who are already using BIMFlow Suite to streamline their BIM workflows and deliver better projects faster.
+            </p>
+            <div
+              class="cta-buttons"
+            >
+              <button
+                class="cta-btn cta-btn--primary"
+              >
+                Start Free Trial
+              </button>
+              <button
+                class="cta-btn cta-btn--secondary"
+              >
+                Contact Sales
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+`;

@@ -1,0 +1,148 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UploadIFCPage snapshot 1`] = `
+<div>
+  <div
+    class="upload-page"
+  >
+    <section
+      class="upload-hero"
+      style="background-image: linear-gradient(rgba(78, 68, 60, 0.7), rgba(42, 36, 32, 0.7)), url("/src/assets/images/uploadHero.jpg");"
+    >
+      <div
+        class="upload-hero__content"
+      >
+        <h1>
+          Upload Your IFC File
+        </h1>
+        <p>
+          Get instant validation, clash detection, compliance checks, cost estimates and project schedule
+        </p>
+      </div>
+    </section>
+    <div
+      class="upload-container"
+    >
+      <div
+        class="upload-box"
+      >
+        <div
+          class="dropzone "
+          role="presentation"
+          tabindex="0"
+        >
+          <input
+            accept="model/ifc,.ifc,.IFC"
+            multiple=""
+            style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+            tabindex="-1"
+            type="file"
+          />
+          <div
+            class="dropzone-icon"
+          >
+            📁
+          </div>
+          <h3>
+            Drag & drop your IFC file
+          </h3>
+          <p>
+            or click to browse
+          </p>
+          <span
+            class="dropzone-info"
+          >
+            Supports .ifc files up to 100MB
+          </span>
+        </div>
+        <div
+          class="upload-features"
+        >
+          <h3>
+            Instant Analysis Includes
+          </h3>
+          <div
+            class="features-grid"
+          >
+            <div
+              class="feature"
+            >
+              <span
+                class="icon"
+              >
+                ✓
+              </span>
+               IFC Schema Validation
+            </div>
+            <div
+              class="feature"
+            >
+              <span
+                class="icon"
+              >
+                🔍
+              </span>
+               Clash Detection
+            </div>
+            <div
+              class="feature"
+            >
+              <span
+                class="icon"
+              >
+                ⚖️
+              </span>
+               Compliance Checking
+            </div>
+            <div
+              class="feature"
+            >
+              <span
+                class="icon"
+              >
+                📊
+              </span>
+               Quantity Takeoff
+            </div>
+            <div
+              class="feature"
+            >
+              <span
+                class="icon"
+              >
+                💰
+              </span>
+               Cost Estimation
+            </div>
+            <div
+              class="feature"
+            >
+              <span
+                class="icon"
+              >
+                📅
+              </span>
+               Gantt Schedule
+            </div>
+          </div>
+        </div>
+        <div
+          class="upload-actions"
+        >
+          <button
+            class="btn btn--secondary"
+          >
+            ← Back Home
+          </button>
+          <button
+            class="btn btn--primary btn--large"
+            disabled=""
+          >
+            Start Analysis
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

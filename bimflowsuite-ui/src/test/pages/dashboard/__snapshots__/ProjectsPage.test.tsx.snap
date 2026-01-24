@@ -1,0 +1,697 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProjectsPage snapshot 1`] = `
+<div>
+  <div
+    class="projects-dashboard-pro"
+  >
+    <div
+      class="projects-header-pro"
+    >
+      <div
+        class="header-content"
+      >
+        <h1>
+          Projects
+        </h1>
+        <p>
+          Manage all your BIM projects • Track compliance, cost & schedule in real-time
+        </p>
+      </div>
+      <a
+        class="new-project-btn-pro"
+        data-discover="true"
+        href="/dashboard/upload"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-plus"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 12h14"
+          />
+          <path
+            d="M12 5v14"
+          />
+        </svg>
+        New Project
+      </a>
+    </div>
+    <div
+      class="projects-controls-pro"
+    >
+      <div
+        class="search-bar-pro"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-search"
+          fill="none"
+          height="20"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m21 21-4.34-4.34"
+          />
+          <circle
+            cx="11"
+            cy="11"
+            r="8"
+          />
+        </svg>
+        <input
+          placeholder="Search projects..."
+          type="text"
+          value=""
+        />
+      </div>
+      <div
+        class="filters-pro"
+      >
+        <select>
+          <option
+            value="all"
+          >
+            All Types
+          </option>
+          <option
+            value="building"
+          >
+            Buildings
+          </option>
+          <option
+            value="bridge"
+          >
+            Bridges
+          </option>
+          <option
+            value="road"
+          >
+            Roads
+          </option>
+          <option
+            value="high-rise"
+          >
+            High-Rises
+          </option>
+        </select>
+        <select>
+          <option
+            value="all"
+          >
+            All Status
+          </option>
+          <option
+            value="Active"
+          >
+            Active
+          </option>
+          <option
+            value="Completed"
+          >
+            Completed
+          </option>
+          <option
+            value="Pending Review"
+          >
+            Pending Review
+          </option>
+          <option
+            value="Compliance Pending"
+          >
+            Compliance Pending
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      class="projects-grid-pro"
+    >
+      <div
+        class="project-card-pro"
+      >
+        <div
+          class="project-thumbnail-pro"
+        >
+          <img
+            alt="Downtown Office Tower"
+            src="/src/assets/images/office-tower.jpg"
+          />
+          <div
+            class="status-badge-pro status-active"
+          >
+            Active
+          </div>
+        </div>
+        <div
+          class="project-content-pro"
+        >
+          <div
+            class="project-header-pro"
+          >
+            <h3>
+              Downtown Office Tower
+            </h3>
+            <span
+              class="project-type-pro"
+            >
+              High-Rise Building
+            </span>
+          </div>
+          <div
+            class="project-metrics-pro"
+          >
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-check-big"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21.801 10A10 10 0 1 1 17 3.335"
+                />
+                <path
+                  d="m9 11 3 3L22 4"
+                />
+              </svg>
+              <span>
+                Compliance: 
+                95%
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-dollar-sign"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="2"
+                  y2="22"
+                />
+                <path
+                  d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                />
+              </svg>
+              <span>
+                $150M
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-users"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                />
+                <path
+                  d="M16 3.128a4 4 0 0 1 0 7.744"
+                />
+                <path
+                  d="M22 21v-2a4 4 0 0 0-3-3.87"
+                />
+                <circle
+                  cx="9"
+                  cy="7"
+                  r="4"
+                />
+              </svg>
+              <span>
+                Team: 
+                12
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-calendar"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2v4"
+                />
+                <path
+                  d="M16 2v4"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="4"
+                />
+                <path
+                  d="M3 10h18"
+                />
+              </svg>
+              <span>
+                Updated: 
+                Nov 18, 2025
+              </span>
+            </div>
+          </div>
+          <p
+            class="project-desc-pro"
+          >
+            45-story mixed-use tower with LEED Platinum target
+          </p>
+          <div
+            class="project-actions-pro"
+          >
+            <button
+              class="view-btn-pro"
+            >
+              View Details →
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="project-card-pro"
+      >
+        <div
+          class="project-thumbnail-pro"
+        >
+          <img
+            alt="River Bridge Expansion"
+            src="/src/assets/images/bridge-expansion.jpg"
+          />
+          <div
+            class="status-badge-pro status-compliance-pending"
+          >
+            Compliance Pending
+          </div>
+        </div>
+        <div
+          class="project-content-pro"
+        >
+          <div
+            class="project-header-pro"
+          >
+            <h3>
+              River Bridge Expansion
+            </h3>
+            <span
+              class="project-type-pro"
+            >
+              Bridge Infrastructure
+            </span>
+          </div>
+          <div
+            class="project-metrics-pro"
+          >
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-check-big"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21.801 10A10 10 0 1 1 17 3.335"
+                />
+                <path
+                  d="m9 11 3 3L22 4"
+                />
+              </svg>
+              <span>
+                Compliance: 
+                87%
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-dollar-sign"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="2"
+                  y2="22"
+                />
+                <path
+                  d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                />
+              </svg>
+              <span>
+                $75M
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-users"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                />
+                <path
+                  d="M16 3.128a4 4 0 0 1 0 7.744"
+                />
+                <path
+                  d="M22 21v-2a4 4 0 0 0-3-3.87"
+                />
+                <circle
+                  cx="9"
+                  cy="7"
+                  r="4"
+                />
+              </svg>
+              <span>
+                Team: 
+                18
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-calendar"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2v4"
+                />
+                <path
+                  d="M16 2v4"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="4"
+                />
+                <path
+                  d="M3 10h18"
+                />
+              </svg>
+              <span>
+                Updated: 
+                Nov 17, 2025
+              </span>
+            </div>
+          </div>
+          <p
+            class="project-desc-pro"
+          >
+            Twin-span bridge with seismic retrofitting
+          </p>
+          <div
+            class="project-actions-pro"
+          >
+            <button
+              class="view-btn-pro"
+            >
+              View Details →
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="project-card-pro"
+      >
+        <div
+          class="project-thumbnail-pro"
+        >
+          <img
+            alt="Urban Road Corridor"
+            src="/src/assets/images/urban-road.jpg"
+          />
+          <div
+            class="status-badge-pro status-completed"
+          >
+            Completed
+          </div>
+        </div>
+        <div
+          class="project-content-pro"
+        >
+          <div
+            class="project-header-pro"
+          >
+            <h3>
+              Urban Road Corridor
+            </h3>
+            <span
+              class="project-type-pro"
+            >
+              Road Infrastructure
+            </span>
+          </div>
+          <div
+            class="project-metrics-pro"
+          >
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-check-big"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21.801 10A10 10 0 1 1 17 3.335"
+                />
+                <path
+                  d="m9 11 3 3L22 4"
+                />
+              </svg>
+              <span>
+                Compliance: 
+                100%
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-dollar-sign"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="2"
+                  y2="22"
+                />
+                <path
+                  d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                />
+              </svg>
+              <span>
+                $40M
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-users"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                />
+                <path
+                  d="M16 3.128a4 4 0 0 1 0 7.744"
+                />
+                <path
+                  d="M22 21v-2a4 4 0 0 0-3-3.87"
+                />
+                <circle
+                  cx="9"
+                  cy="7"
+                  r="4"
+                />
+              </svg>
+              <span>
+                Team: 
+                10
+              </span>
+            </div>
+            <div
+              class="metric-pro"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-calendar"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2v4"
+                />
+                <path
+                  d="M16 2v4"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="4"
+                />
+                <path
+                  d="M3 10h18"
+                />
+              </svg>
+              <span>
+                Updated: 
+                Oct 30, 2025
+              </span>
+            </div>
+          </div>
+          <p
+            class="project-desc-pro"
+          >
+            Complete street redesign with smart traffic systems
+          </p>
+          <div
+            class="project-actions-pro"
+          >
+            <button
+              class="view-btn-pro"
+            >
+              View Details →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

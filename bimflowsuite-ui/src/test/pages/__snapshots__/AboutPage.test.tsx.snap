@@ -1,0 +1,565 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AboutPage snapshot 1`] = `
+<div>
+  <div
+    class="app-container"
+  >
+    <main
+      class="main-content"
+      role="main"
+    >
+      <div
+        class="about-page"
+      >
+        <section
+          class="about-hero"
+          style="background-image: linear-gradient(rgba(78, 68, 60, 0.6), rgba(42, 36, 32, 0.6)), url("/src/assets/images/aboutHero.jpg"); background-size: cover; background-position: center center; background-attachment: fixed;"
+        >
+          <div
+            class="about-hero__overlay"
+          />
+          <div
+            class="about-hero__content"
+          >
+            <h1
+              class="about-hero__title"
+            >
+              Democratizing Digital Construction
+            </h1>
+            <p
+              class="about-hero__subtitle"
+            >
+              BIMFlow Suite is on a mission to make Building Information Modeling accessible to every SME, architect, and engineer worldwide through open-source innovation and advanced automation.
+            </p>
+          </div>
+        </section>
+        <section
+          class="mission-section"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="mission-grid"
+            >
+              <div
+                class="mission-card mission-card--primary"
+              >
+                <div
+                  class="mission-icon"
+                >
+                  🎯
+                </div>
+                <h2>
+                  Our Mission
+                </h2>
+                <p>
+                  To eliminate barriers preventing SMEs from adopting BIM by providing a free, powerful, and intuitive platform that automates model generation, compliance checking, and project analytics across all construction asset types.
+                </p>
+              </div>
+              <div
+                class="mission-card mission-card--secondary"
+              >
+                <div
+                  class="mission-icon"
+                >
+                  🏗️
+                </div>
+                <h2>
+                  Our Vision
+                </h2>
+                <p>
+                  To become the global standard for accessible BIM automation, empowering millions of construction professionals to deliver better projects faster while fostering a thriving open-source ecosystem.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="problem-section"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="section-header"
+            >
+              <h2
+                class="section-title"
+              >
+                The Challenge We're Solving
+              </h2>
+              <p
+                class="section-subtitle"
+              >
+                Despite industry-wide digital transformation initiatives, BIM adoption among SMEs remains critically low
+              </p>
+            </div>
+            <div
+              class="problem-stats"
+            >
+              <div
+                class="problem-stat"
+              >
+                <span
+                  class="stat-number"
+                >
+                  &lt;35%
+                </span>
+                <span
+                  class="stat-label"
+                >
+                  SME BIM Adoption Rate
+                </span>
+              </div>
+              <div
+                class="problem-stat"
+              >
+                <span
+                  class="stat-number"
+                >
+                  $10K+
+                </span>
+                <span
+                  class="stat-label"
+                >
+                  Annual Software Costs
+                </span>
+              </div>
+              <div
+                class="problem-stat"
+              >
+                <span
+                  class="stat-number"
+                >
+                  6+ months
+                </span>
+                <span
+                  class="stat-label"
+                >
+                  Training Time Required
+                </span>
+              </div>
+            </div>
+            <div
+              class="problem-list"
+            >
+              <div
+                class="problem-item"
+              >
+                <span
+                  class="problem-icon"
+                >
+                  💰
+                </span>
+                <div>
+                  <h3>
+                    High Costs
+                  </h3>
+                  <p>
+                    Enterprise BIM suites cost thousands annually, excluding training
+                  </p>
+                </div>
+              </div>
+              <div
+                class="problem-item"
+              >
+                <span
+                  class="problem-icon"
+                >
+                  🎓
+                </span>
+                <div>
+                  <h3>
+                    Steep Learning Curve
+                  </h3>
+                  <p>
+                    Complex interfaces require months of specialized training
+                  </p>
+                </div>
+              </div>
+              <div
+                class="problem-item"
+              >
+                <span
+                  class="problem-icon"
+                >
+                  🔒
+                </span>
+                <div>
+                  <h3>
+                    Vendor Lock-in
+                  </h3>
+                  <p>
+                    Proprietary formats limit interoperability and flexibility
+                  </p>
+                </div>
+              </div>
+              <div
+                class="problem-item"
+              >
+                <span
+                  class="problem-icon"
+                >
+                  ⚙️
+                </span>
+                <div>
+                  <h3>
+                    Manual Processes
+                  </h3>
+                  <p>
+                    Compliance checking and validation remain time-consuming
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="values-section"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="section-header"
+            >
+              <h2
+                class="section-title"
+              >
+                Our Core Values
+              </h2>
+              <p
+                class="section-subtitle"
+              >
+                Principles that guide every decision we make
+              </p>
+            </div>
+            <div
+              class="values-grid"
+            >
+              <div
+                class="value-card"
+              >
+                <div
+                  class="value-icon"
+                >
+                  🌟
+                </div>
+                <h3>
+                  Open & Accessible
+                </h3>
+                <p>
+                  100% open-source commitment. No hidden costs, no vendor lock-in.
+                </p>
+              </div>
+              <div
+                class="value-card"
+              >
+                <div
+                  class="value-icon"
+                >
+                  🎯
+                </div>
+                <h3>
+                  Innovation First
+                </h3>
+                <p>
+                  Pushing boundaries with advanced automation and intent-based modeling.
+                </p>
+              </div>
+              <div
+                class="value-card"
+              >
+                <div
+                  class="value-icon"
+                >
+                  🤝
+                </div>
+                <h3>
+                  Community Driven
+                </h3>
+                <p>
+                  Built by the industry, for the industry. Your feedback shapes our roadmap.
+                </p>
+              </div>
+              <div
+                class="value-card"
+              >
+                <div
+                  class="value-icon"
+                >
+                  ⚡
+                </div>
+                <h3>
+                  Performance Focused
+                </h3>
+                <p>
+                  Enterprise-grade speed and reliability without enterprise pricing.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="timeline-section"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="section-header"
+            >
+              <h2
+                class="section-title"
+              >
+                Our Journey
+              </h2>
+              <p
+                class="section-subtitle"
+              >
+                From concept to global impact
+              </p>
+            </div>
+            <div
+              class="timeline"
+            >
+              <div
+                class="timeline-item"
+              >
+                <div
+                  class="timeline-marker"
+                />
+                <div
+                  class="timeline-content"
+                >
+                  <span
+                    class="timeline-year"
+                  >
+                    2024
+                  </span>
+                  <h3
+                    class="timeline-title"
+                  >
+                    Foundation
+                  </h3>
+                  <p
+                    class="timeline-description"
+                  >
+                    BIMFlow Suite concept and initial development
+                  </p>
+                </div>
+              </div>
+              <div
+                class="timeline-item"
+              >
+                <div
+                  class="timeline-marker"
+                />
+                <div
+                  class="timeline-content"
+                >
+                  <span
+                    class="timeline-year"
+                  >
+                    2025
+                  </span>
+                  <h3
+                    class="timeline-title"
+                  >
+                    Launch
+                  </h3>
+                  <p
+                    class="timeline-description"
+                  >
+                    Public release and open-source community building
+                  </p>
+                </div>
+              </div>
+              <div
+                class="timeline-item"
+              >
+                <div
+                  class="timeline-marker"
+                />
+                <div
+                  class="timeline-content"
+                >
+                  <span
+                    class="timeline-year"
+                  >
+                    2026
+                  </span>
+                  <h3
+                    class="timeline-title"
+                  >
+                    Growth
+                  </h3>
+                  <p
+                    class="timeline-description"
+                  >
+                    150+ GitHub stars, 10 SME pilots, global adoption
+                  </p>
+                </div>
+              </div>
+              <div
+                class="timeline-item"
+              >
+                <div
+                  class="timeline-marker"
+                />
+                <div
+                  class="timeline-content"
+                >
+                  <span
+                    class="timeline-year"
+                  >
+                    2027+
+                  </span>
+                  <h3
+                    class="timeline-title"
+                  >
+                    Scale
+                  </h3>
+                  <p
+                    class="timeline-description"
+                  >
+                    Industry standard for accessible BIM automation
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="team-section"
+        >
+          <div
+            class="section-container"
+          >
+            <div
+              class="section-header"
+            >
+              <h2
+                class="section-title"
+              >
+                Meet the Team
+              </h2>
+              <p
+                class="section-subtitle"
+              >
+                Passionate innovators building the future of construction
+              </p>
+            </div>
+            <div
+              class="team-grid"
+            >
+              <div
+                class="team-card"
+              >
+                <div
+                  class="team-avatar"
+                >
+                  👨‍💼
+                </div>
+                <h3
+                  class="team-name"
+                >
+                  Nnamdi Innocent Oniya
+                </h3>
+                <p
+                  class="team-role"
+                >
+                  Founder & Chief Architect
+                </p>
+                <p
+                  class="team-bio"
+                >
+                  Visionary leader democratizing BIM for SMEs worldwide
+                </p>
+              </div>
+              <div
+                class="team-card"
+              >
+                <div
+                  class="team-avatar"
+                >
+                  👨‍💻
+                </div>
+                <h3
+                  class="team-name"
+                >
+                  Engineering Team
+                </h3>
+                <p
+                  class="team-role"
+                >
+                  Core Development
+                </p>
+                <p
+                  class="team-bio"
+                >
+                  Building the future of open-source construction tech
+                </p>
+              </div>
+              <div
+                class="team-card"
+              >
+                <div
+                  class="team-avatar"
+                >
+                  🌍
+                </div>
+                <h3
+                  class="team-name"
+                >
+                  Community
+                </h3>
+                <p
+                  class="team-role"
+                >
+                  Contributors & Partners
+                </p>
+                <p
+                  class="team-bio"
+                >
+                  Global network of innovators and early adopters
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="about-cta"
+        >
+          <div
+            class="cta-container"
+          >
+            <h2>
+              Join Our Mission
+            </h2>
+            <p>
+              Be part of the movement democratizing digital construction. Whether you're a developer, architect, or SME owner, there's a place for you.
+            </p>
+            <div
+              class="cta-buttons"
+            >
+              <button
+                class="cta-btn cta-btn--primary"
+              >
+                Get Involved
+              </button>
+              <button
+                class="cta-btn cta-btn--secondary"
+              >
+                View on GitHub
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+`;

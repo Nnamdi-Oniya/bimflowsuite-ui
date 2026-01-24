@@ -1,0 +1,138 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HeroSection snapshot 1`] = `
+<div>
+  <section
+    aria-label="BIMFlow Suite BIM Automation Platform"
+    class="hero"
+    role="main"
+  >
+    <div
+      aria-hidden="true"
+      class="hero__video-wrapper"
+    >
+      <video
+        autoplay=""
+        class="hero__video"
+        loop=""
+        playsinline=""
+        poster="/src/assets/images/HeroBackground.png"
+        preload="auto"
+      >
+        <source
+          src="/src/assets/videos/hero-bim-demo.mp4"
+          type="video/mp4"
+        />
+        <img
+          alt="BIMFlow Suite Digital Construction Automation"
+          src="/src/assets/images/HeroBackground.png"
+        />
+      </video>
+    </div>
+    <div
+      aria-hidden="true"
+      class="hero__overlay"
+    />
+    <div
+      class="hero__container"
+    >
+      <div
+        class="hero__content"
+      >
+        <h1
+          class="hero__title"
+        >
+          BIM Automation 
+          <span
+            class="hero__title-accent"
+          >
+            for Buildings and Infrastructure
+          </span>
+        </h1>
+        <p
+          class="hero__subtitle"
+        >
+          The intent driven platform that converts project requirements into detailed IFC 4.3 models ready for coordination, review and seamless delivery across building and infrastructure projects.
+        </p>
+        <div
+          class="hero__buttons"
+        >
+          <button
+            aria-label="Get started with BIMFlow Suite"
+            class="hero__btn hero__btn--primary"
+          >
+            Get Started
+          </button>
+        </div>
+        <div
+          class="hero__features"
+        >
+          <div
+            class="hero__feature"
+          >
+            <span
+              class="hero__feature-icon"
+            >
+              ✓
+            </span>
+             IFC Model Creation
+          </div>
+          <div
+            class="hero__feature"
+          >
+            <span
+              class="hero__feature-icon"
+            >
+              ✓
+            </span>
+             Coordination and Issue Checking
+          </div>
+          <div
+            class="hero__feature"
+          >
+            <span
+              class="hero__feature-icon"
+            >
+              ✓
+            </span>
+             Design Review Support
+          </div>
+          <div
+            class="hero__feature"
+          >
+            <span
+              class="hero__feature-icon"
+            >
+              ✓
+            </span>
+             Parametric Modelling
+          </div>
+          <div
+            class="hero__feature"
+          >
+            <span
+              class="hero__feature-icon"
+            >
+              ✓
+            </span>
+             Quantity and Cost Insights
+          </div>
+          <div
+            class="hero__feature"
+          >
+            <span
+              class="hero__feature-icon"
+            >
+              ✓
+            </span>
+             Project Timeline Preparation
+          </div>
+        </div>
+      </div>
+      <div
+        class="hero__visual"
+      />
+    </div>
+  </section>
+</div>
+`;

@@ -1,0 +1,335 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProfilePage snapshot 1`] = `
+<div>
+  <div
+    class="profile-page"
+  >
+    <div
+      class="profile-container"
+    >
+      <div
+        class="profile-header"
+      >
+        <h1
+          class="profile-title"
+        >
+          My Profile
+        </h1>
+        <div
+          class="profile-actions"
+        >
+          <button
+            class="btn-edit"
+          >
+            <svg
+              fill="none"
+              height="16"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V18C2 18.5304 2.21071 19.0391 2.58579 19.4142C2.96086 19.7893 3.46957 20 4 20H16C16.5304 20 17.0391 19.7893 17.4142 19.4142C17.7893 19.0391 18 18.5304 18 18V11M18.364 5.63604C18.6074 5.39262 18.8978 5.23032 19.2001 5.14912C19.5024 5.06792 19.813 5.07766 20.1084 5.17578C20.4038 5.2739 20.679 5.45513 20.9261 5.70224C21.1732 5.94935 21.3544 6.22454 21.4525 6.51988C21.5507 6.81522 21.5604 7.12585 21.4792 7.42811C21.398 7.73037 21.2357 8.02081 20.9923 8.26423L12 17.256V18H10V15.744L18.364 7.364L18.364 5.63604Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+            </svg>
+            Edit Profile
+          </button>
+        </div>
+      </div>
+      <div
+        class="profile-avatar-section"
+      >
+        <div
+          class="avatar-upload"
+        >
+          <img
+            alt="Profile Avatar"
+            class="avatar-large"
+            src="https://ui-avatars.com/api/?name=Nnamdi+Oniya&background=4ade80&color=1f2937&bold=true"
+          />
+        </div>
+        <div
+          class="avatar-info"
+        >
+          <h2
+            class="avatar-name"
+          >
+            Nnamdi Oniya
+          </h2>
+          <p
+            class="avatar-role"
+          >
+            Admin
+          </p>
+        </div>
+      </div>
+      <div
+        class="profile-details"
+      >
+        <div
+          class="detail-card"
+        >
+          <h3
+            class="detail-title"
+          >
+            <svg
+              fill="none"
+              height="20"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+              <path
+                d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+            </svg>
+            Personal Information
+          </h3>
+          <div
+            class="detail-grid"
+          >
+            <div
+              class="detail-field"
+            >
+              <label
+                for="name"
+              >
+                Full Name
+              </label>
+              <input
+                class="input-field "
+                disabled=""
+                id="name"
+                name="name"
+                type="text"
+                value="Nnamdi Oniya"
+              />
+            </div>
+            <div
+              class="detail-field"
+            >
+              <label
+                for="email"
+              >
+                Email Address
+              </label>
+              <input
+                class="input-field "
+                disabled=""
+                id="email"
+                name="email"
+                type="email"
+                value="nnamdi.oniya@bimflow.com"
+              />
+            </div>
+            <div
+              class="detail-field"
+            >
+              <label
+                for="phone"
+              >
+                Phone Number
+              </label>
+              <input
+                class="input-field "
+                disabled=""
+                id="phone"
+                name="phone"
+                type="tel"
+                value="+234 123 456 7890"
+              />
+            </div>
+            <div
+              class="detail-field full-width"
+            >
+              <label
+                for="bio"
+              >
+                Bio
+              </label>
+              <textarea
+                class="input-field textarea-field "
+                disabled=""
+                id="bio"
+                name="bio"
+                rows="3"
+              >
+                Founder & CEO of BIMFlow Suite. Passionate about democratizing BIM for SMEs.
+              </textarea>
+            </div>
+            <div
+              class="detail-field"
+            >
+              <label>
+                Location
+              </label>
+              <input
+                class="input-field"
+                disabled=""
+                type="text"
+                value="Lagos, Nigeria"
+              />
+            </div>
+            <div
+              class="detail-field"
+            >
+              <label>
+                Member Since
+              </label>
+              <input
+                class="input-field"
+                disabled=""
+                type="text"
+                value="November 2023"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="detail-card"
+        >
+          <h3
+            class="detail-title"
+          >
+            <svg
+              fill="none"
+              height="20"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 2L2 7V17L12 22L22 17V7L12 2Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+              <path
+                d="M12 2V22"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+              <path
+                d="M2 7H22"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+            </svg>
+            Account Settings
+          </h3>
+          <div
+            class="account-actions"
+          >
+            <a
+              class="action-link"
+              data-discover="true"
+              href="/dashboard/settings"
+            >
+              <svg
+                fill="none"
+                height="16"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M19.4 15A7.5 7.5 0 0 0 12 4.6M12 19.4A7.5 7.5 0 0 0 19.4 12M12 4.6V19.4"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                />
+              </svg>
+              Manage Settings
+            </a>
+            <a
+              class="action-link"
+              data-discover="true"
+              href="/dashboard/billing"
+            >
+              <svg
+                fill="none"
+                height="16"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  height="14"
+                  rx="1"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  width="6"
+                  x="9"
+                  y="7"
+                />
+                <path
+                  d="M22.28 15.7A3.78 3.78 0 0 1 19 16.5C17.28 16.5 15.8 15.08 15.8 13.5S17.28 10.5 19 10.5C20.18 10.5 21.28 11.34 21.72 12.62L22.62 12L22.28 15.7Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M21 12H15"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                />
+              </svg>
+              Billing & Subscription (
+              Pro Plan
+              )
+            </a>
+            <button
+              class="action-link danger"
+            >
+              <svg
+                fill="none"
+                height="16"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 21H5C4.46957 21 4 20.5304 4 20V4C4 3.46957 4.46957 3 5 3H9M16 17L21 12L16 7M21 12H9"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                />
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,262 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SettingsPage snapshot 1`] = `
+<div>
+  <div
+    class="settings-page"
+  >
+    <div
+      class="settings-header"
+    >
+      <div
+        class="header-content"
+      >
+        <h1>
+          Settings
+        </h1>
+        <p>
+          Manage your account, preferences, and integrations
+        </p>
+      </div>
+    </div>
+    <div
+      class="settings-container"
+    >
+      <div
+        class="settings-tabs"
+      >
+        <button
+          class="tab-btn active"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-settings"
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+            />
+          </svg>
+          General
+        </button>
+        <button
+          class="tab-btn "
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-user"
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
+            />
+            <circle
+              cx="12"
+              cy="7"
+              r="4"
+            />
+          </svg>
+          Account
+        </button>
+        <button
+          class="tab-btn "
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-link2 lucide-link-2"
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9 17H7A5 5 0 0 1 7 7h2"
+            />
+            <path
+              d="M15 7h2a5 5 0 1 1 0 10h-2"
+            />
+            <line
+              x1="8"
+              x2="16"
+              y1="12"
+              y2="12"
+            />
+          </svg>
+          Integrations
+        </button>
+        <button
+          class="tab-btn "
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-file-code"
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+            />
+            <path
+              d="M14 2v5a1 1 0 0 0 1 1h5"
+            />
+            <path
+              d="M10 12.5 8 15l2 2.5"
+            />
+            <path
+              d="m14 12.5 2 2.5-2 2.5"
+            />
+          </svg>
+          Rule Packs
+        </button>
+      </div>
+      <div
+        class="settings-content"
+      >
+        <div
+          class="tab-panel"
+        >
+          <h2>
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-palette"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"
+              />
+              <circle
+                cx="13.5"
+                cy="6.5"
+                fill="currentColor"
+                r=".5"
+              />
+              <circle
+                cx="17.5"
+                cy="10.5"
+                fill="currentColor"
+                r=".5"
+              />
+              <circle
+                cx="6.5"
+                cy="12.5"
+                fill="currentColor"
+                r=".5"
+              />
+              <circle
+                cx="8.5"
+                cy="7.5"
+                fill="currentColor"
+                r=".5"
+              />
+            </svg>
+            General Settings
+          </h2>
+          <div
+            class="setting-group"
+          >
+            <label>
+              Theme
+            </label>
+            <p
+              class="setting-description"
+            >
+              Choose your preferred theme or sync with system settings
+            </p>
+            <div
+              class="theme-options"
+            >
+              <button
+                class="theme-btn "
+              >
+                ☀️ Light
+              </button>
+              <button
+                class="theme-btn "
+              >
+                🌙 Dark
+              </button>
+              <button
+                class="theme-btn active"
+              >
+                💻 System
+              </button>
+            </div>
+          </div>
+          <div
+            class="setting-group"
+          >
+            <label>
+              Language
+            </label>
+            <p
+              class="setting-description"
+            >
+              Select your preferred language
+            </p>
+            <select>
+              <option>
+                English
+              </option>
+              <option>
+                Spanish
+              </option>
+              <option>
+                French
+              </option>
+              <option>
+                German
+              </option>
+            </select>
+          </div>
+          <button
+            class="save-btn"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

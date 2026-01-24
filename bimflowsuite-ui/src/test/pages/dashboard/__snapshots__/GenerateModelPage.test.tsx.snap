@@ -1,0 +1,516 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GenerateModelPage snapshot 1`] = `
+<div>
+  <div
+    class="generate-page"
+  >
+    <div
+      class="generate-header"
+    >
+      <h1
+        class="page-title"
+      >
+        Generate Model
+      </h1>
+      <p
+        class="page-subtitle"
+      >
+        Provide your project details to auto-generate compliant BIM models with 3D preview.
+      </p>
+    </div>
+    <div
+      class="generate-preview"
+    >
+      <h2>
+        Live Preview
+      </h2>
+      <div
+        class="preview-container"
+      >
+        <div
+          class="preview-placeholder"
+        >
+          <div
+            class="placeholder-content"
+          >
+            <div
+              class="placeholder-icon"
+            >
+              📐
+            </div>
+            <p>
+              Model preview will appear here once you generate your project.
+            </p>
+            <p
+              class="placeholder-sub"
+            >
+              Select project type and enter details to see a live 3D render.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="generate-form"
+    >
+      <form>
+        <div
+          class="form-section"
+        >
+          <h2>
+            Select Project Type
+          </h2>
+          <div
+            class="project-types"
+          >
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🏠
+              </div>
+              <h3>
+                Residential Building
+              </h3>
+              <p>
+                Houses, apartments, condominiums
+              </p>
+            </button>
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🏢
+              </div>
+              <h3>
+                Commercial Office
+              </h3>
+              <p>
+                Office buildings, retail spaces
+              </p>
+            </button>
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🏭
+              </div>
+              <h3>
+                Industrial Facility
+              </h3>
+              <p>
+                Factories, warehouses, plants
+              </p>
+            </button>
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🏥
+              </div>
+              <h3>
+                Healthcare Facility
+              </h3>
+              <p>
+                Hospitals, clinics, medical centers
+              </p>
+            </button>
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🎓
+              </div>
+              <h3>
+                Educational Building
+              </h3>
+              <p>
+                Schools, universities, libraries
+              </p>
+            </button>
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🌉
+              </div>
+              <h3>
+                Bridge Structure
+              </h3>
+              <p>
+                Highway bridges, pedestrian bridges
+              </p>
+            </button>
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🛣️
+              </div>
+              <h3>
+                Road Infrastructure
+              </h3>
+              <p>
+                Highways, streets, tunnels
+              </p>
+            </button>
+            <button
+              class="project-type-btn "
+              type="button"
+            >
+              <div
+                class="project-icon"
+              >
+                🔧
+              </div>
+              <h3>
+                Other Project
+              </h3>
+              <p>
+                Custom infrastructure projects
+              </p>
+            </button>
+          </div>
+        </div>
+        <div
+          class="form-section"
+        >
+          <h2>
+            Project Basics
+          </h2>
+          <div
+            class="form-grid"
+          >
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="projectName"
+              >
+                Project Name *
+              </label>
+              <input
+                class="form-input"
+                id="projectName"
+                name="projectName"
+                placeholder="e.g., Downtown Office Tower"
+                required=""
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="contactEmail"
+              >
+                Contact Email *
+              </label>
+              <input
+                class="form-input"
+                id="contactEmail"
+                name="contactEmail"
+                placeholder="your.email@company.com"
+                required=""
+                type="email"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="form-section"
+        >
+          <h2>
+            Describe Your Project
+          </h2>
+          <div
+            class="form-group"
+          >
+            <label
+              class="form-label"
+              for="description"
+            >
+              Project Description *
+            </label>
+            <textarea
+              class="form-textarea"
+              id="description"
+              maxlength="500"
+              name="description"
+              placeholder="Describe your project requirements, features, and any specific needs."
+              required=""
+              rows="4"
+            />
+            <div
+              class="character-count"
+            >
+              0
+              /500 characters
+            </div>
+          </div>
+        </div>
+        <div
+          class="form-section"
+        >
+          <h2>
+            Specifications
+          </h2>
+          <div
+            class="form-grid"
+          >
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="floors"
+              >
+                Number of Floors
+              </label>
+              <input
+                class="form-input"
+                id="floors"
+                min="1"
+                name="floors"
+                placeholder="e.g., 10"
+                type="number"
+                value=""
+              />
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="area"
+              >
+                Total Area (m²)
+              </label>
+              <input
+                class="form-input"
+                id="area"
+                min="1"
+                name="area"
+                placeholder="e.g., 5000"
+                type="number"
+                value=""
+              />
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="location"
+              >
+                Location
+              </label>
+              <input
+                class="form-input"
+                id="location"
+                name="location"
+                placeholder="e.g., New York, USA"
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="budget"
+              >
+                Estimated Budget ($)
+              </label>
+              <input
+                class="form-input"
+                id="budget"
+                min="0"
+                name="budget"
+                placeholder="e.g., 5000000"
+                type="number"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="form-section"
+        >
+          <h2>
+            Timeline & Requirements
+          </h2>
+          <div
+            class="form-grid"
+          >
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="timeline"
+              >
+                Project Timeline
+              </label>
+              <select
+                class="form-select"
+                id="timeline"
+                name="timeline"
+              >
+                <option
+                  value=""
+                >
+                  Select timeline
+                </option>
+                <option
+                  value="1-3 months"
+                >
+                  1-3 months
+                </option>
+                <option
+                  value="3-6 months"
+                >
+                  3-6 months
+                </option>
+                <option
+                  value="6-12 months"
+                >
+                  6-12 months
+                </option>
+                <option
+                  value="12+ months"
+                >
+                  12+ months
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="form-group"
+          >
+            <label
+              class="form-label"
+              for="specialRequirements"
+            >
+              Special Requirements
+            </label>
+            <textarea
+              class="form-textarea"
+              id="specialRequirements"
+              name="specialRequirements"
+              placeholder="Any specific building codes, sustainability requirements, accessibility needs, or other special considerations..."
+              rows="3"
+            />
+          </div>
+        </div>
+        <div
+          class="form-actions"
+        >
+          <button
+            class="btn btn--secondary"
+            type="button"
+          >
+            ← Back to Dashboard
+          </button>
+          <button
+            class="btn btn--primary generate-btn"
+            disabled=""
+            type="submit"
+          >
+            🚀 Generate BIM Model
+          </button>
+        </div>
+        <div
+          class="features-highlight"
+        >
+          <h3>
+            What You'll Get
+          </h3>
+          <div
+            class="features-grid"
+          >
+            <div
+              class="feature"
+            >
+              <span
+                class="feature-icon"
+              >
+                📐
+              </span>
+              <div>
+                <strong>
+                  IFC 4.3 Compliant Model
+                </strong>
+                <p>
+                  Industry-standard file format ready for any BIM software
+                </p>
+              </div>
+            </div>
+            <div
+              class="feature"
+            >
+              <span
+                class="feature-icon"
+              >
+                🛡️
+              </span>
+              <div>
+                <strong>
+                  Automated Compliance
+                </strong>
+                <p>
+                  Built-in checks for building codes and regulations
+                </p>
+              </div>
+            </div>
+            <div
+              class="feature"
+            >
+              <span
+                class="feature-icon"
+              >
+                👁️
+              </span>
+              <div>
+                <strong>
+                  3D Model Preview
+                </strong>
+                <p>
+                  Interactive 3D visualization with guided tours
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;

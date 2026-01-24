@@ -1,0 +1,441 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FeaturesPage snapshot 1`] = `
+<div>
+  <div
+    class="features-page"
+  >
+    <section
+      class="features-hero"
+      style="background-image: linear-gradient(rgba(78, 68, 60, 0.6), rgba(42, 36, 32, 0.6)), url("/src/assets/images/features-hero.jpg"); background-size: cover; background-position: center center;"
+    >
+      <div
+        class="features-hero__overlay"
+      />
+      <div
+        class="features-hero__content"
+      >
+        <h1>
+          Powerful Features for Modern Construction
+        </h1>
+        <p>
+          Discover how BIMFlow Suite transforms digital construction with advanced automation, compliance, and collaboration tools built for the future.
+        </p>
+        <div
+          class="hero-stats"
+        >
+          <div
+            class="stat"
+          >
+            <span
+              class="stat-number"
+            >
+              100%
+            </span>
+            <span
+              class="stat-label"
+            >
+              Open Source
+            </span>
+          </div>
+          <div
+            class="stat"
+          >
+            <span
+              class="stat-number"
+            >
+              60s
+            </span>
+            <span
+              class="stat-label"
+            >
+              Model Generation
+            </span>
+          </div>
+          <div
+            class="stat"
+          >
+            <span
+              class="stat-number"
+            >
+              10k+
+            </span>
+            <span
+              class="stat-label"
+            >
+              Checks/Second
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="features-nav"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="features-grid"
+        >
+          <button
+            class="feature-tab feature-tab--active"
+          >
+            <span
+              class="feature-tab__icon"
+            >
+              🎯
+            </span>
+            <div
+              class="feature-tab__content"
+            >
+              <h3>
+                Intent-Driven Modeling
+              </h3>
+              <p>
+                Transform natural language into detailed BIM models
+              </p>
+            </div>
+          </button>
+          <button
+            class="feature-tab "
+          >
+            <span
+              class="feature-tab__icon"
+            >
+              🛡️
+            </span>
+            <div
+              class="feature-tab__content"
+            >
+              <h3>
+                Automated Compliance
+              </h3>
+              <p>
+                Thousands of regulatory checks in seconds
+              </p>
+            </div>
+          </button>
+          <button
+            class="feature-tab "
+          >
+            <span
+              class="feature-tab__icon"
+            >
+              🏗️
+            </span>
+            <div
+              class="feature-tab__content"
+            >
+              <h3>
+                Multi-Asset Support
+              </h3>
+              <p>
+                Unified platform for all construction assets
+              </p>
+            </div>
+          </button>
+          <button
+            class="feature-tab "
+          >
+            <span
+              class="feature-tab__icon"
+            >
+              📊
+            </span>
+            <div
+              class="feature-tab__content"
+            >
+              <h3>
+                Smart Analytics
+              </h3>
+              <p>
+                Advanced insights and quantity takeoffs
+              </p>
+            </div>
+          </button>
+          <button
+            class="feature-tab "
+          >
+            <span
+              class="feature-tab__icon"
+            >
+              🤝
+            </span>
+            <div
+              class="feature-tab__content"
+            >
+              <h3>
+                Seamless Collaboration
+              </h3>
+              <p>
+                Real-time teamwork across disciplines
+              </p>
+            </div>
+          </button>
+          <button
+            class="feature-tab "
+          >
+            <span
+              class="feature-tab__icon"
+            >
+              🔓
+            </span>
+            <div
+              class="feature-tab__content"
+            >
+              <h3>
+                Open Source Freedom
+              </h3>
+              <p>
+                Community-driven innovation and transparency
+              </p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+    <section
+      class="feature-details"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="feature-details__content"
+        >
+          <div
+            class="feature-details__visual"
+          >
+            <div
+              class="feature-image"
+            >
+              <img
+                alt="Intent-Driven Modeling"
+                src="/src/assets/images/intent-modeling.jpg"
+              />
+              <div
+                class="feature-badge"
+              >
+                <span
+                  class="feature-badge__icon"
+                >
+                  🎯
+                </span>
+                <span>
+                  Intent-Driven Modeling
+                </span>
+              </div>
+            </div>
+            <div
+              class="capabilities"
+            >
+              <h4>
+                Performance Metrics
+              </h4>
+              <div
+                class="capability"
+              >
+                <div
+                  class="capability__header"
+                >
+                  <span
+                    class="capability__name"
+                  >
+                    Language Understanding
+                  </span>
+                  <span
+                    class="capability__value"
+                  >
+                    95
+                    %
+                  </span>
+                </div>
+                <div
+                  class="capability__bar"
+                >
+                  <div
+                    class="capability__fill"
+                    style="width: 95%;"
+                  />
+                </div>
+              </div>
+              <div
+                class="capability"
+              >
+                <div
+                  class="capability__header"
+                >
+                  <span
+                    class="capability__name"
+                  >
+                    Model Accuracy
+                  </span>
+                  <span
+                    class="capability__value"
+                  >
+                    92
+                    %
+                  </span>
+                </div>
+                <div
+                  class="capability__bar"
+                >
+                  <div
+                    class="capability__fill"
+                    style="width: 92%;"
+                  />
+                </div>
+              </div>
+              <div
+                class="capability"
+              >
+                <div
+                  class="capability__header"
+                >
+                  <span
+                    class="capability__name"
+                  >
+                    Generation Speed
+                  </span>
+                  <span
+                    class="capability__value"
+                  >
+                    98
+                    %
+                  </span>
+                </div>
+                <div
+                  class="capability__bar"
+                >
+                  <div
+                    class="capability__fill"
+                    style="width: 98%;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="feature-details__info"
+          >
+            <h2>
+              Intent-Driven Modeling
+            </h2>
+            <p
+              class="feature-description"
+            >
+              Transform natural language into detailed BIM models
+            </p>
+            <div
+              class="feature-highlights"
+            >
+              <h4>
+                Key Capabilities
+              </h4>
+              <ul
+                class="highlights-list"
+              >
+                <li
+                  class="highlight-item"
+                >
+                  <span
+                    class="highlight-icon"
+                  >
+                    ✓
+                  </span>
+                  Natural language processing for project descriptions
+                </li>
+                <li
+                  class="highlight-item"
+                >
+                  <span
+                    class="highlight-icon"
+                  >
+                    ✓
+                  </span>
+                  Instant IFC 4.3 compliant model generation
+                </li>
+                <li
+                  class="highlight-item"
+                >
+                  <span
+                    class="highlight-icon"
+                  >
+                    ✓
+                  </span>
+                  Support for buildings, bridges, roads, and infrastructure
+                </li>
+                <li
+                  class="highlight-item"
+                >
+                  <span
+                    class="highlight-icon"
+                  >
+                    ✓
+                  </span>
+                  Real-time preview and adjustments
+                </li>
+              </ul>
+            </div>
+            <div
+              class="feature-actions"
+            >
+              <a
+                class="btn btn--primary"
+                data-discover="true"
+                href="/demo"
+              >
+                Try Live Demo
+              </a>
+              <a
+                class="btn btn--secondary"
+                data-discover="true"
+                href="/generate-model"
+              >
+                Generate Model
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="features-cta"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="cta-content"
+        >
+          <h2>
+            Ready to Transform Your Construction Workflow?
+          </h2>
+          <p>
+            Join thousands of architects, engineers, and contractors already using BIMFlow Suite to streamline their digital construction processes.
+          </p>
+          <div
+            class="cta-actions"
+          >
+            <a
+              class="btn btn--primary btn--large"
+              data-discover="true"
+              href="/generate-model"
+            >
+              Start Your First Project
+            </a>
+            <a
+              class="btn btn--secondary"
+              data-discover="true"
+              href="/book-demo"
+            >
+              Contact Sales
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+`;

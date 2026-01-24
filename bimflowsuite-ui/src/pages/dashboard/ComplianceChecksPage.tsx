@@ -19,6 +19,7 @@ import {
   Upload,
   Play,
   Trash2,
+  X,
 } from "lucide-react";
 import "../../assets/ComplianceChecksPage.css";
 
@@ -98,6 +99,13 @@ const ComplianceChecksPage: React.FC = () => {
     "Structural",
     "Accessibility",
   ]);
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    project: Project | null;
+  }>({
+    isOpen: false,
+    project: null,
+  });
 
   // Load user projects from localStorage on component mount
   useEffect(() => {
@@ -302,24 +310,85 @@ const ComplianceChecksPage: React.FC = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const handleDeleteProject = (projectId: string, event: React.MouseEvent) => {
+  const handleDeleteClick = (project: Project, event: React.MouseEvent) => {
     event.stopPropagation();
+    setDeleteModal({
+      isOpen: true,
+      project: project,
+    });
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteModal.project) return;
+
+    const projectId = deleteModal.project.id;
+    const updatedProjects = userProjects.filter(project => project.id !== projectId);
     
-    if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
-      const updatedProjects = userProjects.filter(project => project.id !== projectId);
-      setUserProjects(updatedProjects);
-      localStorage.setItem('userProjects', JSON.stringify(updatedProjects));
-      
-      // If the deleted project was selected, clear the selection
-      if (selectedProject?.id === projectId) {
-        setSelectedProject(null);
-        setResults(null);
-      }
+    setUserProjects(updatedProjects);
+    localStorage.setItem('userProjects', JSON.stringify(updatedProjects));
+    
+    // If the deleted project was selected, clear the selection
+    if (selectedProject?.id === projectId) {
+      setSelectedProject(null);
+      setResults(null);
     }
+    
+    // Close the modal
+    setDeleteModal({
+      isOpen: false,
+      project: null,
+    });
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteModal({
+      isOpen: false,
+      project: null,
+    });
   };
 
   return (
     <div className="compliance-pro">
+      {/* Delete Confirmation Modal */}
+      {deleteModal.isOpen && (
+        <div className="modal-overlay">
+          <div className="delete-modal">
+            <div className="modal-header">
+              <h3>Delete Project</h3>
+              <button className="close-btn" onClick={handleCancelDelete}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="modal-content">
+              <div className="warning-icon">
+                <AlertTriangle size={48} color="#ef4444" />
+              </div>
+              <p>
+                Are you sure you want to delete <strong>"{deleteModal.project?.name}"</strong>?
+              </p>
+              <p className="warning-text">
+                This action cannot be undone. All project data, compliance results, and analysis will be permanently deleted.
+              </p>
+            </div>
+            <div className="modal-actions">
+              <button 
+                className="btn cancel-btn"
+                onClick={handleCancelDelete}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn delete-confirm-btn"
+                onClick={handleConfirmDelete}
+              >
+                <Trash2 size={18} />
+                Delete Project
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="compliance-header-pro">
         <div className="header-content">
@@ -382,7 +451,7 @@ const ComplianceChecksPage: React.FC = () => {
                     {selectedProject?.id === project.id && <CheckCircle className="check" size={24} />}
                     <button 
                       className="delete-project-btn"
-                      onClick={(e) => handleDeleteProject(project.id, e)}
+                      onClick={(e) => handleDeleteClick(project, e)}
                       title="Delete project"
                     >
                       <Trash2 size={16} />

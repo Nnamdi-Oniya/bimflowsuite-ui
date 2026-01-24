@@ -1,0 +1,181 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DemoPage snapshot 1`] = `
+<div>
+  <div
+    class="demo-page"
+  >
+    <section
+      class="demo-hero"
+      style="background-image: linear-gradient(rgba(78, 68, 60, 0.88), rgba(248, 120, 15, 0.4)), url("/src/assets/images/hero-bim2.jpg"); background-size: cover; background-position: center center; min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white;"
+    >
+      <div
+        style="max-width: 1000px; padding: 2rem;"
+      >
+        <h1
+          style="font-size: 4.8rem; font-weight: 900; margin-bottom: 1rem; color: rgb(248, 120, 15); text-shadow: 0 2px 8px rgba(0,0,0,0.5);"
+        >
+          BIMFlow Ultra-Luxury Suite
+        </h1>
+        <p
+          style="font-size: 1.7rem; margin: 2rem 0px; font-weight: 300; text-shadow: 0 1px 4px rgba(0,0,0,0.5);"
+        >
+          Hyper-Realistic 3D Architectural Models with Premium Luxury Features
+        </p>
+        <button
+          style="background: rgb(248, 120, 15); color: white; border: medium; padding: 1.4rem 3.5rem; font-size: 1.4rem; border-radius: 16px; cursor: pointer; font-weight: 700; box-shadow: 0 10px 30px rgba(248,120,15,0.4); transition: all 0.3s ease;"
+        >
+          Start Luxury Project
+        </button>
+      </div>
+    </section>
+    <div
+      class="demo-container"
+      style="max-width: 1400px; margin: 5rem auto; padding: 0px 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;"
+    >
+      <div>
+        <h2
+          style="font-size: 3rem; margin-bottom: 2.5rem; color: rgb(78, 68, 60);"
+        >
+          Ultra-Luxury Projects
+        </h2>
+        <div
+          style="display: grid; gap: 2.5rem;"
+        >
+          <div
+            style="cursor: pointer; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.15); transition: all 0.4s ease; border: 5px solid transparent; opacity: 1;"
+          >
+            <img
+              alt="Ultra-Luxury Mansion"
+              src="/src/assets/images/residential-building.png"
+              style="width: 100%; height: 280px; object-fit: cover;"
+            />
+            <div
+              style="padding: 2rem; background: transparent;"
+            >
+              <h3
+                style="font-size: 1.8rem; margin: 0px 0px 0.8rem; color: rgb(78, 68, 60);"
+              >
+                Ultra-Luxury Mansion
+              </h3>
+              <p
+                style="color: rgb(102, 102, 102); font-size: 1rem; line-height: 1.6;"
+              >
+                Massive three-floor luxury mansion inspired by Mrs. Folorunsho Alakija's Ikoyi estate. Featuring grand entrance, infinity pool, private cinema, gourmet kitchen, personal gym, and rooftop lounge with panoramic views.
+              </p>
+            </div>
+          </div>
+          <div
+            style="cursor: pointer; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.15); transition: all 0.4s ease; border: 5px solid transparent; opacity: 1;"
+          >
+            <img
+              alt="Futuristic Luxury Hospital"
+              src="/src/assets/images/medical-facility.png"
+              style="width: 100%; height: 280px; object-fit: cover;"
+            />
+            <div
+              style="padding: 2rem; background: transparent;"
+            >
+              <h3
+                style="font-size: 1.8rem; margin: 0px 0px 0.8rem; color: rgb(78, 68, 60);"
+              >
+                Futuristic Luxury Hospital
+              </h3>
+              <p
+                style="color: rgb(102, 102, 102); font-size: 1rem; line-height: 1.6;"
+              >
+                Advanced medical complex with MRI centers, surgical theaters, ICU, luxury patient suites, research labs, and premium amenities. Featuring glass elevators, digital signage, and solar power.
+              </p>
+            </div>
+          </div>
+          <div
+            style="cursor: pointer; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.15); transition: all 0.4s ease; border: 5px solid transparent; opacity: 1;"
+          >
+            <img
+              alt="World-Class Corporate Tower"
+              src="/src/assets/images/commercial-office.png"
+              style="width: 100%; height: 280px; object-fit: cover;"
+            />
+            <div
+              style="padding: 2rem; background: transparent;"
+            >
+              <h3
+                style="font-size: 1.8rem; margin: 0px 0px 0.8rem; color: rgb(78, 68, 60);"
+              >
+                World-Class Corporate Tower
+              </h3>
+              <p
+                style="color: rgb(102, 102, 102); font-size: 1rem; line-height: 1.6;"
+              >
+                20-story premium office tower with visible floor layouts, executive suites, boardrooms, coworking spaces, server rooms, and rooftop terrace. Showcasing BIM capabilities with structural and MEP visualization.
+              </p>
+            </div>
+          </div>
+          <div
+            style="cursor: pointer; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.15); transition: all 0.4s ease; border: 5px solid transparent; opacity: 1;"
+          >
+            <img
+              alt="Engineering Masterpiece"
+              src="/src/assets/images/highway-bridge.png"
+              style="width: 100%; height: 280px; object-fit: cover;"
+            />
+            <div
+              style="padding: 2rem; background: transparent;"
+            >
+              <h3
+                style="font-size: 1.8rem; margin: 0px 0px 0.8rem; color: rgb(78, 68, 60);"
+              >
+                Engineering Masterpiece
+              </h3>
+              <p
+                style="color: rgb(102, 102, 102); font-size: 1rem; line-height: 1.6;"
+              >
+                Architectural and engineering marvel showcasing advanced construction techniques and sustainable design principles.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2
+          style="font-size: 3rem; margin-bottom: 2.5rem; color: rgb(78, 68, 60);"
+        >
+          Luxury Results
+        </h2>
+        <div
+          style="background: linear-gradient(135deg, rgb(255, 248, 240) 0%, rgb(255, 245, 230) 100%); border: 2px solid rgb(248, 120, 15); color: rgb(133, 100, 4); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;"
+        >
+          <strong>
+            Ultra-Luxury 3D Experience:
+          </strong>
+           Programmatically generated premium architectural models with hyper-realistic interiors! Explore luxury mansions, futuristic hospitals, and world-class corporate towers.
+        </div>
+        <div
+          style="background: linear-gradient(135deg, rgb(255, 248, 240) 0%, rgb(255, 245, 230) 100%); border: 2px dashed rgb(248, 120, 15); border-radius: 24px; padding: 4rem 2rem; text-align: center;"
+        >
+          <div
+            style="font-size: 6rem; margin-bottom: 1.5rem;"
+          >
+            👑
+          </div>
+          <h2
+            style="font-size: 2.6rem; color: rgb(78, 68, 60); margin: 0px 0px 1rem;"
+          >
+            Premium Architect Avatar (Coming Soon)
+          </h2>
+          <p
+            style="font-size: 1.2rem; color: rgb(102, 102, 102); max-width: 480px; margin: 0px auto; line-height: 1.7;"
+          >
+            Walk through your ultra-luxury 3D BIM models in our premium embedded viewer with architectural insights.
+          </p>
+        </div>
+      </div>
+    </div>
+    <button
+      style="display: block; margin: 6rem auto; padding: 1.3rem 4rem; background: rgb(78, 68, 60); color: white; border: medium; border-radius: 16px; font-size: 1.2rem; cursor: pointer; font-weight: 700; transition: all 0.3s ease;"
+    >
+      Clear All & Start New Luxury Project
+    </button>
+  </div>
+</div>
+`;

@@ -1,0 +1,433 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CostEstimationPage snapshot 1`] = `
+<div>
+  <div
+    class="cost-estimation-pro"
+  >
+    <div
+      class="cost-header-pro"
+    >
+      <div
+        class="header-content"
+      >
+        <h1>
+          Cost Estimation
+        </h1>
+        <p>
+          5D BIM Cost Analysis • Auto-generated from IFC model quantities • Updated 2 hours ago
+        </p>
+      </div>
+      <div
+        class="status-badge"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-trending-up"
+          fill="none"
+          height="20"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M16 7h6v6"
+          />
+          <path
+            d="m22 7-8.5 8.5-5-5L2 17"
+          />
+        </svg>
+        <span>
+          Live Cost Tracking
+        </span>
+      </div>
+    </div>
+    <div
+      class="cost-summary-grid"
+    >
+      <div
+        class="summary-card total"
+      >
+        <div
+          class="card-icon"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-dollar-sign"
+            fill="none"
+            height="32"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line
+              x1="12"
+              x2="12"
+              y1="2"
+              y2="22"
+            />
+            <path
+              d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+            />
+          </svg>
+        </div>
+        <div
+          class="card-content"
+        >
+          <span>
+            Total Project Cost
+          </span>
+          <strong>
+            $
+            4,827,450
+          </strong>
+          <small
+            class="up"
+          >
+            ↑
+             
+            2.38
+            % vs baseline
+          </small>
+        </div>
+      </div>
+      <div
+        class="summary-card"
+      >
+        <span>
+          Cost per m²
+        </span>
+        <strong>
+          $2,847
+        </strong>
+      </div>
+      <div
+        class="summary-card"
+      >
+        <span>
+          Contingency
+        </span>
+        <strong>
+          4.0%
+        </strong>
+      </div>
+      <div
+        class="summary-card"
+      >
+        <span>
+          Confidence Level
+        </span>
+        <strong>
+          92%
+        </strong>
+      </div>
+    </div>
+    <div
+      class="cost-charts-grid"
+    >
+      <div
+        class="chart-card donut"
+      >
+        <div
+          style="width: 100%; height: 100%;"
+        />
+      </div>
+      <div
+        class="chart-card bar"
+      >
+        <div
+          style="width: 100%; height: 500px;"
+        />
+      </div>
+    </div>
+    <div
+      class="detailed-breakdown"
+    >
+      <h3>
+        Detailed Breakdown
+      </h3>
+      <div
+        class="breakdown-row"
+      >
+        <div
+          class="row-label"
+        >
+          <span>
+            Concrete & Rebar
+          </span>
+          <strong>
+            $
+            1,840,000
+          </strong>
+        </div>
+        <div
+          class="progress-container"
+        >
+          <div
+            class="progress-bar"
+            style="width: 38%; background-color: rgb(248, 120, 15);"
+          />
+        </div>
+        <span
+          class="percentage"
+        >
+          38
+          %
+        </span>
+      </div>
+      <div
+        class="breakdown-row"
+      >
+        <div
+          class="row-label"
+        >
+          <span>
+            MEP Systems
+          </span>
+          <strong>
+            $
+            1,210,000
+          </strong>
+        </div>
+        <div
+          class="progress-container"
+        >
+          <div
+            class="progress-bar"
+            style="width: 25%; background-color: rgb(59, 130, 246);"
+          />
+        </div>
+        <span
+          class="percentage"
+        >
+          25
+          %
+        </span>
+      </div>
+      <div
+        class="breakdown-row"
+      >
+        <div
+          class="row-label"
+        >
+          <span>
+            Finishes & Facade
+          </span>
+          <strong>
+            $
+            980,000
+          </strong>
+        </div>
+        <div
+          class="progress-container"
+        >
+          <div
+            class="progress-bar"
+            style="width: 20%; background-color: rgb(139, 92, 246);"
+          />
+        </div>
+        <span
+          class="percentage"
+        >
+          20
+          %
+        </span>
+      </div>
+      <div
+        class="breakdown-row"
+      >
+        <div
+          class="row-label"
+        >
+          <span>
+            Structural Steel
+          </span>
+          <strong>
+            $
+            620,000
+          </strong>
+        </div>
+        <div
+          class="progress-container"
+        >
+          <div
+            class="progress-bar"
+            style="width: 13%; background-color: rgb(16, 185, 129);"
+          />
+        </div>
+        <span
+          class="percentage"
+        >
+          13
+          %
+        </span>
+      </div>
+      <div
+        class="breakdown-row"
+      >
+        <div
+          class="row-label"
+        >
+          <span>
+            Contingency & Overhead
+          </span>
+          <strong>
+            $
+            197,450
+          </strong>
+        </div>
+        <div
+          class="progress-container"
+        >
+          <div
+            class="progress-bar"
+            style="width: 4%; background-color: rgb(245, 158, 11);"
+          />
+        </div>
+        <span
+          class="percentage"
+        >
+          4
+          %
+        </span>
+      </div>
+    </div>
+    <div
+      class="cost-actions-pro"
+    >
+      <button
+        class="btn primary"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-download"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 15V3"
+          />
+          <path
+            d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+          />
+          <path
+            d="m7 10 5 5 5-5"
+          />
+        </svg>
+        Export PDF Report
+      </button>
+      <button
+        class="btn success"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-file-spreadsheet"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+          />
+          <path
+            d="M14 2v5a1 1 0 0 0 1 1h5"
+          />
+          <path
+            d="M8 13h2"
+          />
+          <path
+            d="M14 13h2"
+          />
+          <path
+            d="M8 17h2"
+          />
+          <path
+            d="M14 17h2"
+          />
+        </svg>
+        Export Excel
+      </button>
+      <button
+        class="btn outline"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-trending-up"
+          fill="none"
+          height="18"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M16 7h6v6"
+          />
+          <path
+            d="m22 7-8.5 8.5-5-5L2 17"
+          />
+        </svg>
+        View Historical Trends
+      </button>
+    </div>
+    <div
+      class="cost-legend"
+    >
+      <span>
+        <i
+          style="background: rgb(248, 120, 15);"
+        />
+         Concrete & Formwork
+      </span>
+      <span>
+        <i
+          style="background: rgb(59, 130, 246);"
+        />
+         MEP Systems
+      </span>
+      <span>
+        <i
+          style="background: rgb(139, 92, 246);"
+        />
+         Architectural Finishes
+      </span>
+      <span>
+        <i
+          style="background: rgb(16, 185, 129);"
+        />
+         Structural Steel
+      </span>
+      <span>
+        <i
+          style="background: rgb(245, 158, 11);"
+        />
+         Contingency
+      </span>
+    </div>
+  </div>
+</div>
+`;
