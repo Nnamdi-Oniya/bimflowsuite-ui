@@ -8,11 +8,11 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 test('GetStartedModal renders', () => {
-  render(<GetStartedModal />, { wrapper: Wrapper });
+  render(<GetStartedModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
   expect(document.body.children).toHaveLength(1);
 });
 
 test('GetStartedModal snapshot', () => {
-  const { container } = render(<GetStartedModal />, { wrapper: Wrapper });
+  const { container } = render(<GetStartedModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
   expect(container).toMatchSnapshot();
 });

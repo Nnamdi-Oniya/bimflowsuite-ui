@@ -8,11 +8,11 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 test('DashboardSidebar renders', () => {
-  render(<DashboardSidebar />, { wrapper: Wrapper });
+  render(<DashboardSidebar isOpen={true} onToggle={() => {}} />, { wrapper: Wrapper });
   expect(document.body.children).toHaveLength(1);
 });
 
 test('DashboardSidebar snapshot', () => {
-  const { container } = render(<DashboardSidebar />, { wrapper: Wrapper });
+  const { container } = render(<DashboardSidebar isOpen={true} onToggle={() => {}} />, { wrapper: Wrapper });
   expect(container).toMatchSnapshot();
 });
