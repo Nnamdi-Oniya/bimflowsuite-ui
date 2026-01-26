@@ -8,11 +8,11 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 test('DashboardHeader renders', () => {
-  render(<DashboardHeader />, { wrapper: Wrapper });
+  render(<DashboardHeader onMobileToggle={() => {}} />, { wrapper: Wrapper });
   expect(document.body.children).toHaveLength(1);
 });
 
 test('DashboardHeader snapshot', () => {
-  const { container } = render(<DashboardHeader />, { wrapper: Wrapper });
+  const { container } = render(<DashboardHeader onMobileToggle={() => {}} />, { wrapper: Wrapper });
   expect(container).toMatchSnapshot();
 });

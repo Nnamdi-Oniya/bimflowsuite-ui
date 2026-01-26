@@ -8,11 +8,11 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 test('ImageOptimizer renders', () => {
-  render(<ImageOptimizer />, { wrapper: Wrapper });
+  render(<ImageOptimizer src="/test.jpg" alt="Test image" />, { wrapper: Wrapper });
   expect(document.body.children).toHaveLength(1);
 });
 
 test('ImageOptimizer snapshot', () => {
-  const { container } = render(<ImageOptimizer />, { wrapper: Wrapper });
+  const { container } = render(<ImageOptimizer src="/test.jpg" alt="Test image" />, { wrapper: Wrapper });
   expect(container).toMatchSnapshot();
 });

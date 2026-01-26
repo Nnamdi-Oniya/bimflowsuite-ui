@@ -1,5 +1,5 @@
 {
-  "name": "sme-bim",
+  "name": "bimflowsuite",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -43,11 +43,12 @@
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.9.5",
     "recharts": "^3.3.0",
-    "three": "^0.135.0",
+    "three": "0.135.0",
     "three-stdlib": "^2.36.1",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-pwa": "^1.1.0",
     "web-ifc": "^0.0.73",
+    "web-ifc-three": "^0.0.115",
     "web-ifc-viewer": "^1.0.218",
     "zod": "^4.1.12"
   },
@@ -64,7 +65,7 @@
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@types/react-plotly.js": "^2.6.3",
-    "@types/three": "^0.181.0",
+    "@types/three": "^0.182.0",
     "@vitejs/plugin-react": "^5.0.4",
     "@vitest/browser": "^4.0.15",
     "@vitest/browser-playwright": "^4.0.15",
@@ -90,5 +91,10 @@
     "vite": "^7.1.7",
     "vitest": "^4.0.15",
     "webpack-bundle-analyzer": "^5.0.1"
+  },
+  "overrides": {
+    "web-ifc-viewer": {
+      "web-ifc-three": "0.0.115"
+    }
   }
 }
