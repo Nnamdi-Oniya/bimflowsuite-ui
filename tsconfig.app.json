@@ -1,36 +1,48 @@
 {
   "extends": "./tsconfig.json",
+
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
     "target": "ES2022",
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "types": ["vite/client"],
+
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* Bundler-friendly settings (very important for Vite) */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
+
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Strictness & good defaults */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "erasableSyntaxOnly": true,
 
-    /* Path resolution - Updated for TS 7.0+ */
+    /* Path aliases – modern style with @/* (most popular in 2025+) */
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"],
+      "@services/*": ["./src/services/*"],
+      "@config/*": ["./src/config/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@components/*": ["./src/components/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@assets/*": ["./src/assets/*"]
+      // ← add more folders as your project grows
     }
   },
+
   "include": [
     "src",
     "test",
@@ -38,5 +50,7 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx"
-  ]
+  ],
+
+  "exclude": ["node_modules", "dist"]
 }

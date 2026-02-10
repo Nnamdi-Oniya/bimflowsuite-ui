@@ -1,7 +1,7 @@
 // src/components/CTANewsSection.tsx – FAQ SECTION REMOVED
 import React, { useState } from "react";
 import GetStartedModal from "./GetStartedModal";
-import "../assets/CTANewsSection.css";
+import "../assets/css/CTANewsSection.css";
 
 const CTANewsSection: React.FC = () => {
   const [isGetStartedModalOpen, setIsGetStartedModalOpen] = useState(false);

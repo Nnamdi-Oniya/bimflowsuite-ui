@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FileText, Download, Settings, TrendingUp } from "lucide-react";
-import "../../assets/TemplatesPage.css";
+import "../../assets/css/TemplatesPage.css";
 
 const TemplatesPage: React.FC = () => {
   const templates = [

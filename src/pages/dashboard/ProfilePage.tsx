@@ -1,7 +1,7 @@
 // src/pages/dashboard/ProfilePage.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../assets/ProfilePage.css"; // We'll define this CSS below
+import "../../assets/css/ProfilePage.css"; // We'll define this CSS below
 
 const DashboardProfile: React.FC = () => {
   const navigate = useNavigate();

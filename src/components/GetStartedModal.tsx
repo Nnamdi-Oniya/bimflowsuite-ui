@@ -1,7 +1,7 @@
-// src/components/GetStartedModal.tsx – UPDATED NOV 2025 (Book Demo replaces IFC upload)
+// src/components/GetStartedModal.tsx – UPDATED MARCH 2026
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../assets/GetStartedModal.css";
+import "../assets/css/GetStartedModal.css";
 
 interface GetStartedModalProps {
   isOpen: boolean;
@@ -11,14 +11,14 @@ interface GetStartedModalProps {
 const GetStartedModal: React.FC<GetStartedModalProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
-  const handleCreateFromScratch = () => {
+  const handleCreateProject = () => {
     onClose();
-    navigate("/generate-model"); // Intent-driven model generation wizard
+    navigate("/generate-model"); // Project creation wizard
   };
 
-  const handleBookDemoViaIFC = () => {
+  const handleBookDemo = () => {
     onClose();
-    navigate("/book-demo"); // Now redirects to book-demo page (as requested)
+    navigate("/book-demo"); // Book a personalized demo
   };
 
   if (!isOpen) return null;
@@ -35,33 +35,39 @@ const GetStartedModal: React.FC<GetStartedModalProps> = ({ isOpen, onClose }) =>
 
         <div className="get-started-content">
           <p className="get-started-description">
-            Choose the fastest way to experience open source BIM automation for your projects.
+            Choose how you would like to start your BIM journey with our platform.
           </p>
 
           <div className="get-started-options">
-            {/* Option 1 – Create New Model */}
-            <button onClick={handleCreateFromScratch} className="option-btn option-btn--create">
+            {/* Option 1 – Create New Project */}
+            <button onClick={handleCreateProject} className="option-btn option-btn--create">
               <div className="option-icon">🏗️</div>
               <div className="option-details">
-                <h3>Create New Model</h3>
+                <h3>Create New Project</h3>
                 <p>
-                  Start from scratch — describe your building, bridge, road or high-rise using simple inputs or natural language. 
-                  Instantly generate a fully compliant IFC 4.3 model.
+                  Start a new BIM project from scratch. Describe your building, bridge, road, or infrastructure project using simple inputs. 
+                  Our system will generate a fully compliant IFC 4.3 model for your project requirements.
                 </p>
               </div>
             </button>
 
-            {/* Option 2 – Already Have an IFC? → Now leads to Book Demo */}
-            <button onClick={handleBookDemoViaIFC} className="option-btn option-btn--upload">
-              <div className="option-icon">📁</div>
+            {/* Option 2 – Book a Demo */}
+            <button onClick={handleBookDemo} className="option-btn option-btn--upload">
+              <div className="option-icon">📅</div>
               <div className="option-details">
-                <h3>Already Have an IFC File?</h3>
+                <h3>Book a Personalized Demo</h3>
                 <p>
-                  Perfect! Let us show you exactly what BIMFlow Suite can do with your model — 
-                  validation, compliance, quantities, costs, scheduling and more — in a personalized live demo.
+                  Schedule a live demo with our team. See how BIMFlow Suite can transform your BIM workflows with your existing models. 
+                  Get a personalized walkthrough of validation, compliance, quantities, costs, and scheduling features.
                 </p>
               </div>
             </button>
+          </div>
+
+          <div className="modal-footer-note">
+            <p>
+              <strong>Note:</strong> Both options will guide you through the next steps. New users are recommended to book a demo first to get full platform access.
+            </p>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/ProjectsTestimonialsSection.css";
+import "../assets/css/ProjectsTestimonialsSection.css";
 
 // ✅ Import all images properly
 import ModernLivingRoom from "../assets/images/ModernLivingRoom.jpg";

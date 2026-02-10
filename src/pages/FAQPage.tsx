@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GetStartedModal from "../components/GetStartedModal";
 import faqHero from "../assets/images/faq-hero.jpg";
-import "../assets/FAQPage.css";
+import "../assets/css/FAQPage.css";
 
 interface FAQItem {
   question: string;

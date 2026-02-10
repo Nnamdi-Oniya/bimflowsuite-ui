@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Search, Download, Eye, X, ChevronLeft, ChevronRight, FileText, Calendar, Clock, Filter } from "lucide-react";
-import "../../assets/ReportsCenterPage.css";
+import "../../assets/css/ReportsCenterPage.css";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 

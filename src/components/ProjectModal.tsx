@@ -1,6 +1,6 @@
 // src/components/ProjectModal.tsx
 import React, { useState } from "react";
-import "../assets/ProjectModal.css";
+import "../assets/css/ProjectModal.css";
 
 interface Project {
   id: number;

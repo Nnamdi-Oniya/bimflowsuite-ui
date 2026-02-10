@@ -21,7 +21,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import "../../assets/ComplianceChecksPage.css";
+import "../../assets/css/ComplianceChecksPage.css";
 
 interface Project {
   id: string;

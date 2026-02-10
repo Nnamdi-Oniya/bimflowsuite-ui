@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import GetStartedModal from "./GetStartedModal";  // Same modal as Header
-import "../assets/HeroSection.css";
+import "../assets/css/HeroSection.css";
 import heroVideoMp4 from "../assets/videos/hero-bim-demo.mp4";
 import heroFallback from "../assets/images/HeroBackground.png";
 

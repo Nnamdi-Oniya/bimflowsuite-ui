@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import aboutHero from "../assets/images/aboutHero.jpg";
 
-import "../assets/AboutPage.css";
+import "../assets/css/AboutPage.css";
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();

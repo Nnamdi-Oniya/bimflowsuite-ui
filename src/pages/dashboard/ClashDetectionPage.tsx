@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AlertCircle, AlertTriangle, Info, Zap, Download, Bell } from "lucide-react";
-import "../../assets/ClashDetectionPage.css";
+import "../../assets/css/ClashDetectionPage.css";
 
 interface Clash {
   id: number;

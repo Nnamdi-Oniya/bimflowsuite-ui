@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Plot from "react-plotly.js";
 import type { PlotParams } from "react-plotly.js";
 import { Download, FileSpreadsheet, TrendingUp, DollarSign } from "lucide-react";
-import "../../assets/CostEstimationPage.css";
+import "../../assets/css/CostEstimationPage.css";
 
 // Define a custom interface for the internal Plotly instance method we need
 interface PlotlyCustomRef {

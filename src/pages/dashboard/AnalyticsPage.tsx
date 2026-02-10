@@ -1,5 +1,5 @@
 import React from "react";
-import "../../assets/AnalyticsPage.css";
+import "../../assets/css/AnalyticsPage.css";
 
 // --- TypeScript Fix: Define a flexible style interface for CSS Custom Properties ---
 /**

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Plus, CheckCircle, Clock, DollarSign, AlertTriangle, TrendingUp, X } from "lucide-react";
-import "../../assets/ScenarioManagerPage.css";
+import "../../assets/css/ScenarioManagerPage.css";
 
 interface Scenario {
   id: string;

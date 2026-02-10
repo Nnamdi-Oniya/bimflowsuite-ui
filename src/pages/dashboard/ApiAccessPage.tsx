@@ -1,6 +1,6 @@
 // src/pages/dashboard/ApiAccessPage.tsx – FIXED & ALWAYS WORKS
 import React, { useState } from "react";
-import "../../assets/ApiAccessPage.css";
+import "../../assets/css/ApiAccessPage.css";
 
 const ApiAccessPage: React.FC = () => {
   // Fake key for demo / until you generate real ones

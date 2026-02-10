@@ -1,0 +1,279 @@
+/* ==============================================
+   Success Modal – Fully Branded with Orange
+   Primary accent: Orange (#F8780F / #E66F0D)
+   All green tones replaced with orange family
+   ============================================== */
+
+:root {
+  --white: #FFFFFF;
+  --gray-border: #E9ECEF;
+  --text-dark: #212529;
+  --orange: #F8780F;
+  --orange-dark: #E66F0D;
+  --orange-light: #FF9500;
+  --orange-glow: rgba(248, 120, 15, 0.15);
+  --orange-bg-light: #fff5eb;
+  --orange-bg: #ffe8d1;
+  --orange-muted: #ffab5c;
+  --brown-dark: #4E443C;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  --border-radius: 8px;
+  --btn-height: 48px;
+}
+
+.success-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: fadeIn 0.35s ease-out;
+}
+
+.success-modal {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 
+    var(--shadow-lg),
+    0 12px 40px var(--orange-glow);
+  animation: slideUp 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid var(--gray-border);
+}
+
+.success-modal-header {
+  text-align: center;
+  margin-bottom: 2.25rem;
+}
+
+.success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: var(--orange-bg-light);
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+  animation: scaleIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success-modal-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.success-modal-body {
+  margin-bottom: 2.5rem;
+}
+
+.success-message {
+  font-size: 1.15rem;
+  color: #4B5563;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.user-info {
+  background: var(--orange-bg-light);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--gray-border);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.info-value {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.confirmation-note {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--orange-bg);
+  border: 1px solid rgba(248, 120, 15, 0.25);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  color: var(--orange-dark);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.confirmation-note svg {
+  flex-shrink: 0;
+}
+
+.success-modal-footer {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.success-modal-btn {
+  flex: 1;
+  height: var(--btn-height);
+  padding: 0 2rem;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px var(--orange-glow);
+}
+
+.success-modal-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(248, 120, 15, 0.35);
+}
+
+.success-modal-btn:active {
+  transform: translateY(0);
+}
+
+.success-modal-btn-secondary {
+  flex: 1;
+  height: var(--btn-height);
+  padding: 0 2rem;
+  background: var(--white);
+  color: #6B7280;
+  border: 2px solid var(--gray-border);
+  border-radius: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.success-modal-btn-secondary:hover {
+  background: #fefaf6;
+  border-color: var(--orange-muted);
+  color: var(--orange-dark);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(35px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes scaleIn {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .success-modal {
+    padding: 2rem 1.5rem;
+  }
+  
+  .success-modal-title {
+    font-size: 1.8rem;
+  }
+  
+  .success-modal-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .success-modal-btn,
+  .success-modal-btn-secondary {
+    width: 100%;
+  }
+
+  .confirmation-note {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+}
+
+
+/* Add to src/assets/css/SuccessModal.css */
+
+.success-modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.success-modal-close-btn:hover {
+  color: var(--brown-dark);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.success-modal-close-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Update success modal to have relative positioning */
+.success-modal {
+  position: relative;
+  /* ... rest of your existing styles ... */
+}
+
+/* Remove the old footer styles if they exist */
+.success-modal-footer {
+  display: none;
+}
+
+.user-info {
+  display: none;
+}

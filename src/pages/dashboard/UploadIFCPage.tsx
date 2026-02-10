@@ -6,7 +6,7 @@ import {
   DollarSign, Calendar, Zap, X, Loader2,
   Building2, Hospital, School, LandPlot
 } from "lucide-react";
-import "../../assets/UploadIFCPage.css";
+import "../../assets/css/UploadIFCPage.css";
 
 // Demo building types
 const DEMO_BUILDINGS = [

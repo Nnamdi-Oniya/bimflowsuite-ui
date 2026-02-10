@@ -1,7 +1,7 @@
 // src/components/DashboardSidebar.tsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import "../assets/DashboardSidebar.css";
+import "../assets/css/DashboardSidebar.css";
 
 // Keep all your beautiful SVG icons exactly as they are (unchanged)
 const HomeIcon = () => (
@@ -119,9 +119,18 @@ const DashboardSidebar: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({
       {isOpen && <div className="sidebar-backdrop" onClick={onToggle} />}
       <nav className={`dashboard-sidebar ${isOpen ? 'active' : ''}`}>
         <div className="sidebar-header">
-          <h2 className="sidebar-title">BIMFlow Suite</h2>
-          <button className="sidebar-close" onClick={onToggle} aria-label="Close sidebar">×</button>
-        </div>
+            <Link to="/" className="sidebar-title-link">
+              <h2 className="sidebar-title">BIMFlow Suite</h2>
+            </Link>
+
+            <button
+              className="sidebar-close"
+              onClick={onToggle}
+              aria-label="Close sidebar"
+            >
+            </button>
+          </div>
+
         <ul className="sidebar-nav">
           {sidebarItems.map(item => (
             <li key={item.id}>
