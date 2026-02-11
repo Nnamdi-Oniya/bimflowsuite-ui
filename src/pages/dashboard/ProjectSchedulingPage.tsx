@@ -2,7 +2,7 @@
 import React, { useRef } from "react";
 import Plot from "react-plotly.js";
 import type { PlotParams } from "react-plotly.js";
-import "../../assets/ProjectSchedulingPage.css";
+import "../../assets/css/ProjectSchedulingPage.css";
 
 // 1. Define custom interface for the internal Plotly methods
 interface PlotlyCustomRef {

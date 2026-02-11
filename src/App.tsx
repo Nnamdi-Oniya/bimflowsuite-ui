@@ -1,4 +1,4 @@
-// src/App.tsx – FULLY UPDATED WITH FAQ PAGE ROUTING
+// src/App.tsx – FULLY UPDATED WITH SET PASSWORD PAGE ROUTING
 import React, { Component, Suspense, type ReactNode, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
@@ -18,13 +18,14 @@ const GenerateModelPage = React.lazy(() => import("./pages/GenerateModelPage"));
 const UploadIFCPage = React.lazy(() => import("./pages/UploadIFCPage"));           // Public /upload
 const FeaturesPage = React.lazy(() => import("./pages/FeaturesPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
-const FAQPage = React.lazy(() => import("./pages/FAQPage")); // ADDED FAQ PAGE
+const FAQPage = React.lazy(() => import("./pages/FAQPage"));
 const ProjectsPageLanding = React.lazy(() => import("./pages/ProjectsPage"));
 const BlogPage = React.lazy(() => import("./pages/BlogPage"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage"));
 const LoginPage = React.lazy(() => import("./pages/LoginPage"));
 const BookDemoPage = React.lazy(() => import("./pages/BookDemoPage"));
 const ForgotPasswordPage = React.lazy(() => import("./pages/ForgotPasswordPage"));
+const SetPasswordPage = React.lazy(() => import("./pages/SetPasswordPage")); // ADDED SET PASSWORD PAGE
 
 // Dashboard Layout & Pages
 const DashboardLayout = React.lazy(() => import("./components/DashboardLayout"));
@@ -85,7 +86,7 @@ const LoadingFallback: React.FC = () => (
 const AppContent: React.FC = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard");
-  const hideFooterPaths = ["/login", "/book-demo", "/forgot-password"];
+  const hideFooterPaths = ["/login", "/book-demo", "/forgot-password", "/set-password"];
   const showFooter = !isDashboard && !hideFooterPaths.includes(location.pathname);
 
   return (
@@ -113,7 +114,7 @@ const AppContent: React.FC = () => {
             <Route path="/upload" element={<UploadIFCPage />} />
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/faq" element={<FAQPage />} /> {/* ADDED FAQ ROUTE */}
+            <Route path="/faq" element={<FAQPage />} />
             <Route path="/projects" element={<ProjectsPageLanding />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
@@ -122,6 +123,7 @@ const AppContent: React.FC = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/book-demo" element={<BookDemoPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/set-password" element={<SetPasswordPage />} /> {/* ADDED SET PASSWORD ROUTE */}
 
             {/* DASHBOARD */}
             <Route path="/dashboard" element={<DashboardLayout />}>

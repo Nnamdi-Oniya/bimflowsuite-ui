@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../assets/ContactPage.css";
+import "../assets/css/ContactPage.css";
 import contactHero from "../assets/images/contactHero.jpg";
 
 const ContactPage: React.FC = () => {

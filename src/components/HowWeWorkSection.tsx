@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/HowWeWorkSection.css";
+import "../assets/css/HowWeWorkSection.css";
 import bgPattern from "../assets/images/work-bg.png";
 // Ensure this path matches where you placed your video file
 import cityPlanningVideo from "../assets/videos/City_Planning.mp4";

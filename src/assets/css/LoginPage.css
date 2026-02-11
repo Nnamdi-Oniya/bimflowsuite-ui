@@ -181,27 +181,6 @@
   transform: translateX(4px);
 }
 
-.error-message {
-  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
-  color: #DC2626;
-  padding: 1rem;
-  border-radius: 16px;
-  border-left: 5px solid #EF4444;
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.2);
-  animation: shake 0.5s ease-in-out;
-  text-align: left;
-  line-height: 1.5;
-  padding-left: 1.25rem;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
-}
-
 /* Enhanced error text styling for better visibility under each field */
 .error-text {
   color: #EF4444;
@@ -216,6 +195,27 @@
   border-left: 3px solid #EF4444;
 }
 
+/* API Error Message Styles */
+.api-error-message {
+  background-color: #FEF2F2;
+  color: #DC2626;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #FECACA;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  animation: fadeIn 0.3s ease-in-out;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Updated Login Button - Same size as Book Demo button */
 .login-btn {
   padding: 1.2rem 2.5rem;
   background: linear-gradient(135deg, #F8780F 0%, #FF9500 50%, #F59E0B 100%);
@@ -235,6 +235,10 @@
   overflow: hidden;
   width: 100%;
   box-sizing: border-box;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-btn::before {
@@ -263,6 +267,7 @@
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
+  background: linear-gradient(135deg, #ccc 0%, #aaa 50%, #999 100%);
 }
 
 .loading-spinner {
@@ -430,6 +435,7 @@
     font-size: 1.05rem;
     border-radius: 18px;
     margin-top: 0.25rem;
+    min-height: 52px;
   }
 
   .divider {
@@ -442,25 +448,6 @@
     padding: 0 1rem;
   }
 
-  .social-login {
-    margin: 2rem 0 2rem;
-    padding: 0 0.25rem;
-    gap: 1rem;
-  }
-
-  .social-btn {
-    padding: 1rem 1.5rem;
-    border-radius: 18px;
-    font-size: 0.95rem;
-    gap: 0.75rem;
-  }
-
-  .social-icon {
-    font-size: 1.2rem;
-    width: 24px;
-    height: 24px;
-  }
-
   .signup-prompt {
     margin-top: 2rem;
     padding: 0 0.25rem;
@@ -470,7 +457,7 @@
     font-size: 0.95rem;
   }
 
-  .error-message {
+  .api-error-message {
     padding: 0.875rem;
     font-size: 0.9rem;
     margin-bottom: 1.25rem;
@@ -508,14 +495,7 @@
 
   .login-btn {
     padding: 1rem 1.5rem;
-  }
-
-  .social-login {
-    flex-direction: column;
-  }
-
-  .social-btn {
-    padding: 0.9rem 1.25rem;
+    min-height: 48px;
   }
 }
 
@@ -544,11 +524,6 @@
     margin: 1.5rem 0;
   }
   
-  .social-login {
-    margin: 1.5rem 0;
-    gap: 0.75rem;
-  }
-  
   .signup-prompt {
     margin-top: 1.5rem;
   }
@@ -557,7 +532,6 @@
 /* High DPI screens optimization */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .login-btn,
-  .social-btn,
   .form-input {
     border-width: 1.5px;
   }
@@ -574,8 +548,7 @@
     box-shadow: none;
   }
   
-  .login-btn,
-  .social-btn {
+  .login-btn {
     box-shadow: none;
     border: 1px solid #ccc;
   }
@@ -597,7 +570,6 @@
 /* Focus indicators for keyboard navigation */
 .form-input:focus-visible,
 .login-btn:focus-visible,
-.social-btn:focus-visible,
 .forgot-password:focus-visible,
 .signup-link:focus-visible {
   outline: 2px solid #F8780F;
@@ -620,8 +592,9 @@
     background: white;
   }
   
-  .social-btn {
+  .login-btn {
     border: 2px solid black;
     background: white;
+    color: black;
   }
 }

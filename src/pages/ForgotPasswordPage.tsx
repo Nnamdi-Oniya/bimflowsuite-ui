@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import "../assets/ForgotPasswordPage.css";
+import "../assets/css/ForgotPasswordPage.css";
 import forgotPasswordImage from "../assets/images/forgotPasswordImage.jpg"; // Full-page left side image
 
 const ForgotPasswordPage: React.FC = () => {

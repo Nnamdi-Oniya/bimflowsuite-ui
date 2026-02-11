@@ -15,7 +15,7 @@ import officeTower from "../../assets/images/office-tower.jpg";
 import bridgeExpansion from "../../assets/images/bridge-expansion.jpg";
 import urbanRoad from "../../assets/images/urban-road.jpg";
 
-import "../../assets/ProjectsDash.css";
+import "../../assets/css/ProjectsDash.css";
 import ProjectModal from "../../components/ProjectModal";
 
 // ──────────────────────────────────────────────────────────────

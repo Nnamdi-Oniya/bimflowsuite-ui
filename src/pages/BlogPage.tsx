@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../assets/BlogPage.css";
+import "../assets/css/BlogPage.css";
 import blogHero from "../assets/images/blog-hero.jpg";
 import blogTutorial from "../assets/images/blog-tutorial.jpg";
 import digitalConstruction from "../assets/images/DigitalConstruction.jpg";

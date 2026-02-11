@@ -3,7 +3,7 @@ import React, { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import "../../assets/GenerateModelDash.css";
+import "../../assets/css/GenerateModelDash.css";
 
 // Import placeholder images
 import residentialBuilding from "../../assets/images/residential-building.png";

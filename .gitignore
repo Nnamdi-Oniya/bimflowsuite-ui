@@ -31,3 +31,5 @@ src/assets/videos/hero-bim-demo.mp4
 
 /node_modules/.vitest/
 /.vitest/
+.env.production
+.env.development

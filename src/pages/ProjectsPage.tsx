@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../assets/ProjectsPage.css";
+import "../assets/css/ProjectsPage.css";
 import projectsHero from "../assets/images/projects-hero.jpg";
 import residentialBuilding from "../assets/images/ResidentialBuilding.jpg";
 import modernOffice from "../assets/images/ModernOffice.jpg";

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GetStartedModal from "./GetStartedModal";
 import logo from "../assets/images/bimflow-logo.png";
-import "../assets/Header.css";
+import "../assets/css/Header.css";
 
 type NavLink = { href: string; label: string };
 

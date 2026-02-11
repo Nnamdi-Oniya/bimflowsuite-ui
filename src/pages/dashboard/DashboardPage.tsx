@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../assets/DashboardPage.css";
+import "../../assets/css/DashboardPage.css";
 
 // RESTORED DEMO IMAGES
 import officeTower from "../../assets/images/office-tower.jpg";

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../assets/ServicesSection.css";
+import "../assets/css/ServicesSection.css";
 import room3 from "../assets/images/Livingdrawing.png";
 
 const ServicesSection: React.FC = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Settings as SettingsIcon, User, Palette, Link2, FileCode } from "lucide-react";
-import "../../assets/SettingsPage.css";
+import "../../assets/css/SettingsPage.css";
 
 type Theme = 'light' | 'dark' | 'system';
 

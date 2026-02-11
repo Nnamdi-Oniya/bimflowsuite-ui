@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
-import "../assets/UploadIFCPage.css";
+import "../assets/css/UploadIFCPage.css";
 import uploadHero from "../assets/images/uploadHero.jpg"; // Add your own hero image
 
 const UploadIFCPage: React.FC = () => {

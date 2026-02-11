@@ -1,7 +1,7 @@
 // src/components/Footer.tsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../assets/Footer.css";
+import "../assets/css/Footer.css";
 // Import footer images
 import roomfoot1 from "../assets/images/roomfoot1.png";
 import roomfoot2 from "../assets/images/roomfoot2.png";

@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import "../assets/DemoPage.css";
-import { autodeskService } from "../services/autodeskService";
+import "../assets/css/DemoPage.css";
+
 
 // Import placeholder images
 import heroBim from "../assets/images/hero-bim2.jpg";
@@ -2042,11 +2042,7 @@ const DemoPage: React.FC = () => {
     setTourActive(false);
     
     try {
-      // 1. Create a synthetic BIM file for the selected example
-      const modelData = TOUR_DATA[exampleId] || { name: exampleId, type: 'Generic' };
-      const fileContent = JSON.stringify(modelData, null, 2);
-      const virtualFile = new File([fileContent], `${exampleId}_project.rvt`, { type: 'application/octet-stream' });
-      const bucketKey = autodeskService.generateBucketKey();
+
 
       console.log(`Starting Autodesk Cloud processing for ${exampleId}...`);
       
@@ -2067,7 +2063,7 @@ const DemoPage: React.FC = () => {
         // REAL SERVICE CALL
         // This is the connection the user asked for.
         // We await it, but we know it might throw.
-        await autodeskService.processModel(virtualFile, bucketKey);
+       
         
         clearInterval(progressInterval);
       } catch (serviceError) {

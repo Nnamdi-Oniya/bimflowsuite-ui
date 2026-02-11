@@ -1,7 +1,7 @@
 // src/components/DashboardHeader.tsx
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../assets/DashboardHeader.css";
+import "../assets/css/DashboardHeader.css";
 
 // SVG Icons
 const SunIcon = () => (

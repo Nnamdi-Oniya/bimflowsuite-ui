@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
-import "../assets/DashboardLayout.css"; // Optional: additional styles if needed
+import "../assets/css/DashboardLayout.css"; // Optional: additional styles if needed
 
 const DashboardLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

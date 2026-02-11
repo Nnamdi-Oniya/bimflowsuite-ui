@@ -1,7 +1,7 @@
 // src/pages/FeaturesPage.tsx (Updated: Contact Sales links to /book-demo)
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../assets/FeaturesPage.css";
+import "../assets/css/FeaturesPage.css";
 import featuresHero from "../assets/images/features-hero.jpg";
 import intentModeling from "../assets/images/intent-modeling.jpg";
 import complianceCheck from "../assets/images/compliance-check.jpg";
