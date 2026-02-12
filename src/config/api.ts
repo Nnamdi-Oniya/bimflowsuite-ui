@@ -37,51 +37,51 @@ export const ENV = {
   version: getEnv('REACT_APP_VERSION', '1.0.0'),
   frontendUrl: getEnv(
     'REACT_APP_FRONTEND_URL',
-    typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173',
+    typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173'
   ),
 } as const;
 
 export const getBackendUrl = (): string => {
-  if (ENV.isDevelopment && typeof window !== 'undefined') {
-    return '';
+  if (ENV.isDevelopment) {
+    return ''; // Use proxy in development
   }
-
   if (ENV.backendUrl) {
     return ENV.backendUrl;
   }
-
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:8000';
   }
-
   return 'https://api.bimflowsuite.com';
 };
 
 export const getApiPrefix = (): string => ENV.apiPrefix;
 
-export const BASE_URL: string = getBackendUrl() + getApiPrefix();
+export const BASE_URL: string = ENV.isDevelopment ? '/api' : getBackendUrl() + getApiPrefix();
 
 export const BACKEND_CONFIG = {
   get baseUrl(): string {
-    return getBackendUrl();
+    return ENV.isDevelopment ? '' : getBackendUrl();
   },
   apiPrefix: ENV.apiPrefix,
   timeout: 30000,
   uploadTimeout: 300000,
-
+  debug: ENV.debug,
+  
+  // ✅ CRITICAL: Token refresh is DISABLED
+  ENABLE_TOKEN_REFRESH: false,
+  
   endpoints: {
     auth: {
       login: '/auth/login/',
       register: '/auth/register/',
       logout: '/auth/logout/',
       verify: '/auth/verify/',
-      refresh: '/token/refresh/',
-      me: '/auth/me/',
+      refresh: '/token/refresh/', // Defined but NEVER used
       changePassword: '/auth/change-password/',
       resetPassword: '/auth/reset-password/',
-      requestReset: '/auth/request-reset/',
-      confirmReset: '/auth/confirm-reset/',
+      requestReset: '/auth/forgot-password/',
+      confirmReset: '/auth/reset-password/',
       activateAccount: '/auth/activate/',
       verifyActivationToken: '/auth/verify-activation-token/',
     },
@@ -91,7 +91,7 @@ export const BACKEND_CONFIG = {
       update: (id: string | number) => `/users/${id}/`,
       delete: (id: string | number) => `/users/${id}/`,
       uploadAvatar: '/users/upload-avatar/',
-      profile: '/users/profile/',
+      profile: '/user/profile/',
     },
     analytics: {
       dashboard: '/analytics/dashboard/',
@@ -175,7 +175,6 @@ export const BACKEND_CONFIG = {
     health: '/health/',
     version: '/version/',
   },
-
   wsEndpoints: {
     notifications: '/ws/notifications/',
     collaboration: '/ws/collaboration/',
@@ -184,47 +183,90 @@ export const BACKEND_CONFIG = {
   },
 } as const;
 
+// Simple token encryption/decryption
+const encodeToken = (token: string): string => {
+  try {
+    return btoa(encodeURIComponent(token));
+  } catch {
+    return token;
+  }
+};
+
+const decodeToken = (encoded: string): string => {
+  try {
+    return decodeURIComponent(atob(encoded));
+  } catch {
+    return encoded;
+  }
+};
+
+// Memory cache
+let memoryAccessToken: string | null = null;
+
+// Initialize from localStorage
+if (typeof window !== 'undefined') {
+  try {
+    const encryptedAccess = localStorage.getItem('access_token');
+    memoryAccessToken = encryptedAccess ? decodeToken(encryptedAccess) : null;
+  } catch (error) {
+    console.error('Failed to initialize tokens:', error);
+  }
+}
+
 export interface TokenPair {
   access: string;
   refresh: string;
 }
 
-let accessToken: string | null = null;
-let refreshToken: string | null = null;
-
-if (typeof window !== 'undefined') {
-  accessToken = localStorage.getItem('access_token');
-  refreshToken = localStorage.getItem('refresh_token');
-}
-
 export const setTokens = (tokens: TokenPair): void => {
-  accessToken = tokens.access;
-  refreshToken = tokens.refresh;
+  memoryAccessToken = tokens.access;
   if (typeof window !== 'undefined') {
-    localStorage.setItem('access_token', tokens.access);
-    localStorage.setItem('refresh_token', tokens.refresh);
+    try {
+      localStorage.setItem('access_token', encodeToken(tokens.access));
+      // Store refresh token but NEVER use it
+      localStorage.setItem('refresh_token', encodeToken(tokens.refresh));
+      window.dispatchEvent(new CustomEvent('auth-state-changed', { 
+        detail: { isAuthenticated: true } 
+      }));
+    } catch (error) {
+      console.error('Failed to store tokens:', error);
+    }
   }
 };
 
 export const clearTokens = (): void => {
-  accessToken = null;
-  refreshToken = null;
+  memoryAccessToken = null;
   if (typeof window !== 'undefined') {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_data');
+    window.dispatchEvent(new CustomEvent('auth-state-changed', { 
+      detail: { isAuthenticated: false } 
+    }));
   }
 };
 
-export const getAccessToken = (): string | null => accessToken;
-export const getRefreshToken = (): string | null => refreshToken;
+export const getAccessToken = (): string | null => memoryAccessToken;
 
 export const isAuthenticated = (): boolean => {
   const token = getAccessToken();
   if (!token) return false;
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.exp * 1000 > Date.now();
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let padded = base64;
+    while (padded.length % 4) padded += '=';
+    const jsonPayload = decodeURIComponent(
+      atob(padded)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const payload = JSON.parse(jsonPayload);
+    const exp = payload.exp;
+    if (typeof exp !== 'number') return false;
+    // 5 minute buffer
+    return exp * 1000 > Date.now() + 300000;
   } catch {
     return false;
   }
@@ -232,7 +274,7 @@ export const isAuthenticated = (): boolean => {
 
 export const getAuthHeaders = (): Record<string, string> => {
   const token = getAccessToken();
-  return token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : {};
+  return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
 export const getWebSocketUrl = (endpoint: string): string => {

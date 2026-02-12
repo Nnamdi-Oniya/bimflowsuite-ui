@@ -1,9 +1,9 @@
-// Updated ForgotPasswordPage.tsx with form validation
+// src/pages/ForgotPasswordPage.tsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 import "../assets/css/ForgotPasswordPage.css";
-import forgotPasswordImage from "../assets/images/forgotPasswordImage.jpg"; // Full-page left side image
+import forgotPasswordImage from "../assets/images/forgotPasswordImage.jpg";
+import { authService } from "../services/authService";
 
 const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,12 +20,10 @@ const ForgotPasswordPage: React.FC = () => {
     const value = e.target.value;
     setEmail(value);
 
-    // Clear error on change
     if (errors.email) {
       setErrors({});
     }
 
-    // Validate email on change
     if (value.trim()) {
       const emailError = validateEmail(value);
       setErrors({ email: emailError });
@@ -49,28 +47,40 @@ const ForgotPasswordPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-    setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      await authService.requestPasswordReset({ email });
+      // success path — backend returns 204 → no body to read
       setMessage("If an account with that email exists, we've sent a reset link.");
       setEmail("");
-    }, 1500);
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      setMessage("An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="forgot-password-page">
-    
       <div className="forgot-password-main">
         <div className="forgot-password-image-section">
-          <img src={forgotPasswordImage} alt="Password recovery illustration" className="forgot-password-image" />
+          <img
+            src={forgotPasswordImage}
+            alt="Password recovery illustration"
+            className="forgot-password-image"
+          />
         </div>
+
         <div className="forgot-password-content-section">
           <div className="forgot-password-content-wrapper">
             <div className="forgot-password-form-card">
               <h2 className="forgot-password-title">Forgot Password</h2>
               <p className="forgot-password-subtitle">Enter your email to reset your password.</p>
+
               <form onSubmit={handleSubmit} className="forgot-password-form">
                 <div className="form-group">
                   <label htmlFor="email" className="form-label">
@@ -81,25 +91,21 @@ const ForgotPasswordPage: React.FC = () => {
                     id="email"
                     value={email}
                     onChange={handleChange}
-                    className={`form-input ${errors.email ? 'error' : ''}`}
+                    className={`form-input ${errors.email ? "error" : ""}`}
                     placeholder="Enter your email"
                     required
                   />
                   {errors.email && <span className="error-text">{errors.email}</span>}
                 </div>
 
-                <button 
-                  type="submit" 
-                  className="forgot-password-btn"
-                  disabled={isLoading}
-                >
+                <button type="submit" className="forgot-password-btn" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <div className="loading-spinner"></div>
                       Sending Link...
                     </>
                   ) : (
-                    'Send Reset Link'
+                    "Send Reset Link"
                   )}
                 </button>
               </form>
@@ -107,7 +113,9 @@ const ForgotPasswordPage: React.FC = () => {
               {message && <div className="success-message">{message}</div>}
 
               <div className="back-link">
-                <Link to="/login" className="back-to-login">Back to Login</Link>
+                <Link to="/login" className="back-to-login">
+                  Back to Login
+                </Link>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
-// src/config/apiClient.ts
-import { BACKEND_CONFIG, type TokenPair, setTokens, clearTokens, getAccessToken, getRefreshToken } from '../config/api';
+// src/service/apiClient.ts
+import { BACKEND_CONFIG, clearTokens, getAccessToken } from '../config/api';
 
 // Types for API responses
 export interface ApiResponse<T = any> {
@@ -22,7 +22,7 @@ export interface ApiError {
   data?: any;
 }
 
-// API Client Class
+// API Client Class - NO REFRESH TOKEN LOGIC
 class ApiClient {
   private baseUrl: string;
   private timeout: number;
@@ -48,7 +48,8 @@ class ApiClient {
     };
 
     const token = getAccessToken();
-    if (token && !endpoint.includes('/auth/') && !endpoint.includes('/token/')) {
+    // Add token for all requests except login
+    if (token && !endpoint.includes('/auth/login/')) {
       requestHeaders['Authorization'] = `Bearer ${token}`;
     }
 
@@ -71,20 +72,15 @@ class ApiClient {
       const response = await fetch(url, config);
       clearTimeout(timeoutId);
 
-      // Handle 401 Unauthorized (login/refresh logic)
-      if (response.status === 401 && getRefreshToken() && !endpoint.includes('/token/refresh/')) {
-        try {
-          const newTokens = await this.refreshToken();
-          if (newTokens) {
-            requestHeaders['Authorization'] = `Bearer ${getAccessToken()}`;
-            const retryResponse = await fetch(url, { ...config, headers: requestHeaders });
-            return await this.handleResponse<T>(retryResponse);
-          }
-        } catch (refreshError) {
-          clearTokens();
-          window.dispatchEvent(new CustomEvent('auth-expired'));
-          throw new Error('Session expired. Please login again.');
-        }
+      // Handle 401 Unauthorized - NO REFRESH ATTEMPT, just clear tokens and throw
+      if (response.status === 401 && !endpoint.includes('/auth/login/')) {
+        clearTokens();
+        window.dispatchEvent(new CustomEvent('auth-expired'));
+        throw {
+          message: 'Session expired. Please login again.',
+          status: 401,
+          code: 'SESSION_EXPIRED'
+        } as ApiError;
       }
 
       return await this.handleResponse<T>(response);
@@ -125,12 +121,14 @@ class ApiClient {
     const responseText = await response.text();
 
     // Debug: Log the response for troubleshooting
-    console.log(`API Response [${response.status}]:`, {
-      url: response.url,
-      status: response.status,
-      statusText: response.statusText,
-      body: responseText
-    });
+    if (BACKEND_CONFIG.debug) {
+      console.log(`API Response [${response.status}]:`, {
+        url: response.url,
+        status: response.status,
+        statusText: response.statusText,
+        body: responseText.substring(0, 500) + (responseText.length > 500 ? '...' : '')
+      });
+    }
 
     if (response.status === 204) {
       return {
@@ -167,7 +165,7 @@ class ApiClient {
         errorMessage = responseData.map(err => typeof err === 'object' ? JSON.stringify(err) : err).join(', ');
       }
 
-      // Handle field-specific errors (like {"username": ["This field is required."]})
+      // Handle field-specific errors
       if (responseData && typeof responseData === 'object' && !Array.isArray(responseData)) {
         validationErrors = Object.entries(responseData)
           .filter(([key]) => key !== 'detail' && key !== 'error' && key !== 'message')
@@ -208,30 +206,7 @@ class ApiClient {
     };
   }
 
-  private async refreshToken(): Promise<TokenPair | null> {
-    const currentRefreshToken = getRefreshToken();
-    if (!currentRefreshToken) return null;
-
-    try {
-      const response = await fetch(`${this.baseUrl}/token/refresh/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refresh: currentRefreshToken }),
-      });
-
-      if (response.ok) {
-        const tokens: TokenPair = await response.json();
-        setTokens(tokens);
-        return tokens;
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  }
-
+  // HTTP methods
   async get<T>(endpoint: string, headers?: Record<string, string>): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'GET', undefined, headers);
   }

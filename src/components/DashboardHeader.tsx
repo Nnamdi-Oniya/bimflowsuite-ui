@@ -1,6 +1,7 @@
 // src/components/DashboardHeader.tsx
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/DashboardHeader.css";
 
 // SVG Icons
@@ -31,7 +32,6 @@ const SettingsIcon = () => (
   </svg>
 );
 
-// Beautiful Chevron Down Icon (rotates on open)
 const ChevronDownIcon = ({ isOpen }: { isOpen: boolean }) => (
   <svg
     width="16"
@@ -52,8 +52,10 @@ const ChevronDownIcon = ({ isOpen }: { isOpen: boolean }) => (
 const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileToggle }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [avatarError, setAvatarError] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   // Theme Setup
   useEffect(() => {
@@ -82,12 +84,97 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
+  const handleLogout = async () => {
     setIsDropdownOpen(false);
-    navigate("/login");
+    try {
+      await logout();
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback: clear everything manually and redirect
+      localStorage.clear();
+      sessionStorage.clear();
+      navigate("/login", { replace: true });
+    }
   };
+
+  // Get user display name
+  const getUserDisplayName = (): string => {
+    if (!user) return "User";
+    
+    if (user.first_name && user.last_name) {
+      return `${user.first_name} ${user.last_name}`;
+    }
+    if (user.first_name) {
+      return user.first_name;
+    }
+    if (user.last_name) {
+      return user.last_name;
+    }
+    if (user.username) {
+      return user.username;
+    }
+    if (user.email) {
+      return user.email.split('@')[0];
+    }
+    return "User";
+  };
+
+  // Get user email
+  const getUserEmail = (): string => {
+    return user?.email || "user@bimflow.com";
+  };
+
+  // Get user initials for avatar
+  const getUserInitials = (): string => {
+    if (!user) return "U";
+    
+    if (user.first_name && user.last_name) {
+      return `${user.first_name[0]}${user.last_name[0]}`.toUpperCase();
+    }
+    if (user.first_name) {
+      return user.first_name[0].toUpperCase();
+    }
+    if (user.last_name) {
+      return user.last_name[0].toUpperCase();
+    }
+    if (user.username) {
+      return user.username[0].toUpperCase();
+    }
+    if (user.email) {
+      return user.email[0].toUpperCase();
+    }
+    return "U";
+  };
+
+  // Get avatar URL - NO BACKEND_CONFIG DEPENDENCY
+  const getAvatarUrl = (): string => {
+    // If we have a profile picture from backend, use it
+    if (user?.profile_picture && !avatarError) {
+      // If it's already a full URL, use it directly
+      if (user.profile_picture.startsWith('http')) {
+        return user.profile_picture;
+      }
+      // If it's a relative path, use it as-is (proxy will handle it)
+      return user.profile_picture;
+    }
+    
+    // Fallback to UI Avatar
+    const initials = getUserInitials();
+    const backgroundColor = theme === 'dark' ? '4ade80' : '3b82f6';
+    const textColor = theme === 'dark' ? '1f2937' : 'ffffff';
+    
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${backgroundColor}&color=${textColor}&bold=true&length=2&size=40`;
+  };
+
+  const handleAvatarError = () => {
+    setAvatarError(true);
+  };
+
+  // Reset avatar error when user changes
+  useEffect(() => {
+    setAvatarError(false);
+  }, [user?.profile_picture, user?.id]);
 
   return (
     <header className="dashboard-header">
@@ -135,9 +222,10 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
               aria-expanded={isDropdownOpen}
             >
               <img
-                src="https://ui-avatars.com/api/?name=Nnamdi+Oniya&background=4ade80&color=1f2937&bold=true"
-                alt="Nnamdi Oniya"
+                src={getAvatarUrl()}
+                alt={getUserDisplayName()}
                 className="avatar"
+                onError={handleAvatarError}
               />
               <ChevronDownIcon isOpen={isDropdownOpen} />
             </button>
@@ -145,8 +233,8 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
             {/* Dropdown Menu */}
             <div className={`user-dropdown ${isDropdownOpen ? "active" : ""}`}>
               <div className="dropdown-header">
-                <div className="dropdown-user-name">Nnamdi Oniya</div>
-                <div className="dropdown-user-email">nnamdi.oniya@bimflow.com</div>
+                <div className="dropdown-user-name">{getUserDisplayName()}</div>
+                <div className="dropdown-user-email">{getUserEmail()}</div>
               </div>
 
               <div className="dropdown-menu">
@@ -173,7 +261,10 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
 
                 <div className="dropdown-divider" />
 
-                <button className="dropdown-item logout" onClick={handleLogout}>
+                <button 
+                  className="dropdown-item logout" 
+                  onClick={handleLogout}
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                     <polyline points="16 17 21 12 16 7" />
