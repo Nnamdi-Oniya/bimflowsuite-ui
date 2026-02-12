@@ -3,10 +3,9 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { authService } from "../services/authService";
 import type { UserProfile } from "../services/authService";
 import { 
-  isUserAuthenticated, 
-  getUserFromStorage, 
-  clearAuthData 
-} from "../utils/authUtils";
+  getAccessToken,
+  isAuthenticated as checkIsAuthenticated
+} from "../config/api";
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -21,34 +20,51 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
-    // Initialize from storage using your utility
-    return getUserFromStorage<UserProfile>();
+    // Initialize from storage
+    return authService.getStoredUser();
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Initialize from your utility
-    return isUserAuthenticated();
+    // Check if we have a valid token
+    return checkIsAuthenticated() && !!getAccessToken();
   });
 
   useEffect(() => {
     // Verify token validity and fetch fresh user data
     const initAuth = async () => {
       try {
-        const authenticated = isUserAuthenticated();
-        setIsAuthenticated(authenticated);
+        const hasValidToken = checkIsAuthenticated() && !!getAccessToken();
+        setIsAuthenticated(hasValidToken);
         
-        if (authenticated) {
+        if (hasValidToken) {
+          // Always try to get fresh user data from API
           const response = await authService.getCurrentUser();
           if (response.success && response.data) {
             setUser(response.data);
+          } else {
+            // If API call fails but we have stored user, keep it
+            const storedUser = authService.getStoredUser();
+            if (storedUser) {
+              setUser(storedUser);
+            } else {
+              // No stored user, clear everything
+              authService.clearAllData();
+              setIsAuthenticated(false);
+              setUser(null);
+            }
           }
         }
       } catch (error) {
         console.error("Failed to initialize auth:", error);
-        // Clear invalid auth data using your utility
-        clearAuthData();
-        setIsAuthenticated(false);
-        setUser(null);
+        // Don't clear data on error, keep existing state
+        const storedUser = authService.getStoredUser();
+        if (storedUser && checkIsAuthenticated()) {
+          setUser(storedUser);
+        } else {
+          authService.clearAllData();
+          setIsAuthenticated(false);
+          setUser(null);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -58,8 +74,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Listen for auth state changes
     const handleAuthChange = (event: CustomEvent) => {
-      setIsAuthenticated(event.detail.isAuthenticated);
-      if (!event.detail.isAuthenticated) {
+      const isAuth = event.detail.isAuthenticated;
+      setIsAuthenticated(isAuth);
+      
+      if (!isAuth) {
         setUser(null);
       } else {
         // Re-fetch user when authenticated
@@ -89,7 +107,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     await authService.logout();
-    // Your clearAuthData is called inside authService.logout()
     setUser(null);
     setIsAuthenticated(false);
   };

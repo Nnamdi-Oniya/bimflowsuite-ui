@@ -1,0 +1,376 @@
+/* ==============================================
+   Dashboard Success Modal – Orange Theme
+   Primary accent: Orange (#F8780F / #E66F0D)
+   All green tones replaced with orange family
+   Use: Profile, Settings, Dashboard updates
+   ============================================== */
+
+:root {
+  --white: #FFFFFF;
+  --gray-border: #E9ECEF;
+  --text-dark: #212529;
+  --text-light: #6B7280;
+  --orange: #F8780F;
+  --orange-dark: #E66F0D;
+  --orange-light: #FF9500;
+  --orange-glow: rgba(248, 120, 15, 0.15);
+  --orange-bg-light: #fff5eb;
+  --orange-bg: #ffe8d1;
+  --orange-muted: #ffab5c;
+  --brown-dark: #4E443C;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  --border-radius: 8px;
+  --btn-height: 48px;
+}
+
+/* Overlay */
+.dashboard-success-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: dashboardFadeIn 0.35s ease-out;
+}
+
+/* Modal Container */
+.dashboard-success-modal {
+  position: relative;
+  background: var(--white);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 
+    var(--shadow-lg),
+    0 12px 40px var(--orange-glow);
+  animation: dashboardSlideUp 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid var(--gray-border);
+}
+
+/* Close Button */
+.dashboard-success-modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.dashboard-success-modal-close-btn:hover {
+  color: var(--orange-dark);
+  background: var(--orange-bg-light);
+  transform: rotate(90deg);
+}
+
+.dashboard-success-modal-close-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Header */
+.dashboard-success-modal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+  animation: dashboardScaleIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 20px var(--orange-glow);
+}
+
+.dashboard-success-icon svg {
+  width: 48px;
+  height: 48px;
+  stroke: white;
+}
+
+.dashboard-success-modal-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+/* Body */
+.dashboard-success-modal-body {
+  margin-bottom: 2rem;
+}
+
+.dashboard-success-message {
+  font-size: 1.15rem;
+  color: #4B5563;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* User Info */
+.dashboard-user-info {
+  background: var(--orange-bg-light);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--gray-border);
+}
+
+.dashboard-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.05rem;
+}
+
+.dashboard-info-label {
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.dashboard-info-value {
+  color: var(--orange-dark);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Updated Fields */
+.dashboard-updated-fields {
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-updated-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6B7280;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dashboard-updated-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.dashboard-updated-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--orange-bg);
+  border-radius: 100px;
+  color: var(--orange-dark);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.dashboard-updated-chip:hover {
+  background: var(--orange-bg-light);
+  border-color: var(--orange);
+  transform: translateY(-2px);
+}
+
+.dashboard-updated-chip svg {
+  color: var(--orange);
+}
+
+/* Confirmation Note */
+.dashboard-confirmation-note {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--orange-bg);
+  border: 1px solid rgba(248, 120, 15, 0.25);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  color: var(--orange-dark);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.dashboard-confirmation-note svg {
+  flex-shrink: 0;
+  stroke: var(--orange-dark);
+}
+
+/* Footer */
+.dashboard-success-modal-footer {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.dashboard-success-modal-btn {
+  flex: 1;
+  height: var(--btn-height);
+  padding: 0 2rem;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px var(--orange-glow);
+}
+
+.dashboard-success-modal-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(248, 120, 15, 0.35);
+}
+
+.dashboard-success-modal-btn:active {
+  transform: translateY(0);
+}
+
+.dashboard-success-modal-btn-secondary {
+  flex: 1;
+  height: var(--btn-height);
+  padding: 0 2rem;
+  background: var(--white);
+  color: #6B7280;
+  border: 2px solid var(--gray-border);
+  border-radius: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dashboard-success-modal-btn-secondary:hover {
+  background: #fefaf6;
+  border-color: var(--orange-muted);
+  color: var(--orange-dark);
+}
+
+/* Animations */
+@keyframes dashboardFadeIn {
+  from { 
+    opacity: 0; 
+    backdrop-filter: blur(0);
+  }
+  to { 
+    opacity: 1; 
+    backdrop-filter: blur(10px);
+  }
+}
+
+@keyframes dashboardSlideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(35px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes dashboardScaleIn {
+  0%   { 
+    transform: scale(0); 
+    opacity: 0;
+  }
+  70%  { 
+    transform: scale(1.15); 
+    opacity: 0.95;
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .dashboard-success-modal {
+    padding: 2rem 1.5rem;
+  }
+  
+  .dashboard-success-modal-title {
+    font-size: 1.8rem;
+  }
+  
+  .dashboard-success-modal-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .dashboard-success-modal-btn,
+  .dashboard-success-modal-btn-secondary {
+    width: 100%;
+  }
+
+  .dashboard-confirmation-note {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .dashboard-updated-grid {
+    justify-content: center;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .dashboard-success-modal {
+    background: #1a1e24;
+    border-color: #2d3238;
+  }
+  
+  .dashboard-success-message {
+    color: #9CA3AF;
+  }
+  
+  .dashboard-user-info {
+    background: rgba(248, 120, 15, 0.1);
+    border-color: #2d3238;
+  }
+  
+  .dashboard-info-label {
+    color: #9CA3AF;
+  }
+  
+  .dashboard-success-modal-btn-secondary {
+    background: transparent;
+    color: #9CA3AF;
+    border-color: #2d3238;
+  }
+  
+  .dashboard-success-modal-btn-secondary:hover {
+    background: rgba(248, 120, 15, 0.1);
+    color: var(--orange);
+  }
+}

@@ -1,3 +1,4 @@
+// src/config/api.ts
 type Env = Record<string, string | undefined>;
 declare const process: { env: Env } | undefined;
 
@@ -67,7 +68,7 @@ export const BACKEND_CONFIG = {
   uploadTimeout: 300000,
   debug: ENV.debug,
   
-  // ✅ CRITICAL: Set this to FALSE to disable token refresh attempts
+  // ✅ CRITICAL: Token refresh is DISABLED
   ENABLE_TOKEN_REFRESH: false,
   
   endpoints: {
@@ -76,7 +77,7 @@ export const BACKEND_CONFIG = {
       register: '/auth/register/',
       logout: '/auth/logout/',
       verify: '/auth/verify/',
-      refresh: '/token/refresh/', // Still defined but won't be used
+      refresh: '/token/refresh/', // Defined but NEVER used
       changePassword: '/auth/change-password/',
       resetPassword: '/auth/reset-password/',
       requestReset: '/auth/forgot-password/',
@@ -182,11 +183,6 @@ export const BACKEND_CONFIG = {
   },
 } as const;
 
-export interface TokenPair {
-  access: string;
-  refresh: string;
-}
-
 // Simple token encryption/decryption
 const encodeToken = (token: string): string => {
   try {
@@ -206,26 +202,28 @@ const decodeToken = (encoded: string): string => {
 
 // Memory cache
 let memoryAccessToken: string | null = null;
-let memoryRefreshToken: string | null = null;
 
 // Initialize from localStorage
 if (typeof window !== 'undefined') {
   try {
     const encryptedAccess = localStorage.getItem('access_token');
-    const encryptedRefresh = localStorage.getItem('refresh_token');
     memoryAccessToken = encryptedAccess ? decodeToken(encryptedAccess) : null;
-    memoryRefreshToken = encryptedRefresh ? decodeToken(encryptedRefresh) : null;
   } catch (error) {
     console.error('Failed to initialize tokens:', error);
   }
 }
 
+export interface TokenPair {
+  access: string;
+  refresh: string;
+}
+
 export const setTokens = (tokens: TokenPair): void => {
   memoryAccessToken = tokens.access;
-  memoryRefreshToken = tokens.refresh;
   if (typeof window !== 'undefined') {
     try {
       localStorage.setItem('access_token', encodeToken(tokens.access));
+      // Store refresh token but NEVER use it
       localStorage.setItem('refresh_token', encodeToken(tokens.refresh));
       window.dispatchEvent(new CustomEvent('auth-state-changed', { 
         detail: { isAuthenticated: true } 
@@ -238,7 +236,6 @@ export const setTokens = (tokens: TokenPair): void => {
 
 export const clearTokens = (): void => {
   memoryAccessToken = null;
-  memoryRefreshToken = null;
   if (typeof window !== 'undefined') {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
@@ -250,7 +247,6 @@ export const clearTokens = (): void => {
 };
 
 export const getAccessToken = (): string | null => memoryAccessToken;
-export const getRefreshToken = (): string | null => memoryRefreshToken;
 
 export const isAuthenticated = (): boolean => {
   const token = getAccessToken();

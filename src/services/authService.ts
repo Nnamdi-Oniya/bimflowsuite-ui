@@ -1,3 +1,4 @@
+// src/services/authService.ts
 import { apiClient, type ApiResponse } from './apiClient';
 import {
   BACKEND_CONFIG,
@@ -5,12 +6,9 @@ import {
   setTokens,
   clearTokens,
   getAccessToken,
-  getRefreshToken,
 } from '../config/api';
 
-// ────────────────────────────────────────────────
-// Types – export everything
-// ────────────────────────────────────────────────
+
 export interface UserProfile {
   id: number;
   username: string;
@@ -107,12 +105,9 @@ type ServiceAuthResponse = {
   tokens: TokenPair;
 };
 
-// ────────────────────────────────────────────────
-// Auth Service Class (consolidated for BIMFlow Suite)
- // ────────────────────────────────────────────────
+
 class AuthService {
   private endpoints = BACKEND_CONFIG.endpoints;
-  private refreshPromise: Promise<ApiResponse<TokenPair>> | null = null;
 
   // ─── Utility Methods ──────────────────────────────
   private decodeBase64String(encoded: string): string {
@@ -133,7 +128,7 @@ class AuthService {
         return decoded;
       }
     } catch (error) {
-      console.error('Base64 decode error in BIMFlow Suite:', error);
+      console.error('Base64 decode error:', error);
       return encoded;
     }
   }
@@ -162,35 +157,70 @@ class AuthService {
           password: credentials.password,
         }
       );
+      
       if (!raw.success || !raw.data) {
         return {
           success: false,
           status: raw.status || 401,
-          message: raw.message || 'Login failed in BIMFlow Suite',
+          message: raw.message || 'Login failed',
         };
       }
+      
       const { user: backendUser, tokens } = raw.data;
+      
+      // Store tokens FIRST
       setTokens(tokens);
-      const userProfile: UserProfile = {
-        id: backendUser.id,
-        username: backendUser.username,
-        email: backendUser.email,
-        date_joined: backendUser.date_joined,
-        is_active: true,
-        first_name: '',
-        last_name: '',
-        phone_number: '',
-        location: '',
-        company: '',
-        job_title: '',
-      };
+      
+      // NOW fetch the REAL user profile from /user/profile/
+      let userProfile: UserProfile;
+      
+      try {
+        const profileResponse = await this.getCurrentUser();
+        if (profileResponse.success && profileResponse.data) {
+          userProfile = profileResponse.data;
+        } else {
+          // Fallback to basic profile if profile fetch fails
+          userProfile = {
+            id: backendUser.id,
+            username: backendUser.username,
+            email: backendUser.email,
+            date_joined: backendUser.date_joined,
+            is_active: true,
+            first_name: '',
+            last_name: '',
+            phone_number: '',
+            location: '',
+            company: '',
+            job_title: '',
+          };
+        }
+      } catch (error) {
+        // Fallback to basic profile
+        userProfile = {
+          id: backendUser.id,
+          username: backendUser.username,
+          email: backendUser.email,
+          date_joined: backendUser.date_joined,
+          is_active: true,
+          first_name: '',
+          last_name: '',
+          phone_number: '',
+          location: '',
+          company: '',
+          job_title: '',
+        };
+      }
+      
+      // Store user data
       localStorage.setItem('user_data', JSON.stringify(userProfile));
      
+      // Dispatch auth state changed event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('auth-state-changed', {
           detail: { isAuthenticated: true }
         }));
       }
+      
       return {
         success: true,
         data: {
@@ -198,14 +228,14 @@ class AuthService {
           tokens,
         },
         status: raw.status,
-        message: raw.message || 'Login successful in BIMFlow Suite',
+        message: raw.message || 'Login successful',
       };
     } catch (error: any) {
-      console.error('Login service error in BIMFlow Suite:', error);
+      console.error('Login service error:', error);
       return {
         success: false,
         status: error.status || 401,
-        message: error.message || 'Login failed in BIMFlow Suite',
+        message: error.message || 'Login failed',
       };
     }
   }
@@ -221,15 +251,21 @@ class AuthService {
           password: data.password,
         }
       );
+      
       if (!raw.success || !raw.data) {
         return {
           success: false,
           status: raw.status || 400,
-          message: raw.message || 'Registration failed in BIMFlow Suite',
+          message: raw.message || 'Registration failed',
         };
       }
+      
       const { user: backendUser, tokens } = raw.data;
+      
+      // Store tokens
       setTokens(tokens);
+      
+      // Create user profile with provided registration data
       const userProfile: UserProfile = {
         id: backendUser.id,
         username: backendUser.username,
@@ -240,14 +276,30 @@ class AuthService {
         last_name: data.last_name || '',
         company: data.company || '',
         phone_number: data.phone || '',
+        location: '',
+        job_title: '',
       };
+      
+      // Store user data
       localStorage.setItem('user_data', JSON.stringify(userProfile));
+      
+      // Try to fetch updated profile after registration
+      try {
+        const profileResponse = await this.getCurrentUser();
+        if (profileResponse.success && profileResponse.data) {
+          localStorage.setItem('user_data', JSON.stringify(profileResponse.data));
+        }
+      } catch (error) {
+        // Silently fail - we already have basic profile
+      }
      
+      // Dispatch auth state changed event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('auth-state-changed', {
           detail: { isAuthenticated: true }
         }));
       }
+      
       return {
         success: true,
         data: {
@@ -255,13 +307,13 @@ class AuthService {
           tokens,
         },
         status: raw.status,
-        message: raw.message || 'Registration successful in BIMFlow Suite',
+        message: raw.message || 'Registration successful',
       };
     } catch (error: any) {
       return {
         success: false,
         status: error.status || 400,
-        message: error.message || 'Registration failed in BIMFlow Suite',
+        message: error.message || 'Registration failed',
       };
     }
   }
@@ -269,9 +321,10 @@ class AuthService {
   // ─── Logout ───────────────────────────────────────
   async logout(): Promise<ApiResponse> {
     try {
-      await apiClient.post(this.endpoints.auth.logout, {});
-    } catch (error) {
-      console.warn('Logout API call failed in BIMFlow Suite, clearing tokens locally:', error);
+      // Try to call logout endpoint, but don't wait for it
+      await apiClient.post(this.endpoints.auth.logout, {}).catch(() => {
+        // Silently fail - we're logging out anyway
+      });
     } finally {
       this.clearAllData();
      
@@ -281,9 +334,10 @@ class AuthService {
         }));
       }
     }
+    
     return {
       data: null,
-      message: 'Logged out successfully from BIMFlow Suite',
+      message: 'Logged out successfully',
       status: 200,
       success: true,
     };
@@ -292,75 +346,60 @@ class AuthService {
   // ─── Get Current User ─────────────────────────────
   async getCurrentUser(): Promise<ApiResponse<UserProfile>> {
     const storedUser = this.getStoredUser();
-    if (storedUser && this.isAuthenticated()) {
-      return {
-        data: storedUser,
-        status: 200,
-        success: true,
-        message: 'User retrieved from storage in BIMFlow Suite',
-      };
-    }
+    
+    // If we have a valid token, always fetch fresh data from API
     if (this.isAuthenticated()) {
       try {
         const resp = await apiClient.get<UserProfile>(this.endpoints.users.profile);
        
         if (resp.success && resp.data) {
+          // Update stored user with fresh data
           localStorage.setItem('user_data', JSON.stringify(resp.data));
+          return resp;
         }
-       
-        return resp;
       } catch (error) {
-        console.error('Failed to fetch user profile in BIMFlow Suite:', error);
+        console.error('Failed to fetch user profile:', error);
+        
+        // If API call fails but we have stored user, return stored user
+        if (storedUser) {
+          return {
+            data: storedUser,
+            status: 200,
+            success: true,
+            message: 'User retrieved from storage (API unavailable)',
+          };
+        }
+        
         return {
           success: false,
           status: 401,
-          message: 'Failed to fetch user profile in BIMFlow Suite',
+          message: 'Failed to fetch user profile',
         };
       }
     }
+    
+    // Not authenticated, return stored user if exists (for backward compatibility)
+    if (storedUser) {
+      return {
+        data: storedUser,
+        status: 200,
+        success: true,
+        message: 'User retrieved from storage',
+      };
+    }
+    
     return {
       success: false,
       status: 401,
-      message: 'Not authenticated in BIMFlow Suite',
+      message: 'Not authenticated',
     };
-  }
-
-  // ─── Token Refresh ────────────────────────────────
-  async refreshAccessToken(): Promise<ApiResponse<TokenPair>> {
-    if (this.refreshPromise) {
-      return this.refreshPromise;
-    }
-    const refresh = getRefreshToken();
-    if (!refresh) {
-      return {
-        success: false,
-        status: 401,
-        message: 'No refresh token available in BIMFlow Suite',
-      };
-    }
-    this.refreshPromise = apiClient.post<TokenPair>(
-      this.endpoints.auth.refresh,
-      { refresh }
-    ).then(resp => {
-      if (resp.success && resp.data) {
-        setTokens(resp.data);
-      }
-      this.refreshPromise = null;
-      return resp;
-    }).catch(error => {
-      this.refreshPromise = null;
-      if (error.status === 401) {
-        this.clearAllData();
-      }
-      throw error;
-    });
-    return this.refreshPromise;
   }
 
   // ─── Password Reset & Activation ──────────────────
   async requestPasswordReset(data: PasswordResetRequest): Promise<ApiResponse> {
     return apiClient.post(this.endpoints.auth.requestReset, data);
   }
+  
   async confirmPasswordReset(data: PasswordResetConfirm): Promise<ApiResponse> {
     return apiClient.post(this.endpoints.auth.confirmReset, {
       token: data.token,
@@ -368,6 +407,7 @@ class AuthService {
       password_confirm: data.confirm_new_password,
     });
   }
+  
   async activateAccount(data: SetPasswordData): Promise<ApiResponse<SetPasswordResponse>> {
     const payload = {
       email: data.email,
@@ -381,6 +421,7 @@ class AuthService {
       payload
     );
   }
+  
   async verifyActivationToken(data: VerifyTokenData): Promise<ApiResponse<VerifyTokenResponse>> {
     const payload = {
       email: data.email,
@@ -397,6 +438,7 @@ class AuthService {
   isAuthenticated(): boolean {
     const token = getAccessToken();
     if (!token) return false;
+    
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -418,10 +460,10 @@ class AuthService {
      
       if (typeof exp !== 'number') return false;
      
-      // 30 second buffer for BIMFlow Suite network lag
-      return exp * 1000 > Date.now() + 30000;
+      // 5 minute buffer for network lag
+      return exp * 1000 > Date.now() + 300000;
     } catch (err) {
-      console.warn('[auth] Failed to parse JWT in BIMFlow Suite', err);
+      console.warn('[auth] Failed to parse JWT', err);
       return false;
     }
   }
@@ -500,7 +542,7 @@ class AuthService {
     }
   }
 
-  // ─── BIMFlow Suite Specific: Base64 Encoding/Decoding ─────────────────
+  // ─── Base64 Encoding/Decoding ─────────────────
   decodeBase64(encoded: string): string {
     return this.decodeBase64String(encoded);
   }
@@ -510,7 +552,7 @@ class AuthService {
       const utf8Bytes = unescape(encodeURIComponent(text));
       return btoa(utf8Bytes);
     } catch (error) {
-      console.error('Base64 encode error in BIMFlow Suite:', error);
+      console.error('Base64 encode error:', error);
       return btoa(text);
     }
   }

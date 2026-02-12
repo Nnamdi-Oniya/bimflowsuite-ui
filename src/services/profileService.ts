@@ -11,23 +11,33 @@ class ProfileService {
   }
 
   async updateProfile(data: Partial<UserProfile>): Promise<ApiResponse<UserProfile>> {
-    return apiClient.patch<UserProfile>(this.base, data);
+    return apiClient.put<UserProfile>(this.base, data);
   }
 
-  async uploadAvatar(file: File): Promise<ApiResponse<{ profile_picture: string }>> {
+  async uploadAvatar(file: File): Promise<ApiResponse<UserProfile>> {
     const formData = new FormData();
     formData.append('profile_picture', file);
 
-    return apiClient.post<{ profile_picture: string }>(
-      `${this.base}upload-avatar/`,
+    // ✅ Profile picture is updated via PUT to same endpoint with profile_picture field
+    return apiClient.put<UserProfile>(
+      this.base,
       formData,
       undefined,
       true
     );
   }
 
-  async removeAvatar(): Promise<ApiResponse> {
-    return apiClient.delete(`${this.base}avatar/`);
+  async removeAvatar(): Promise<ApiResponse<UserProfile>> {
+    // ✅ Send empty string to clear profile picture
+    const formData = new FormData();
+    formData.append('profile_picture', '');
+    
+    return apiClient.put<UserProfile>(
+      this.base,
+      formData,
+      undefined,
+      true
+    );
   }
 }
 

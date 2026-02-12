@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import GetStartedModal from "./GetStartedModal";
 import logo from "../assets/images/bimflow-logo.png";
 import { authService } from "../services/authService";
-import { getAccessToken } from "../config/api";
+import { getAccessToken, isAuthenticated as checkIsAuthenticated } from "../config/api";
 import type { UserProfile } from "../services/authService";
 import "../assets/css/Header.css";
 
@@ -31,13 +31,8 @@ const Header: React.FC = () => {
         return;
       }
 
-      let authenticated = authService.isAuthenticated();
-
-      if (!authenticated) {
-        const refreshResult = await authService.refreshAccessToken();
-        authenticated = refreshResult.success;
-      }
-
+      // ✅ Simply check if token is valid - NO REFRESH ATTEMPT
+      const authenticated = checkIsAuthenticated() && !!getAccessToken();
       setIsLoggedIn(authenticated);
 
       if (authenticated) {
@@ -79,16 +74,27 @@ const Header: React.FC = () => {
       navigate('/login', { state: { from: location.pathname } });
     };
 
+    const handleAuthStateChanged = (event: CustomEvent) => {
+      setIsLoggedIn(event.detail.isAuthenticated);
+      if (!event.detail.isAuthenticated) {
+        setUser(null);
+      } else {
+        checkAuth();
+      }
+    };
+
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("focus", checkAuth);
     window.addEventListener("auth-expired", handleAuthExpired);
+    window.addEventListener("auth-state-changed", handleAuthStateChanged as EventListener);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("focus", checkAuth);
       window.removeEventListener("auth-expired", handleAuthExpired);
+      window.removeEventListener("auth-state-changed", handleAuthStateChanged as EventListener);
     };
-  }, [location.pathname]);
+  }, [location.pathname, navigate]);
 
   const handleLogout = async () => {
     await authService.logout();
@@ -98,10 +104,12 @@ const Header: React.FC = () => {
     navigate("/");
   };
 
+  // Don't render header on dashboard pages
   if (location.pathname.startsWith("/dashboard")) {
     return null;
   }
 
+  // Loading state
   if (loading) {
     return (
       <header className="header" role="banner">

@@ -480,3 +480,218 @@
     font-size: 2rem;
   }
 }
+
+
+/* Add to src/assets/css/SettingsPage.css */
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--orange, #F8780F);
+}
+
+.input-disabled {
+  background-color: #F3F4F6;
+  color: #6B7280;
+  cursor: not-allowed;
+}
+
+.field-note {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #6B7280;
+}
+
+.field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #EF4444;
+}
+
+input.error {
+  border-color: #EF4444;
+}
+
+.password-requirements {
+  background: #F9FAFB;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #E5E7EB;
+}
+
+.password-requirements h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+}
+
+.password-requirements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.password-requirements li {
+  font-size: 0.9rem;
+  color: #6B7280;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.password-requirements li.met {
+  color: #10B981;
+}
+
+.tab-description {
+  color: #6B7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.error-message {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #B91C1C;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Dark mode support */
+.dark .password-requirements {
+  background: #1F2937;
+  border-color: #374151;
+}
+
+.dark .password-requirements h4 {
+  color: #E5E7EB;
+}
+
+.dark .password-requirements li {
+  color: #9CA3AF;
+}
+
+.dark .password-requirements li.met {
+  color: #34D399;
+}
+
+.dark .input-disabled {
+  background-color: #374151;
+  color: #9CA3AF;
+}
+
+.dark .field-note {
+  color: #9CA3AF;
+}
+
+.dark .error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #FCA5A5;
+}
+
+
+/* Add to src/assets/css/SettingsPage.css */
+
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #F8780F 0%, #E66F0D 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(248, 120, 15, 0.25);
+}
+
+.coming-soon-badge .badge-icon {
+  font-size: 1.25rem;
+}
+
+.upload-label.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upload-label.disabled:hover {
+  border-color: #E5E7EB;
+  background: #F9FAFB;
+}
+
+.upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upload-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Dark mode support */
+.dark .coming-soon-badge {
+  background: linear-gradient(135deg, #F8780F 0%, #E66F0D 100%);
+  color: white;
+}
+
+.dark .upload-label.disabled {
+  border-color: #374151;
+  background: #1F2937;
+}
+
+.dark .upload-label.disabled:hover {
+  border-color: #374151;
+  background: #1F2937;
+}
+
+/* Make sure these exist in your SettingsPage.css */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+input:disabled, select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
