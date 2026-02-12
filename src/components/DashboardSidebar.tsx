@@ -1,9 +1,9 @@
-// src/components/DashboardSidebar.tsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../assets/css/DashboardSidebar.css";
 
-// Keep all your beautiful SVG icons exactly as they are (unchanged)
+// ─── Icons (unchanged) ──────────────────────────────────────────────
+
 const HomeIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M3 9L12 2L21 9V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V9Z" />
@@ -92,52 +92,58 @@ const TemplatesIcon = () => (
   </svg>
 );
 
-const DashboardSidebar: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({ isOpen, onToggle }) => {
+// ─── Component ──────────────────────────────────────────────────────
+
+interface DashboardSidebarProps {
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, onToggle }) => {
   const location = useLocation();
 
-  const sidebarItems = [
-    { id: "overview", label: "Overview", icon: <HomeIcon />, link: "/dashboard" },
-    { id: "projects", label: "Projects", icon: <ProjectsIcon />, link: "/dashboard/projects" },
-    { id: "upload", label: "Upload & Validate", icon: <UploadIcon />, link: "/dashboard/upload-ifc" },
-    { id: "generate", label: "Generate Model", icon: <GenerateIcon />, link: "/dashboard/generate" },
-    { id: "compliance", label: "Compliance Checks", icon: <ComplianceIcon />, link: "/dashboard/compliance" },
-    { id: "clash", label: "Clash Detection", icon: <ClashIcon />, link: "/dashboard/clash-detection" },
-    { id: "cost", label: "Cost Estimation", icon: <CostIcon />, link: "/dashboard/cost-estimation" },
-    { id: "schedule", label: "Project Scheduling", icon: <ScheduleIcon />, link: "/dashboard/scheduling" },
-    { id: "reports", label: "Reports Center", icon: <ReportsIcon />, link: "/dashboard/reports" },
-    { id: "scenarios", label: "Scenario Manager", icon: <ScenarioIcon />, link: "/dashboard/scenarios" },
-    { id: "templates", label: "Templates", icon: <TemplatesIcon />, link: "/dashboard/templates" },
+  const items = [
+    { id: "overview",   label: "Overview",          icon: <HomeIcon />,       to: "/dashboard"               },
+    { id: "projects",   label: "Projects",          icon: <ProjectsIcon />,   to: "/dashboard/projects"      },
+    { id: "upload",     label: "Upload & Validate", icon: <UploadIcon />,     to: "/dashboard/upload-ifc"    },
+    { id: "generate",   label: "Generate Model",    icon: <GenerateIcon />,   to: "/dashboard/generate"      },
+    { id: "compliance", label: "Compliance Checks", icon: <ComplianceIcon />, to: "/dashboard/compliance"    },
+    { id: "clash",      label: "Clash Detection",   icon: <ClashIcon />,      to: "/dashboard/clash-detection" },
+    { id: "cost",       label: "Cost Estimation",   icon: <CostIcon />,       to: "/dashboard/cost-estimation" },
+    { id: "schedule",   label: "Project Scheduling",icon: <ScheduleIcon />,   to: "/dashboard/scheduling"    },
+    { id: "reports",    label: "Reports Center",    icon: <ReportsIcon />,    to: "/dashboard/reports"       },
+    { id: "scenarios",  label: "Scenario Manager",  icon: <ScenarioIcon />,   to: "/dashboard/scenarios"     },
+    { id: "templates",  label: "Templates",         icon: <TemplatesIcon />,  to: "/dashboard/templates"     },
   ];
 
-  const isActive = (link: string) => {
-    if (link === "/dashboard") return location.pathname === "/dashboard";
-    return location.pathname.startsWith(link);
+  const isActive = (path: string) =>
+    path === "/dashboard" ? location.pathname === "/dashboard" : location.pathname.startsWith(path);
+
+  const closeOnMobile = () => {
+    if (window.innerWidth <= 1024) onToggle();
   };
 
   return (
     <>
       {isOpen && <div className="sidebar-backdrop" onClick={onToggle} />}
-      <nav className={`dashboard-sidebar ${isOpen ? 'active' : ''}`}>
-        <div className="sidebar-header">
-            <Link to="/" className="sidebar-title-link">
-              <h2 className="sidebar-title">BIMFlow Suite</h2>
-            </Link>
 
-            <button
-              className="sidebar-close"
-              onClick={onToggle}
-              aria-label="Close sidebar"
-            >
-            </button>
-          </div>
+      <nav className={`dashboard-sidebar ${isOpen ? "active" : ""}`}>
+        <div className="sidebar-header">
+          <Link to="/" className="sidebar-brand" onClick={closeOnMobile}>
+            <h2 className="sidebar-title">BIMFlow Suite</h2>
+          </Link>
+          <button className="sidebar-close" onClick={onToggle} aria-label="Close sidebar">
+            ×
+          </button>
+        </div>
 
         <ul className="sidebar-nav">
-          {sidebarItems.map(item => (
+          {items.map(item => (
             <li key={item.id}>
               <Link
-                to={item.link}
-                className={`sidebar-link ${isActive(item.link) ? 'active' : ''}`}
-                onClick={() => window.innerWidth <= 1024 && onToggle()}
+                to={item.to}
+                className={`sidebar-link ${isActive(item.to) ? "active" : ""}`}
+                onClick={closeOnMobile}
               >
                 <span className="sidebar-icon">{item.icon}</span>
                 <span className="sidebar-label">{item.label}</span>
@@ -145,7 +151,6 @@ const DashboardSidebar: React.FC<{ isOpen: boolean; onToggle: () => void }> = ({
             </li>
           ))}
         </ul>
-        {/* Footer removed completely - no user info, theme, or logout */}
       </nav>
     </>
   );

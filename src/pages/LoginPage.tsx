@@ -1,23 +1,59 @@
 // src/pages/LoginPage.tsx
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../assets/css/LoginPage.css";
-import loginImage from "../assets/images/loginImage2.jpg"; 
-
-import { authService } from "../services/authService"; 
+import loginImage from "../assets/images/loginImage2.jpg";
+import { authService } from "../services/authService";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get redirect path from state
+  const from = (location.state as any)?.from || "/dashboard";
+  const successMessage = (location.state as any)?.message;
 
   const [formData, setFormData] = useState({
-    identifier: "", // Can be email or username
+    identifier: "",
     password: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState<string>("");
+  const [successMessageState, setSuccessMessageState] = useState<string>(successMessage || "");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Clear success message after 5 seconds
+  useEffect(() => {
+    if (successMessageState) {
+      const timer = setTimeout(() => {
+        setSuccessMessageState("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessageState]);
+
+  // Check if already authenticated
+  useEffect(() => {
+    if (authService.isAuthenticated()) {
+      navigate(from, { replace: true });
+    }
+  }, [navigate, from]);
+
+  // Listen for auth state changes
+  useEffect(() => {
+    const handleAuthChange = (event: CustomEvent) => {
+      if (event.detail.isAuthenticated) {
+        navigate(from, { replace: true });
+      }
+    };
+
+    window.addEventListener('auth-state-changed', handleAuthChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('auth-state-changed', handleAuthChange as EventListener);
+    };
+  }, [navigate, from]);
 
   const validateIdentifier = (identifier: string): string => {
     if (!identifier.trim()) {
@@ -28,20 +64,21 @@ const LoginPage: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear field + global error on change
+    // Clear field-specific error
     if (errors[name]) {
-      setErrors({ ...errors, [name]: "" });
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+    
+    // Clear API error when user starts typing
     if (apiError) {
       setApiError("");
     }
 
-    // Live validation for identifier
     if (name === "identifier" && value.trim()) {
       const identifierError = validateIdentifier(value);
-      setErrors({ ...errors, identifier: identifierError });
+      setErrors((prev) => ({ ...prev, identifier: identifierError }));
     }
   };
 
@@ -66,87 +103,52 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     setApiError("");
+    setSuccessMessageState("");
+    
     if (!validateForm()) return;
+    if (isLoading) return;
 
     setIsLoading(true);
 
     try {
-      const identifier = formData.identifier.trim();
-      
       const credentials = {
-        username_or_email: identifier, 
+        username_or_email: formData.identifier.trim(),
         password: formData.password,
       };
 
-      console.log('Sending login request with:', credentials);
-
       const response = await authService.login(credentials);
 
-      console.log('Login response:', response);
-
       if (response.success && response.data) {
-        // Login successful → tokens & user already saved by authService
-        navigate("/dashboard", { replace: true });
+        // Don't navigate here - let the auth-state-changed event handle it
+        // This ensures consistency across the app
       } else {
-        // Check for specific error messages from response
         if (response.message) {
           setApiError(response.message);
         } else {
           setApiError("Login failed. Please check your credentials.");
         }
+        setIsLoading(false);
       }
     } catch (err: any) {
       console.error('Login error:', err);
       
-      // Handle different error shapes from your ApiClient
       let message = "An error occurred. Please try again later.";
 
       if (err.message) {
         message = err.message;
       }
 
-      // Specific handling for 401 Unauthorized (invalid credentials)
       if (err.status === 401) {
-        // Check if backend returned a specific error message
-        if (err.data?.error) {
-          message = err.data.error; // "Invalid credentials"
-        } else if (err.data?.detail) {
-          message = err.data.detail;
-        } else {
-          message = "Invalid email/username or password.";
-        }
-      } 
-      // Handle 400 Bad Request (validation errors)
-      else if (err.status === 400) {
-        if (err.errors?.length) {
-          // Validation errors from serializer
-          const firstError = err.errors[0];
-          message = `${firstError.field}: ${firstError.messages.join(", ")}`;
-        } else if (err.data) {
-          // Check for field-specific errors in the data
-          const errorFields = Object.keys(err.data);
-          if (errorFields.length > 0 && errorFields[0] !== 'detail' && errorFields[0] !== 'error') {
-            const firstField = errorFields[0];
-            const fieldError = Array.isArray(err.data[firstField]) 
-              ? err.data[firstField][0] 
-              : err.data[firstField];
-            message = `${firstField}: ${fieldError}`;
-          } else if (err.data.detail) {
-            message = err.data.detail;
-          } else if (err.data.error) {
-            message = err.data.error;
-          } else if (typeof err.data === 'string') {
-            message = err.data;
-          }
-        }
-      } 
-      // Handle network errors
-      else if (err.status === 0 || err.code === "NETWORK_ERROR") {
+        message = "Invalid email/username or password.";
+      } else if (err.status === 400) {
+        message = "Please check your input and try again.";
+      } else if (err.status === 0 || err.code === "NETWORK_ERROR") {
         message = "Cannot connect to the server. Please check your internet connection.";
+      } else if (err.status === 404) {
+        message = "Login service not available. Please try again later.";
       }
 
       setApiError(message);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -166,10 +168,15 @@ const LoginPage: React.FC = () => {
                 Sign in to your BIMFlow Suite account to access your projects and tools.
               </p>
 
+              {successMessageState && (
+                <div className="success-message" role="alert">
+                  ✅ {successMessageState}
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="login-form">
-                {/* API Error Display */}
                 {apiError && (
-                  <div className="api-error-message">
+                  <div className="api-error-message" role="alert">
                     ⚠️ {apiError}
                   </div>
                 )}
@@ -187,10 +194,12 @@ const LoginPage: React.FC = () => {
                     className={`form-input ${errors.identifier ? "error" : ""}`}
                     placeholder="Enter your email or username"
                     autoComplete="username"
-                    required
+                    disabled={isLoading}
+                    aria-invalid={!!errors.identifier}
+                    aria-describedby={errors.identifier ? "identifier-error" : undefined}
                   />
                   {errors.identifier && (
-                    <span className="error-text">
+                    <span id="identifier-error" className="error-text">
                       {errors.identifier}
                     </span>
                   )}
@@ -210,7 +219,9 @@ const LoginPage: React.FC = () => {
                       className={`form-input ${errors.password ? "error" : ""}`}
                       placeholder="Enter your password"
                       autoComplete="current-password"
-                      required
+                      disabled={isLoading}
+                      aria-invalid={!!errors.password}
+                      aria-describedby={errors.password ? "password-error" : undefined}
                     />
                   </div>
 
@@ -219,7 +230,7 @@ const LoginPage: React.FC = () => {
                   </Link>
 
                   {errors.password && (
-                    <span className="error-text">
+                    <span id="password-error" className="error-text">
                       {errors.password}
                     </span>
                   )}
@@ -232,7 +243,16 @@ const LoginPage: React.FC = () => {
                 >
                   {isLoading ? (
                     <>
-                      <div className="loading-spinner"></div>
+                      <span className="loading-spinner" style={{ 
+                        display: "inline-block",
+                        width: "20px", 
+                        height: "20px", 
+                        border: "2px solid rgba(255,255,255,0.3)", 
+                        borderTop: "2px solid white", 
+                        borderRadius: "50%", 
+                        animation: "spin 0.8s linear infinite",
+                        marginRight: "8px"
+                      }} />
                       Signing In...
                     </>
                   ) : (
@@ -257,7 +277,7 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>  
   );
 };
 

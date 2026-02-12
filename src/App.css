@@ -26,3 +26,38 @@ body {
   text-align: center;
   padding: 2rem;
 }
+
+
+/* src/index.css or src/App.css - Add this at the bottom */
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(248, 120, 15, 0.3);
+  border-top: 2px solid #F8780F;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner-large {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid #F8780F;
+  outline-offset: 2px;
+}

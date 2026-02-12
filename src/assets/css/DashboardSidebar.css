@@ -369,3 +369,29 @@
 .dark .dashboard-sidebar {
   scrollbar-color: #4b5563 #1a1a1a;
 }
+
+.sidebar-brand {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  flex: 1;
+}
+
+.sidebar-brand:hover .sidebar-title {
+  opacity: 0.9;
+  /* or any other hover effect you prefer */
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.sidebar-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}

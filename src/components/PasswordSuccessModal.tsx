@@ -1,8 +1,7 @@
-// src/components/PasswordSuccessModal.tsx - COMPLETE
+// src/components/PasswordSuccessModal.tsx
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/PasswordSuccessModal.css';
-
 interface PasswordSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -11,7 +10,6 @@ interface PasswordSuccessModalProps {
   redirectTo?: string;
   isPasswordUpdate?: boolean; // NEW: Add this prop
 }
-
 const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
   isOpen,
   onClose,
@@ -21,7 +19,6 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
   isPasswordUpdate = false // NEW: Default to false
 }) => {
   const navigate = useNavigate();
-
   // Auto-close and redirect functionality
   useEffect(() => {
     if (isOpen && autoCloseDelay > 0) {
@@ -31,53 +28,49 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
       return () => clearTimeout(timer);
     }
   }, [isOpen, autoCloseDelay]);
-
   const handleRedirect = () => {
     onClose();
-    navigate(redirectTo, { 
+    navigate(redirectTo, {
       replace: true,
-      state: { 
+      state: {
         passwordResetSuccess: true,
-        email: email 
-      } 
+        email: email
+      }
     });
   };
-
   const handleClose = () => {
     onClose();
   };
-
   if (!isOpen) return null;
-
   return (
     <div className="password-success-modal-overlay">
       <div className="password-success-modal">
         {/* Close Button at Top Right */}
-        <button 
+        <button
           onClick={handleClose}
           className="password-success-modal-close-btn"
           aria-label="Close modal"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path 
-              d="M18 6L6 18M6 6L18 18" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
+            <path
+              d="M18 6L6 18M6 6L18 18"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
         </button>
-        
+       
         <div className="password-success-modal-header">
           <div className="password-success-icon">
             <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="32" cy="32" r="30" stroke="#F8780F" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              <path 
-                d="M44 28L29.5 42L22 34.7273" 
-                stroke="#F8780F" 
-                strokeWidth="3" 
-                strokeLinecap="round" 
+              <path
+                d="M44 28L29.5 42L22 34.7273"
+                stroke="#F8780F"
+                strokeWidth="3"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
@@ -86,11 +79,11 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
             {isPasswordUpdate ? 'Password Updated Successfully!' : 'Password Set Successfully!'}
           </h2>
         </div>
-        
+       
         <div className="password-success-modal-body">
           <div className="success-message-container">
             <p className="success-message-main">
-              {isPasswordUpdate 
+              {isPasswordUpdate
                 ? 'Your password has been updated successfully!'
                 : 'Your password has been set successfully!'
               }
@@ -101,7 +94,7 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
                 : 'Your account has been activated and you can now log in to BIMFlow Suite.'
               }
             </p>
-            
+           
             {email && (
               <div className="user-email-display">
                 <span className="email-label">Account:</span>
@@ -109,22 +102,22 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
               </div>
             )}
           </div>
-          
+         
           <div className="security-notice">
             <div className="security-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path 
-                  d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" 
-                  stroke="#F8780F" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
+                <path
+                  d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"
+                  stroke="#F8780F"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <path 
-                  d="M9 12L11 14L15 10" 
-                  stroke="#F8780F" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
+                <path
+                  d="M9 12L11 14L15 10"
+                  stroke="#F8780F"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
@@ -133,15 +126,15 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
               Your password is securely encrypted. For your security, please don't share it with anyone.
             </p>
           </div>
-          
+         
           <div className="countdown-notice">
             <div className="countdown-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path 
-                  d="M12 8V12L15 15" 
-                  stroke="#6c757d" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
+                <path
+                  d="M12 8V12L15 15"
+                  stroke="#6c757d"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
                 <circle cx="12" cy="12" r="9" stroke="#6c757d" strokeWidth="2"/>
@@ -152,9 +145,8 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
             </p>
           </div>
         </div>
-
         <div className="password-success-modal-actions">
-          <button 
+          <button
             onClick={handleRedirect}
             className="password-success-modal-btn login-btn"
           >
@@ -165,5 +157,4 @@ const PasswordSuccessModal: React.FC<PasswordSuccessModalProps> = ({
     </div>
   );
 };
-
 export default PasswordSuccessModal;
