@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`use-mobile snapshot 1`] = `
+<div>
+  <use-mobile />
+</div>
+`;

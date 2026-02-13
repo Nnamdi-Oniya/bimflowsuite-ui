@@ -1,18 +1,18 @@
 import { test, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import GenerateModelPage from '@/pages/GenerateModelPage';
+import SetPasswordPage from '@/pages/SetPasswordPage';
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <BrowserRouter>{children}</BrowserRouter>
 );
 
-test('GenerateModelPage renders', () => {
-  render(<GenerateModelPage />, { wrapper: Wrapper });
+test('SetPasswordPage renders', () => {
+  render(<SetPasswordPage />, { wrapper: Wrapper });
   expect(document.body.children).toHaveLength(1);
 });
 
-test('GenerateModelPage snapshot', () => {
-  const { container } = render(<GenerateModelPage />, { wrapper: Wrapper });
+test('SetPasswordPage snapshot', () => {
+  const { container } = render(<SetPasswordPage />, { wrapper: Wrapper });
   expect(container).toMatchSnapshot();
 });

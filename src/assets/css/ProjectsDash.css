@@ -272,3 +272,396 @@
   .projects-grid-pro { grid-template-columns: 1fr; }
   .project-metrics-pro { grid-template-columns: 1fr; }
 }
+
+/* Add to your existing ProjectsDash.css */
+
+/* ============================================
+   Empty State Design - Professional Dashboard Style
+   ============================================ */
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border-radius: 32px;
+  border: 2px dashed #e2e8f0;
+  margin: 3rem auto;
+  max-width: 600px;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .empty-state {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-color: #334155;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+}
+
+/* Animated background gradient effect */
+.empty-state::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(248,120,15,0.03) 0%, transparent 50%);
+  animation: emptyStatePulse 8s ease infinite;
+  pointer-events: none;
+}
+
+@keyframes emptyStatePulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+/* Empty icon */
+.empty-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  background: linear-gradient(135deg, #f8780f, #f97316);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: floatIcon 3s ease-in-out infinite;
+  filter: drop-shadow(0 10px 15px rgba(248,120,15,0.2));
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Empty state heading */
+.empty-state h3 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+.dark .empty-state h3 {
+  color: #f1f5f9;
+}
+
+.empty-state h3::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #f8780f, #f97316);
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+/* Empty state paragraph */
+.empty-state p {
+  color: #64748b;
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.dark .empty-state p {
+  color: #94a3b8;
+}
+
+/* Create project button */
+.empty-state-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.2rem 2.8rem;
+  background: linear-gradient(135deg, #f8780f, #f97316);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 15px 30px -8px rgba(248,120,15,0.3);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.empty-state-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.6s ease;
+  z-index: -1;
+}
+
+.empty-state-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 25px 40px -8px rgba(248,120,15,0.4);
+}
+
+.empty-state-btn:hover::before {
+  left: 100%;
+}
+
+.empty-state-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.empty-state-btn svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.3s ease;
+}
+
+.empty-state-btn:hover svg {
+  transform: rotate(90deg);
+}
+
+/* Suggestion cards - additional helpful content */
+.empty-state-suggestions {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.dark .empty-state-suggestions {
+  border-top-color: #334155;
+}
+
+.suggestions-title {
+  font-size: 1rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.suggestions-grid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.suggestion-card {
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.dark .suggestion-card {
+  background: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+.suggestion-card:hover {
+  transform: translateY(-2px);
+  border-color: #f8780f;
+  background: white;
+  box-shadow: 0 10px 20px -10px rgba(248,120,15,0.2);
+}
+
+.dark .suggestion-card:hover {
+  background: #2d3a4f;
+}
+
+.suggestion-icon {
+  font-size: 1.3rem;
+  filter: drop-shadow(0 2px 4px rgba(248,120,15,0.2));
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 3rem 1.5rem;
+    margin: 2rem 1rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.8rem;
+  }
+  
+  .empty-state p {
+    font-size: 1rem;
+  }
+  
+  .empty-state-btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+  
+  .suggestions-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .suggestion-card {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.5rem;
+  }
+  
+  .empty-icon {
+    font-size: 4rem;
+  }
+}
+
+/* Optional: Add a subtle pattern overlay */
+.empty-state-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.dark .empty-state-pattern {
+  background-image: radial-gradient(#475569 1px, transparent 1px);
+}
+
+/* Animation for button pulse effect */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(248,120,15,0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(248,120,15,0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(248,120,15,0);
+  }
+}
+
+.empty-state-btn:focus {
+  animation: pulse 2s infinite;
+  outline: none;
+}
+
+/* Loading state for empty state (if you want to add a loading variation) */
+.empty-state.loading .empty-icon {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+/* Add to your existing ProjectsDash.css */
+
+.project-number-badge {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  padding: 0.4rem 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+.dark .project-number-badge {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1e293b;
+}
+
+.status-rejected {
+  background: #ef4444;
+}
+
+.status-draft {
+  background: #6b7280;
+}
+
+.client-info {
+  margin: 0.75rem 0;
+  padding: 0.5rem;
+  background: #f8fafc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.dark .client-info {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+.client-name {
+  font-weight: 600;
+}
+
+.client-type {
+  margin-left: 0.5rem;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.dark .client-type {
+  color: #94a3b8;
+}
+
+.project-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.75rem 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.dark .project-dates {
+  color: #94a3b8;
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.date-item::before {
+  content: "📅";
+  margin-right: 0.25rem;
+  font-size: 0.85rem;
+}

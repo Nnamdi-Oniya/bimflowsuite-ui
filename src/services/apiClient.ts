@@ -22,7 +22,10 @@ export interface ApiError {
   data?: any;
 }
 
-// API Client Class - NO REFRESH TOKEN LOGIC
+/**
+ * API Client - No refresh token logic
+ * Handles all HTTP requests to the backend API
+ */
 class ApiClient {
   private baseUrl: string;
   private timeout: number;
@@ -32,6 +35,9 @@ class ApiClient {
     this.timeout = BACKEND_CONFIG.timeout;
   }
 
+  /**
+   * Core request handler
+   */
   private async request<T>(
     endpoint: string,
     method: string = 'GET',
@@ -72,7 +78,7 @@ class ApiClient {
       const response = await fetch(url, config);
       clearTimeout(timeoutId);
 
-      // Handle 401 Unauthorized - NO REFRESH ATTEMPT, just clear tokens and throw
+      // Handle 401 Unauthorized - NO REFRESH ATTEMPT
       if (response.status === 401 && !endpoint.includes('/auth/login/')) {
         clearTokens();
         window.dispatchEvent(new CustomEvent('auth-expired'));
@@ -95,12 +101,12 @@ class ApiClient {
         } as ApiError;
       }
 
-      // If error is already an ApiError, re-throw it
+      // Re-throw if already an ApiError
       if (error && typeof error === 'object' && 'status' in error) {
         throw error;
       }
 
-      // Only throw network error for actual network failures
+      // Handle network errors
       if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
         throw {
           message: 'Network error occurred. Please check your internet connection.',
@@ -117,18 +123,11 @@ class ApiClient {
     }
   }
 
+  /**
+   * Process API response
+   */
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
     const responseText = await response.text();
-
-    // Debug: Log the response for troubleshooting
-    if (BACKEND_CONFIG.debug) {
-      console.log(`API Response [${response.status}]:`, {
-        url: response.url,
-        status: response.status,
-        statusText: response.statusText,
-        body: responseText.substring(0, 500) + (responseText.length > 500 ? '...' : '')
-      });
-    }
 
     if (response.status === 204) {
       return {
@@ -143,7 +142,6 @@ class ApiClient {
       try {
         responseData = JSON.parse(responseText);
       } catch {
-        // If not JSON, treat as plain text
         responseData = { detail: responseText };
       }
     }
@@ -152,7 +150,7 @@ class ApiClient {
       let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
       let validationErrors: ValidationError[] = [];
 
-      // Handle Django REST Framework error formats
+      // Parse Django REST Framework error formats
       if (responseData.detail) {
         errorMessage = responseData.detail;
       } else if (responseData.error) {
@@ -165,7 +163,7 @@ class ApiClient {
         errorMessage = responseData.map(err => typeof err === 'object' ? JSON.stringify(err) : err).join(', ');
       }
 
-      // Handle field-specific errors
+      // Parse field-specific validation errors
       if (responseData && typeof responseData === 'object' && !Array.isArray(responseData)) {
         validationErrors = Object.entries(responseData)
           .filter(([key]) => key !== 'detail' && key !== 'error' && key !== 'message')
@@ -174,12 +172,6 @@ class ApiClient {
             messages: Array.isArray(messages) ? messages : [String(messages)],
           }));
         
-        // If we have field errors but no general error message, create one
-        if (validationErrors.length > 0 && !errorMessage.includes('Validation')) {
-          errorMessage = 'Validation failed. Please check your input.';
-        }
-        
-        // Format error message to be more user-friendly for the first error
         if (validationErrors.length > 0 && errorMessage === `HTTP ${response.status}: ${response.statusText}`) {
           const firstError = validationErrors[0];
           errorMessage = `${firstError.field}: ${firstError.messages.join(', ')}`;
@@ -194,7 +186,6 @@ class ApiClient {
         data: responseData
       };
 
-      console.error('API Error:', apiError);
       throw apiError;
     }
 
@@ -206,7 +197,7 @@ class ApiClient {
     };
   }
 
-  // HTTP methods
+  // HTTP Methods
   async get<T>(endpoint: string, headers?: Record<string, string>): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'GET', undefined, headers);
   }
@@ -227,6 +218,9 @@ class ApiClient {
     return this.request<T>(endpoint, 'DELETE', undefined, headers);
   }
 
+  /**
+   * File upload with progress tracking
+   */
   async uploadFile(
     endpoint: string,
     file: File,
@@ -279,6 +273,9 @@ class ApiClient {
     });
   }
 
+  /**
+   * File download
+   */
   async downloadFile(endpoint: string): Promise<Blob> {
     const url = `${this.baseUrl}${endpoint}`;
     const token = getAccessToken();

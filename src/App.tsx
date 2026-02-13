@@ -23,11 +23,14 @@ const LoginPage = React.lazy(() => import("./pages/LoginPage"));
 const ForgotPasswordPage = React.lazy(() => import("./pages/ForgotPasswordPage"));
 const ResetPasswordPage = React.lazy(() => import("./pages/ResetPasswordPage"));
 const SetPasswordPage = React.lazy(() => import("./pages/SetPasswordPage"));
+const ProjectGeneratePage = React.lazy(() => import("./pages/ProjectGeneratePage")); 
 
+// Dashboard imports
 const DashboardLayout = React.lazy(() => import("./components/DashboardLayout"));
 const DashboardOverview = React.lazy(() => import("./pages/dashboard/DashboardPage"));
 const DashboardProjects = React.lazy(() => import("./pages/dashboard/ProjectsPage"));
-const DashboardGenerate = React.lazy(() => import("./pages/dashboard/GenerateModelPage"));
+const DashboardCreateProject = React.lazy(() => import("./pages/dashboard/CreateProjectPage"));
+const DashboardGenerate = React.lazy(() => import("./pages/dashboard/GenerateModelPage")); 
 const DashboardCompliance = React.lazy(() => import("./pages/dashboard/ComplianceChecksPage"));
 const DashboardUploadIFCPage = React.lazy(() => import("./pages/dashboard/UploadIFCPage"));
 const ClashDetectionPage = React.lazy(() => import("./pages/dashboard/ClashDetectionPage"));
@@ -39,7 +42,6 @@ const DashboardTemplates = React.lazy(() => import("./pages/dashboard/TemplatesP
 const DashboardSettings = React.lazy(() => import("./pages/dashboard/SettingsPage"));
 const DashboardProfile = React.lazy(() => import("./pages/dashboard/ProfilePage"));
 
-// ─── ErrorBoundary ───
 interface ErrorBoundaryState {
   hasError: boolean;
 }
@@ -88,19 +90,16 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
   }
 }
 
-// ─── ScrollToTop ───
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    // Use instant scroll for better performance
     window.scrollTo(0, 0);
   }, [pathname]);
   
   return null;
 };
 
-// ─── Loading Fallback ───
 const LoadingFallback: React.FC = () => (
   <div
     style={{
@@ -126,7 +125,6 @@ const LoadingFallback: React.FC = () => (
   </div>
 );
 
-// ─── 404 Page Component ───
 const NotFoundPage: React.FC = () => (
   <div style={{ 
     padding: "4rem 2rem", 
@@ -172,7 +170,6 @@ const NotFoundPage: React.FC = () => (
   </div>
 );
 
-// ─── Main App Content ───
 const AppContent: React.FC = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard");
@@ -205,6 +202,7 @@ const AppContent: React.FC = () => {
             <Route path="/projects" element={<ProjectsPageLanding />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/project-generate" element={<ProjectGeneratePage />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<LoginPage />} />
@@ -217,6 +215,7 @@ const AppContent: React.FC = () => {
               <Route path="/dashboard" element={<DashboardLayout />}>
                 <Route index element={<DashboardOverview />} />
                 <Route path="projects" element={<DashboardProjects />} />
+                <Route path="projects/create" element={<DashboardCreateProject />} />
                 <Route path="generate" element={<DashboardGenerate />} />
                 <Route path="compliance" element={<DashboardCompliance />} />
                 <Route path="upload-ifc" element={<DashboardUploadIFCPage />} />
@@ -241,7 +240,6 @@ const AppContent: React.FC = () => {
   );
 };
 
-// ─── Main App ───
 const App: React.FC = () => (
   <ErrorBoundary>
     <AppContent />

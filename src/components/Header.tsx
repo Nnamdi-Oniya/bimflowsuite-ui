@@ -31,7 +31,6 @@ const Header: React.FC = () => {
         return;
       }
 
-      // ✅ Simply check if token is valid - NO REFRESH ATTEMPT
       const authenticated = checkIsAuthenticated() && !!getAccessToken();
       setIsLoggedIn(authenticated);
 
@@ -49,8 +48,7 @@ const Header: React.FC = () => {
         setUser(null);
         authService.clearAllData();
       }
-    } catch (err) {
-      console.error("Header auth check failed:", err);
+    } catch {
       setIsLoggedIn(false);
       setUser(null);
       authService.clearAllData();
@@ -96,20 +94,10 @@ const Header: React.FC = () => {
     };
   }, [location.pathname, navigate]);
 
-  const handleLogout = async () => {
-    await authService.logout();
-    setIsLoggedIn(false);
-    setUser(null);
-    setMobileOpen(false);
-    navigate("/");
-  };
-
-  // Don't render header on dashboard pages
   if (location.pathname.startsWith("/dashboard")) {
     return null;
   }
 
-  // Loading state
   if (loading) {
     return (
       <header className="header" role="banner">
@@ -161,10 +149,10 @@ const Header: React.FC = () => {
                   Dashboard
                 </Link>
                 <button
-                  className="btn btn--secondary logout-btn"
-                  onClick={handleLogout}
+                  className="btn btn--secondary"
+                  onClick={() => setModalOpen(true)}
                 >
-                  Logout
+                  Get Started
                 </button>
               </>
             ) : (

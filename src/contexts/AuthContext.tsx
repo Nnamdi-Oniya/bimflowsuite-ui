@@ -18,6 +18,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * Authentication Provider Component
+ * Manages authentication state throughout the application
+ */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
     // Initialize from storage
@@ -54,8 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
           }
         }
-      } catch (error) {
-        console.error("Failed to initialize auth:", error);
+      } catch {
         // Don't clear data on error, keep existing state
         const storedUser = authService.getStoredUser();
         if (storedUser && checkIsAuthenticated()) {
@@ -96,6 +99,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
+  /**
+   * Handle user login
+   */
   const login = async (credentials: any) => {
     const response = await authService.login(credentials);
     if (response.success && response.data) {
@@ -105,12 +111,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return response;
   };
 
+  /**
+   * Handle user logout
+   */
   const logout = async () => {
     await authService.logout();
     setUser(null);
     setIsAuthenticated(false);
   };
 
+  /**
+   * Refresh user data from API
+   */
   const refreshUser = async () => {
     const response = await authService.getCurrentUser();
     if (response.success && response.data) {
@@ -132,6 +144,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
+/**
+ * Custom hook to use auth context
+ */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

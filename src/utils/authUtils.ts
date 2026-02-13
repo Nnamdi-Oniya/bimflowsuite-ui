@@ -1,3 +1,4 @@
+// src/utils/authUtils.ts
 import { isAuthenticated as checkAuth } from '../config/api';
 
 /**
@@ -19,8 +20,8 @@ export const getUserEmailFromStorage = (): string | null => {
       const user = JSON.parse(userData);
       return user.email || null;
     }
-  } catch (error) {
-    console.warn('Failed to parse user data from storage:', error);
+  } catch {
+    // Silent fail - no console logs in production
   }
   return null;
 };
@@ -36,8 +37,8 @@ export const getUserFromStorage = <T = any>(): T | null => {
     if (userData) {
       return JSON.parse(userData) as T;
     }
-  } catch (error) {
-    console.warn('Failed to parse user data from storage:', error);
+  } catch {
+    // Silent fail - no console logs in production
   }
   return null;
 };
@@ -87,4 +88,17 @@ export const isTokenExpired = (token: string): boolean => {
   const payload = parseJwt(token);
   if (!payload || !payload.exp) return true;
   return payload.exp * 1000 <= Date.now();
+};
+
+/**
+ * Dispatch auth state change event
+ */
+export const dispatchAuthState = (isAuthenticated: boolean): void => {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent('auth-state-changed', {
+        detail: { isAuthenticated },
+      })
+    );
+  }
 };

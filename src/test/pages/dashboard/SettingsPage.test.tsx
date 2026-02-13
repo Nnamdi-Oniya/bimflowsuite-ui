@@ -1,18 +1,14 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+// src/test/pages/dashboard/SettingsPage.test.tsx
+import { it, expect } from 'vitest';
+import { render } from '@/test/utils/test-utils';
 import SettingsPage from '@/pages/dashboard/SettingsPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
-
-test('SettingsPage renders', () => {
-  render(<SettingsPage />, { wrapper: Wrapper });
+it('SettingsPage renders', () => {
+  render(<SettingsPage />);
   expect(document.body.children).toHaveLength(1);
 });
 
-test('SettingsPage snapshot', () => {
-  const { container } = render(<SettingsPage />, { wrapper: Wrapper });
+it('SettingsPage snapshot', () => {
+  const { container } = render(<SettingsPage />);
   expect(container).toMatchSnapshot();
 });

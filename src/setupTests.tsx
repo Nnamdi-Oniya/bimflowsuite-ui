@@ -1,9 +1,10 @@
 // src/setupTests.ts
 import '@testing-library/jest-dom/vitest';
-import { vi } from 'vitest'
-import { Buffer } from 'buffer'
+import { vi } from 'vitest';
+import { Buffer } from 'buffer';
 
-
+// Make vitest functions available globally (though globals:true should handle this)
+// This is a backup
 
 // -------------------------------------------------------
 // Window mocks
@@ -20,18 +21,18 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-})
+});
 
 Object.defineProperty(window, 'scrollTo', {
   writable: true,
   value: vi.fn(),
-})
+});
 
 // -------------------------------------------------------
 // React Router mocks
 // -------------------------------------------------------
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual<any>('react-router-dom')
+  const actual = await vi.importActual<any>('react-router-dom');
   return {
     ...actual,
     useNavigate: () => vi.fn(),
@@ -45,8 +46,8 @@ vi.mock('react-router-dom', async () => {
     useParams: () => ({}),
     useSearchParams: () => [new URLSearchParams(), vi.fn()],
     useRouteError: () => null,
-  }
-})
+  };
+});
 
 // -------------------------------------------------------
 // Canvas mocks
@@ -54,10 +55,10 @@ vi.mock('react-router-dom', async () => {
 Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
   value: vi.fn().mockReturnValue(null),
   writable: true,
-})
+});
 
 vi.mock('canvas', async () => {
-  const actual = await vi.importActual<any>('canvas')
+  const actual = await vi.importActual<any>('canvas');
   return {
     ...actual,
     createCanvas: vi.fn(() => ({
@@ -71,8 +72,8 @@ vi.mock('canvas', async () => {
     loadImage: vi.fn(() =>
       Promise.reject(new Error('Not supported in test environment'))
     ),
-  }
-})
+  };
+});
 
 // -------------------------------------------------------
 // react-pdf mocks
@@ -90,29 +91,40 @@ vi.mock('react-pdf', () => ({
       workerSrc: 'pdfjs-worker-mock',
     },
   },
-}))
+}));
 
 // -------------------------------------------------------
 // Plotly mocks
 // -------------------------------------------------------
 vi.mock('plotly.js-dist-min', () => {
-  const mock = vi.fn()
+  const mock = vi.fn();
   return {
     newPlot: mock,
     react: mock,
     purge: mock,
     addFrames: mock,
     respond: mock,
-  }
-})
+  };
+});
 
 vi.mock('plotly.js', () => {
-  const mock = vi.fn()
+  const mock = vi.fn();
   return {
     newPlot: mock,
     react: mock,
     purge: mock,
     addFrames: mock,
     respond: mock,
+  };
+});
+
+// -------------------------------------------------------
+// Suppress act() warnings (optional)
+// -------------------------------------------------------
+const originalError = console.error;
+console.error = (...args) => {
+  if (/Warning.*not wrapped in act/.test(args[0])) {
+    return;
   }
-})
+  originalError.call(console, ...args);
+};

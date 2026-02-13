@@ -1,4 +1,5 @@
 // src/config/api.ts
+
 type Env = Record<string, string | undefined>;
 declare const process: { env: Env } | undefined;
 
@@ -42,21 +43,14 @@ export const ENV = {
 } as const;
 
 export const getBackendUrl = (): string => {
-  if (ENV.isDevelopment) {
-    return ''; // Use proxy in development
-  }
-  if (ENV.backendUrl) {
-    return ENV.backendUrl;
-  }
+  if (ENV.isDevelopment) return '';
+  if (ENV.backendUrl) return ENV.backendUrl;
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return 'http://localhost:8000';
-  }
+  if (hostname === 'localhost' || hostname === '127.0.0.1') return 'http://localhost:8000';
   return 'https://api.bimflowsuite.com';
 };
 
 export const getApiPrefix = (): string => ENV.apiPrefix;
-
 export const BASE_URL: string = ENV.isDevelopment ? '/api' : getBackendUrl() + getApiPrefix();
 
 export const BACKEND_CONFIG = {
@@ -67,8 +61,6 @@ export const BACKEND_CONFIG = {
   timeout: 30000,
   uploadTimeout: 300000,
   debug: ENV.debug,
-  
-  // ✅ CRITICAL: Token refresh is DISABLED
   ENABLE_TOKEN_REFRESH: false,
   
   endpoints: {
@@ -77,7 +69,7 @@ export const BACKEND_CONFIG = {
       register: '/auth/register/',
       logout: '/auth/logout/',
       verify: '/auth/verify/',
-      refresh: '/token/refresh/', // Defined but NEVER used
+      refresh: '/token/refresh/',
       changePassword: '/auth/change-password/',
       resetPassword: '/auth/reset-password/',
       requestReset: '/auth/forgot-password/',
@@ -183,7 +175,7 @@ export const BACKEND_CONFIG = {
   },
 } as const;
 
-// Simple token encryption/decryption
+// Token Management
 const encodeToken = (token: string): string => {
   try {
     return btoa(encodeURIComponent(token));
@@ -200,16 +192,14 @@ const decodeToken = (encoded: string): string => {
   }
 };
 
-// Memory cache
 let memoryAccessToken: string | null = null;
 
-// Initialize from localStorage
 if (typeof window !== 'undefined') {
   try {
     const encryptedAccess = localStorage.getItem('access_token');
     memoryAccessToken = encryptedAccess ? decodeToken(encryptedAccess) : null;
-  } catch (error) {
-    console.error('Failed to initialize tokens:', error);
+  } catch {
+    memoryAccessToken = null;
   }
 }
 
@@ -223,13 +213,12 @@ export const setTokens = (tokens: TokenPair): void => {
   if (typeof window !== 'undefined') {
     try {
       localStorage.setItem('access_token', encodeToken(tokens.access));
-      // Store refresh token but NEVER use it
       localStorage.setItem('refresh_token', encodeToken(tokens.refresh));
       window.dispatchEvent(new CustomEvent('auth-state-changed', { 
         detail: { isAuthenticated: true } 
       }));
-    } catch (error) {
-      console.error('Failed to store tokens:', error);
+    } catch {
+      // Silently fail
     }
   }
 };
@@ -251,21 +240,24 @@ export const getAccessToken = (): string | null => memoryAccessToken;
 export const isAuthenticated = (): boolean => {
   const token = getAccessToken();
   if (!token) return false;
+  
   try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     let padded = base64;
     while (padded.length % 4) padded += '=';
+    
     const jsonPayload = decodeURIComponent(
       atob(padded)
         .split('')
         .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
         .join('')
     );
+    
     const payload = JSON.parse(jsonPayload);
     const exp = payload.exp;
+    
     if (typeof exp !== 'number') return false;
-    // 5 minute buffer
     return exp * 1000 > Date.now() + 300000;
   } catch {
     return false;
@@ -281,4 +273,25 @@ export const getWebSocketUrl = (endpoint: string): string => {
   const base = getBackendUrl() || (typeof window !== 'undefined' ? window.location.origin : '');
   const protocol = base.startsWith('https') ? 'wss' : 'ws';
   return `${protocol}://${base.replace(/^https?:\/\//, '')}${endpoint}`;
+};
+
+// Media URL Handling
+export const getMediaBaseUrl = (): string => {
+  if (typeof import.meta !== 'undefined' && import.meta.env.VITE_MEDIA_BASE_URL) {
+    return import.meta.env.VITE_MEDIA_BASE_URL as string;
+  }
+  const backendUrl = getBackendUrl();
+  if (backendUrl) return backendUrl;
+  if (ENV.isDevelopment) return 'http://localhost:8000';
+  return 'https://api.bimflowsuite.com';
+};
+
+export const resolveMediaUrl = (path?: string | null): string => {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('//')) {
+    return path;
+  }
+  const base = getMediaBaseUrl();
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${cleanPath}`;
 };

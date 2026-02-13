@@ -8,11 +8,17 @@ exports[`DashboardSidebar snapshot 1`] = `
     <div
       class="sidebar-header"
     >
-      <h2
-        class="sidebar-title"
+      <a
+        class="sidebar-brand"
+        data-discover="true"
+        href="/"
       >
-        BIMFlow Suite
-      </h2>
+        <h2
+          class="sidebar-title"
+        >
+          BIMFlow Suite
+        </h2>
+      </a>
       <button
         aria-label="Close sidebar"
         class="sidebar-close"

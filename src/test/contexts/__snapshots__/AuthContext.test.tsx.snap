@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AuthProvider snapshot (authenticated) 1`] = `
+<div>
+  <div>
+    <div
+      data-testid="auth-status"
+    >
+      Not Authenticated
+    </div>
+    <div
+      data-testid="user-display"
+    >
+      Test User
+    </div>
+  </div>
+</div>
+`;

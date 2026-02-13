@@ -1,3 +1,4 @@
+// vite.config.ts
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -7,9 +8,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-
-  console.log(`🚀 Mode: ${mode}`);
-  console.log(`🌐 Using backend target: ${env.VITE_BACKEND_URL || 'http://127.0.0.1:8000'}`);
 
   return {
     plugins: [react()],
@@ -31,28 +29,17 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       host: true,
-
       proxy: {
         '/api/v1': {
-          target: 'http://127.0.0.1:8000', // IPv4 loopback – prevents ::1 issues
+          target: 'http://127.0.0.1:8000',
           changeOrigin: true,
           secure: false,
-
-          configure: (proxy, _options) => {
-            proxy.on('proxyReq', (_proxyReq, _req, _res) => {
-              console.log('[Proxy] → Sending:', _req.method, _req.url);
-            });
-
-            proxy.on('proxyRes', (_proxyRes, _req, _res) => {
-              console.log('[Proxy] ← Received:', _proxyRes.statusCode, _req.url);
-            });
-
-            proxy.on('error', (err, _req, _res) => {
-              console.log('[Proxy] Error:', err);
-            });
-          },
         },
       },
+    },
+
+    esbuild: {
+      drop: ['console', 'debugger'],
     },
 
     build: {
@@ -68,16 +55,25 @@ export default defineConfig(({ mode }) => {
       },
     },
 
+    optimizeDeps: {
+      include: [
+        '@mui/material',
+        '@mui/icons-material',
+        '@emotion/react',
+        '@emotion/styled',
+      ],
+    },
+
     test: {
-      globals: true,
+      globals: true, // This makes vitest, expect, vi available globally
       css: true,
       environment: 'jsdom',
-      setupFiles: ['./src/setupTests'],
+      setupFiles: ['./src/setupTests.ts'], // Added .ts extension
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
         include: ['src/**/*.{ts,tsx}'],
-        exclude: ['src/main.tsx', 'src/vite-env.d.ts'],
+        exclude: ['src/main.tsx', 'src/vite-env.d.ts', 'src/test/**'],
       },
       exclude: ['node_modules', 'dist', '**/*.stories.{ts,tsx}'],
     },
