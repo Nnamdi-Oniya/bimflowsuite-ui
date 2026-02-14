@@ -2,9 +2,9 @@
 import { apiClient, type ApiResponse } from './apiClient';
 
 export interface Project {
-  id: number;
+  id: number;  // Backend generates this - NEVER send from frontend
   name: string;
-  project_number: string;
+  project_number: string; // Backend generates this
   description: string;
   phase: string;
   project_type: string;
@@ -25,7 +25,7 @@ export interface Project {
 export interface CreateProjectData {
   name: string;
   description: string;
-  project_number: string;
+  // REMOVED: project_number - backend generates
   phase: string;
   project_type: string;
   client_name?: string;
@@ -76,7 +76,6 @@ class ProjectService {
       else {
         result.success = false;
         result.message = 'Unexpected API response structure';
-        console.error('Unexpected API response structure:', response.data);
       }
     } else {
       result.message = response.message || 'Failed to fetch projects';
@@ -90,6 +89,7 @@ class ProjectService {
   }
 
   async createProject(data: CreateProjectData): Promise<ApiResponse<Project>> {
+    // IMPORTANT: Never send 'id' field - backend generates it
     return apiClient.post<Project>(`${this.base}/create/`, data);
   }
 

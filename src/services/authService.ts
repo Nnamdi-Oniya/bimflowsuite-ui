@@ -6,6 +6,7 @@ import {
   setTokens,
   clearTokens,
   getAccessToken,
+  refreshTokensFromStorage,
 } from '../config/api';
 
 // ────────────────────────────────────────────────
@@ -113,6 +114,13 @@ type ServiceAuthResponse = {
 class AuthService {
   private endpoints = BACKEND_CONFIG.endpoints;
 
+  constructor() {
+    // Ensure tokens are loaded from storage on service initialization
+    if (typeof window !== 'undefined') {
+      refreshTokensFromStorage();
+    }
+  }
+
   // ─── Utility Methods ──────────────────────────────
 
   /**
@@ -182,7 +190,7 @@ class AuthService {
       
       const { user: backendUser, tokens } = raw.data;
       
-      // Store tokens
+      // Store tokens (automatically encoded by setTokens)
       setTokens(tokens);
       
       // Fetch full user profile
@@ -251,7 +259,7 @@ class AuthService {
       
       const { user: backendUser, tokens } = raw.data;
       
-      // Store tokens
+      // Store tokens (automatically encoded by setTokens)
       setTokens(tokens);
       
       // Create user profile

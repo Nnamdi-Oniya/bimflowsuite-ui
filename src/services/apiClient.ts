@@ -1,4 +1,4 @@
-// src/service/apiClient.ts
+// src/services/apiClient.ts
 import { BACKEND_CONFIG, clearTokens, getAccessToken } from '../config/api';
 
 // Types for API responses
@@ -36,6 +36,23 @@ class ApiClient {
   }
 
   /**
+   * Helper to detect real network-level failures across browsers
+   */
+  private isNetworkError(error: unknown): boolean {
+    if (!(error instanceof TypeError)) return false;
+
+    const msg = (error.message || '').toLowerCase();
+
+    return (
+      msg.includes('failed to fetch') ||
+      msg.includes('networkerror') ||
+      msg.includes('load failed') ||
+      msg.includes('network request failed') ||
+      msg.includes('the internet connection appears to be offline')
+    );
+  }
+
+  /**
    * Core request handler
    */
   private async request<T>(
@@ -53,7 +70,9 @@ class ApiClient {
       ...headers,
     };
 
+    // Get token - already decoded from memory
     const token = getAccessToken();
+
     // Add token for all requests except login
     if (token && !endpoint.includes('/auth/login/')) {
       requestHeaders['Authorization'] = `Bearer ${token}`;
@@ -93,7 +112,7 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof DOMException && error.name === 'AbortError') {
         throw {
           message: 'Request timeout. Please try again.',
           status: 408,
@@ -101,20 +120,23 @@ class ApiClient {
         } as ApiError;
       }
 
-      // Re-throw if already an ApiError
-      if (error && typeof error === 'object' && 'status' in error) {
-        throw error;
-      }
-
-      // Handle network errors
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      // ────────────────────────────────────────────────
+      //           Improved network error detection
+      // ────────────────────────────────────────────────
+      if (this.isNetworkError(error)) {
         throw {
-          message: 'Network error occurred. Please check your internet connection.',
+          message: 'Network error occurred. Please check your internet connection or try again later.',
           status: 0,
           code: 'NETWORK_ERROR'
         } as ApiError;
       }
 
+      // Re-throw if already an ApiError (from handleResponse or elsewhere)
+      if (error && typeof error === 'object' && 'status' in error) {
+        throw error;
+      }
+
+      // Fallback for any other unexpected error
       throw {
         message: error instanceof Error ? error.message : 'An unexpected error occurred',
         status: 0,
@@ -171,7 +193,7 @@ class ApiClient {
             field,
             messages: Array.isArray(messages) ? messages : [String(messages)],
           }));
-        
+
         if (validationErrors.length > 0 && errorMessage === `HTTP ${response.status}: ${response.statusText}`) {
           const firstError = validationErrors[0];
           errorMessage = `${firstError.field}: ${firstError.messages.join(', ')}`;

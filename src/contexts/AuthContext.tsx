@@ -4,7 +4,8 @@ import { authService } from "../services/authService";
 import type { UserProfile } from "../services/authService";
 import { 
   getAccessToken,
-  isAuthenticated as checkIsAuthenticated
+  isAuthenticated as checkIsAuthenticated,
+  refreshTokensFromStorage
 } from "../config/api";
 
 interface AuthContextType {
@@ -29,6 +30,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Refresh tokens from storage first
+    refreshTokensFromStorage();
     // Check if we have a valid token
     return checkIsAuthenticated() && !!getAccessToken();
   });
@@ -37,6 +40,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Verify token validity and fetch fresh user data
     const initAuth = async () => {
       try {
+        // Refresh tokens from storage on each init
+        refreshTokensFromStorage();
+        
         const hasValidToken = checkIsAuthenticated() && !!getAccessToken();
         setIsAuthenticated(hasValidToken);
         

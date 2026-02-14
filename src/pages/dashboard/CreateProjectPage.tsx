@@ -12,7 +12,7 @@ interface ProjectFormData extends CreateProjectData {}
 const initialFormState: ProjectFormData = {
   name: "",
   description: "",
-  project_number: "",
+  // REMOVED: project_number - backend generates this
   phase: "concept",
   project_type: "",
   client_name: "",
@@ -70,8 +70,8 @@ const RISK_CLASSIFICATIONS = [
 export default function CreateProjectPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ProjectFormData>(() => {
-    const projectNumber = `PRJ-${Date.now().toString(36).toUpperCase()}`;
-    return { ...initialFormState, project_number: projectNumber };
+    // REMOVED: project_number generation - let backend handle it
+    return { ...initialFormState };
   });
   
   const [errors, setErrors] = useState<Partial<Record<keyof ProjectFormData, string>>>({});
@@ -140,8 +140,18 @@ export default function CreateProjectPage() {
     setSubmitError(null);
 
     try {
+      // IMPORTANT: Never send 'id' field - backend generates it
+      // Also, don't send project_number - backend generates it
       const payload = {
-        ...formData,
+        name: formData.name,
+        description: formData.description,
+        phase: formData.phase,
+        project_type: formData.project_type,
+        client_name: formData.client_name,
+        client_type: formData.client_type,
+        project_scale: formData.project_scale,
+        risk_classification: formData.risk_classification,
+        project_address: formData.project_address,
         project_start_date: formData.project_start_date 
           ? new Date(formData.project_start_date).toISOString() 
           : null,
@@ -151,11 +161,13 @@ export default function CreateProjectPage() {
         expected_completion_date: formData.expected_completion_date 
           ? new Date(formData.expected_completion_date).toISOString() 
           : null,
+        approval_status: formData.approval_status || "pending",
       };
 
       const response = await projectService.createProject(payload);
       
       if (response.success && response.data) {
+        // Store the ID returned from backend - NEVER generate on frontend
         setCreatedProject({
           id: response.data.id,
           name: response.data.name
@@ -229,7 +241,7 @@ export default function CreateProjectPage() {
                 </h2>
 
                 <div className="form-grid">
-                  {/* Project Name - Fixed with htmlFor and id */}
+                  {/* Project Name */}
                   <div className="form-group">
                     <label htmlFor="project-name" className="form-label required">
                       Project Name
@@ -246,7 +258,7 @@ export default function CreateProjectPage() {
                     {errors.name && <span className="error-text">{errors.name}</span>}
                   </div>
 
-                  {/* Project Type - Fixed with htmlFor and id */}
+                  {/* Project Type */}
                   <div className="form-group">
                     <label htmlFor="project-type" className="form-label required">
                       Project Type
@@ -268,7 +280,7 @@ export default function CreateProjectPage() {
                     {errors.project_type && <span className="error-text">{errors.project_type}</span>}
                   </div>
 
-                  {/* Description - Fixed with htmlFor and id */}
+                  {/* Description */}
                   <div className="form-group full-width">
                     <label htmlFor="project-description" className="form-label required">
                       Description
@@ -288,24 +300,7 @@ export default function CreateProjectPage() {
                     {errors.description && <span className="error-text">{errors.description}</span>}
                   </div>
 
-                  {/* Project Number - Fixed with htmlFor and id */}
-                  <div className="form-group">
-                    <label htmlFor="project-number" className="form-label">
-                      Project Number
-                    </label>
-                    <input
-                      id="project-number"
-                      type="text"
-                      name="project_number"
-                      value={formData.project_number}
-                      className="form-input"
-                      disabled
-                      readOnly
-                    />
-                    <small className="field-hint">Auto-generated unique identifier</small>
-                  </div>
-
-                  {/* Phase - Fixed with htmlFor and id */}
+                  {/* Phase */}
                   <div className="form-group">
                     <label htmlFor="project-phase" className="form-label">
                       Phase
@@ -325,7 +320,7 @@ export default function CreateProjectPage() {
                     </select>
                   </div>
 
-                  {/* Address - Fixed with htmlFor and id */}
+                  {/* Address */}
                   <div className="form-group">
                     <label htmlFor="project-address" className="form-label">
                       Address
@@ -352,7 +347,7 @@ export default function CreateProjectPage() {
                 </h2>
 
                 <div className="form-grid">
-                  {/* Client Name - Fixed with htmlFor and id */}
+                  {/* Client Name */}
                   <div className="form-group">
                     <label htmlFor="client-name" className="form-label">
                       Client Name
@@ -368,7 +363,7 @@ export default function CreateProjectPage() {
                     />
                   </div>
 
-                  {/* Client Type - Fixed with htmlFor and id */}
+                  {/* Client Type */}
                   <div className="form-group">
                     <label htmlFor="client-type" className="form-label">
                       Client Type
@@ -388,7 +383,7 @@ export default function CreateProjectPage() {
                     </select>
                   </div>
 
-                  {/* Project Scale - Fixed with htmlFor and id */}
+                  {/* Project Scale */}
                   <div className="form-group">
                     <label htmlFor="project-scale" className="form-label">
                       Project Scale
@@ -408,7 +403,7 @@ export default function CreateProjectPage() {
                     </select>
                   </div>
 
-                  {/* Risk Classification - Fixed with htmlFor and id */}
+                  {/* Risk Classification */}
                   <div className="form-group">
                     <label htmlFor="risk-classification" className="form-label">
                       Risk Classification
@@ -439,7 +434,7 @@ export default function CreateProjectPage() {
                 </h2>
 
                 <div className="form-grid">
-                  {/* Project Start Date - Fixed with htmlFor and id */}
+                  {/* Project Start Date */}
                   <div className="form-group">
                     <label htmlFor="project-start-date" className="form-label">
                       Project Start Date
@@ -454,7 +449,7 @@ export default function CreateProjectPage() {
                     />
                   </div>
 
-                  {/* Construction Start Date - Fixed with htmlFor and id */}
+                  {/* Construction Start Date */}
                   <div className="form-group">
                     <label htmlFor="construction-start-date" className="form-label">
                       Construction Start Date
@@ -469,7 +464,7 @@ export default function CreateProjectPage() {
                     />
                   </div>
 
-                  {/* Expected Completion - Fixed with htmlFor and id */}
+                  {/* Expected Completion */}
                   <div className="form-group">
                     <label htmlFor="expected-completion" className="form-label">
                       Expected Completion

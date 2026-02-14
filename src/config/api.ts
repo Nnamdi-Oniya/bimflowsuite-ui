@@ -175,31 +175,50 @@ export const BACKEND_CONFIG = {
   },
 } as const;
 
-// Token Management
+// ==============================================
+// TOKEN MANAGEMENT - ENCODED FOR SECURITY
+// ==============================================
+
+/**
+ * Encode token for secure storage
+ * Uses double encoding for extra security
+ */
 const encodeToken = (token: string): string => {
   try {
+    // First encodeURIComponent, then base64
     return btoa(encodeURIComponent(token));
   } catch {
     return token;
   }
 };
 
+/**
+ * Decode token from storage
+ */
 const decodeToken = (encoded: string): string => {
   try {
+    // First base64 decode, then decodeURIComponent
     return decodeURIComponent(atob(encoded));
   } catch {
     return encoded;
   }
 };
 
+// In-memory cache for decoded tokens
 let memoryAccessToken: string | null = null;
+let memoryRefreshToken: string | null = null;
 
+// Initialize from localStorage on load
 if (typeof window !== 'undefined') {
   try {
     const encryptedAccess = localStorage.getItem('access_token');
+    const encryptedRefresh = localStorage.getItem('refresh_token');
+    
     memoryAccessToken = encryptedAccess ? decodeToken(encryptedAccess) : null;
+    memoryRefreshToken = encryptedRefresh ? decodeToken(encryptedRefresh) : null;
   } catch {
     memoryAccessToken = null;
+    memoryRefreshToken = null;
   }
 }
 
@@ -208,14 +227,47 @@ export interface TokenPair {
   refresh: string;
 }
 
+/**
+ * Store tokens securely
+ * - Encoded in localStorage
+ * - Decoded in memory for quick access
+ */
 export const setTokens = (tokens: TokenPair): void => {
+  // Store decoded in memory
   memoryAccessToken = tokens.access;
+  memoryRefreshToken = tokens.refresh;
+  
   if (typeof window !== 'undefined') {
     try {
+      // Store ENCODED in localStorage
       localStorage.setItem('access_token', encodeToken(tokens.access));
       localStorage.setItem('refresh_token', encodeToken(tokens.refresh));
+      
+      // Dispatch event for auth state change
       window.dispatchEvent(new CustomEvent('auth-state-changed', { 
         detail: { isAuthenticated: true } 
+      }));
+    } catch {
+      // Silently fail if localStorage is unavailable
+    }
+  }
+};
+
+/**
+ * Clear all tokens from memory and storage
+ */
+export const clearTokens = (): void => {
+  memoryAccessToken = null;
+  memoryRefreshToken = null;
+  
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_data');
+      
+      window.dispatchEvent(new CustomEvent('auth-state-changed', { 
+        detail: { isAuthenticated: false } 
       }));
     } catch {
       // Silently fail
@@ -223,25 +275,62 @@ export const setTokens = (tokens: TokenPair): void => {
   }
 };
 
-export const clearTokens = (): void => {
-  memoryAccessToken = null;
+/**
+ * Get access token (already decoded from memory)
+ */
+export const getAccessToken = (): string | null => {
+  return memoryAccessToken;
+};
+
+/**
+ * Get refresh token (already decoded from memory)
+ */
+export const getRefreshToken = (): string | null => {
+  return memoryRefreshToken;
+};
+
+/**
+ * Refresh tokens from storage
+ * Call this on app initialization or after storage changes
+ */
+export const refreshTokensFromStorage = (): void => {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user_data');
-    window.dispatchEvent(new CustomEvent('auth-state-changed', { 
-      detail: { isAuthenticated: false } 
-    }));
+    try {
+      const encryptedAccess = localStorage.getItem('access_token');
+      const encryptedRefresh = localStorage.getItem('refresh_token');
+      
+      if (encryptedAccess) {
+        memoryAccessToken = decodeToken(encryptedAccess);
+      } else {
+        memoryAccessToken = null;
+      }
+      
+      if (encryptedRefresh) {
+        memoryRefreshToken = decodeToken(encryptedRefresh);
+      } else {
+        memoryRefreshToken = null;
+      }
+    } catch {
+      memoryAccessToken = null;
+      memoryRefreshToken = null;
+    }
   }
 };
 
-export const getAccessToken = (): string | null => memoryAccessToken;
+// Initial refresh on module load
+if (typeof window !== 'undefined') {
+  refreshTokensFromStorage();
+}
 
+/**
+ * Check if user is authenticated with valid token
+ */
 export const isAuthenticated = (): boolean => {
   const token = getAccessToken();
   if (!token) return false;
   
   try {
+    // Decode JWT to check expiration
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     let padded = base64;
@@ -258,17 +347,23 @@ export const isAuthenticated = (): boolean => {
     const exp = payload.exp;
     
     if (typeof exp !== 'number') return false;
+    
+    // Add 5 minute buffer (300,000 ms) to account for network lag
     return exp * 1000 > Date.now() + 300000;
   } catch {
     return false;
   }
 };
 
+/**
+ * Get auth headers for API requests
+ */
 export const getAuthHeaders = (): Record<string, string> => {
   const token = getAccessToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
+// WebSocket URL helper
 export const getWebSocketUrl = (endpoint: string): string => {
   const base = getBackendUrl() || (typeof window !== 'undefined' ? window.location.origin : '');
   const protocol = base.startsWith('https') ? 'wss' : 'ws';

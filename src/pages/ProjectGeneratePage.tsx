@@ -11,7 +11,7 @@ import { bookDemoService } from "../services/bookDemoService";
 import ProjectSuccessModal from "../components/ProjectSuccessModal";
 
 interface ProjectCreateResponse {
-  id: number;
+  id: number;  // Backend generates this - NEVER send from frontend
   name: string;
   project_number: string;
   description: string;
@@ -111,7 +111,7 @@ export default function ProjectGeneratePage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [submissionId, setSubmissionId] = useState<number | null>(null);
+  const [createdProjectId, setCreatedProjectId] = useState<number | null>(null); // Store ID from backend response
 
   const [formData, setFormData] = useState<ProjectFormData>(() => {
     const saved = loadFormData();
@@ -175,10 +175,10 @@ export default function ProjectGeneratePage() {
       if (isAuthenticated) {
         const today = new Date().toISOString().split('T')[0];
         
+        // IMPORTANT: Never send 'id' field - backend generates it
         const projectPayload = {
           name: formData.name.trim(),
           description: formData.description.trim(),
-          project_number: `PRJ-${Date.now().toString(36).toUpperCase()}`,
           phase: formData.phase,
           project_type: formData.project_type,
           client_name: formData.client_name?.trim() || "",
@@ -196,14 +196,17 @@ export default function ProjectGeneratePage() {
         
         if (res.success && res.data) {
           clearFormData();
+          // Store the ID returned from backend - NEVER generate on frontend
           if (res.data.id) {
-            setSubmissionId(res.data.id);
+            setCreatedProjectId(res.data.id);
           }
           setShowSuccessModal(true);
         } else {
           throw new Error(res.message || "Failed to create project");
         }
       } else {
+        // For guest users, we still need to pass project params to demo request
+        // But NEVER include an ID field
         const payload = {
           request_type: "general_inquiry",
           firstname: "Guest",
@@ -221,7 +224,6 @@ export default function ProjectGeneratePage() {
           consent_privacy: true,
           project_params: {
             name: formData.name.trim(),
-            project_number: `PRJ-${Date.now().toString(36).toUpperCase()}`,
             description: formData.description.trim(),
             project_type: formData.project_type,
             phase: formData.phase,
@@ -288,9 +290,9 @@ export default function ProjectGeneratePage() {
           <>
             <p>Your project <strong>"{formData.name}"</strong> has been created.</p>
             <p>Your model generation request has been submitted. Our team will process it and notify you when your models are ready.</p>
-            {submissionId && (
+            {createdProjectId && (
               <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-                Project ID: <strong>{submissionId}</strong>
+                Project ID: <strong>{createdProjectId}</strong>
               </p>
             )}
           </>
@@ -299,7 +301,7 @@ export default function ProjectGeneratePage() {
           label: "View My Projects",
           onClick: handleGoToProjects
         }}
-        projectId={submissionId || undefined}
+        projectId={createdProjectId || undefined}
       />
 
       <NewUserModal

@@ -17,7 +17,7 @@ export interface BookDemoRequest {
   additional_details?: string;
   consent_marketing: boolean;
   consent_privacy: boolean;
-  project_params?: any; // Added project_params field
+  project_params?: any;
 }
 
 export interface BookDemoResponse {
@@ -34,7 +34,6 @@ export interface BookDemoResponse {
   };
 }
 
-// ✅ Define local ApiResponse interface to avoid dependency issues
 export interface ApiResponse<T = any> {
   data?: T;
   message?: string;
@@ -43,52 +42,35 @@ export interface ApiResponse<T = any> {
 }
 
 class BookDemoService {
-  // ✅ FIXED: Use the correct backend endpoint
-  private baseEndpoint = '/user/request-submission/'; // This matches your Django URL
+  private baseEndpoint = '/user/request-submission/';
 
-  // Submit demo request with optional project parameters
   async submitDemoRequest(
     data: BookDemoRequest, 
     projectParams?: any
   ): Promise<ApiResponse<BookDemoResponse>> {
     try {
-      console.log("📤 Submitting PUBLIC demo request to:", this.baseEndpoint);
-      console.log("📤 Request data:", { 
-        ...data, 
-        phone_number: '***',
-        has_project_params: !!projectParams 
-      });
-
-      // Prepare the complete request data
       const requestData: any = {
         ...data,
-        // Backend expects "general_enquiries" not "general_inquiry"
         request_type: data.request_type === 'general_inquiry' ? 'general_enquiries' : 
                       data.request_type === 'others' ? 'other' : data.request_type,
       };
 
-      // Add project_params if provided
       if (projectParams) {
         requestData.project_params = projectParams;
-        console.log("📦 Including project parameters in demo request");
       }
 
       const response = await publicApiClient.post<BookDemoResponse>(this.baseEndpoint, requestData);
-      console.log("✅ Demo request submitted successfully:", response);
       
-      // Clear stored project params after successful submission
       if (projectParams) {
         this.clearStoredProjectParams();
       }
       
       return response;
     } catch (error: any) {
-      console.error("❌ Demo request submission failed:", error);
       throw error;
     }
   }
 
-  // Submit model generation request (for authenticated users or demo requests with projects)
   async submitModelGenerationRequest(
     userData: {
       firstname: string;
@@ -106,8 +88,6 @@ class BookDemoService {
     isDemoRequest: boolean = false
   ): Promise<ApiResponse> {
     try {
-      console.log("📤 Submitting model generation request");
-      
       const requestData: any = {
         request_type: isDemoRequest ? 'request_demo' : 'generate_model',
         firstname: userData.firstname || "Model",
@@ -128,80 +108,65 @@ class BookDemoService {
         project_params: projectParams
       };
 
-      // If it's a demo request, map request_type for backend
       if (isDemoRequest) {
         requestData.request_type = 'request_demo';
       }
 
       const response = await publicApiClient.post<BookDemoResponse>(this.baseEndpoint, requestData);
-      console.log("✅ Model generation request submitted successfully:", response);
       return response;
     } catch (error: any) {
-      console.error("❌ Model generation request failed:", error);
       throw error;
     }
   }
 
-  // Store project parameters for later use
   storeProjectParams(params: any): void {
     try {
       sessionStorage.setItem('pending_project_params', JSON.stringify(params));
-      console.log("💾 Stored project parameters in session storage");
     } catch (error) {
-      console.warn("⚠️ Failed to store project parameters:", error);
+      // Silently handle storage error
     }
   }
 
-  // Get stored project parameters
   getStoredProjectParams(): any | null {
     try {
       const params = sessionStorage.getItem('pending_project_params');
       return params ? JSON.parse(params) : null;
     } catch (error) {
-      console.warn("⚠️ Failed to get stored project parameters:", error);
       return null;
     }
   }
 
-  // Clear stored project parameters
   clearStoredProjectParams(): void {
     try {
       sessionStorage.removeItem('pending_project_params');
       sessionStorage.removeItem('pending_model_data');
-      console.log("🧹 Cleared stored project parameters");
     } catch (error) {
-      console.warn("⚠️ Failed to clear project parameters:", error);
+      // Silently handle storage error
     }
   }
 
-  // Store model form data
   storeModelFormData(formData: any): void {
     try {
       sessionStorage.setItem('pending_model_data', JSON.stringify(formData));
-      console.log("💾 Stored model form data");
     } catch (error) {
-      console.warn("⚠️ Failed to store model form data:", error);
+      // Silently handle storage error
     }
   }
 
-  // Get stored model form data
   getStoredModelFormData(): any | null {
     try {
       const data = sessionStorage.getItem('pending_model_data');
       return data ? JSON.parse(data) : null;
     } catch (error) {
-      console.warn("⚠️ Failed to get stored model form data:", error);
       return null;
     }
   }
 
-  // Check if coming from generate model page
   hasPendingModelRequest(): boolean {
     return !!sessionStorage.getItem('pending_project_params') || 
            !!sessionStorage.getItem('pending_model_data');
   }
 
-  // Get formatted project details for additional_details field
   formatProjectDetails(projectData: any): string {
     if (!projectData) return '';
     
@@ -233,27 +198,21 @@ class BookDemoService {
     return details.join('\n');
   }
 
-  // Check if email already exists (optional)
   async checkEmailExists(email: string): Promise<{ exists: boolean; message?: string }> {
     try {
-      console.log("🔍 Checking email existence:", email);
-      
       const response = await publicApiClient.post<{ exists: boolean }>('/user/check-email/', {
         email
       });
       
       if (response.data) {
-        console.log("📧 Email check result:", response.data.exists);
         return { exists: response.data.exists };
       }
       return { exists: false };
     } catch (error: any) {
-      console.log("ℹ️ Email check not available, continuing without check");
       return { exists: false };
     }
   }
 
-  // Get available sectors
   getAvailableSectors(): Array<{ value: string; label: string }> {
     return [
       { value: 'architecture', label: 'Architecture' },
@@ -272,7 +231,6 @@ class BookDemoService {
     ];
   }
 
-  // Get request types - updated to match backend
   getRequestTypes(): Array<{ value: BookDemoRequest['request_type']; label: string }> {
     return [
       { value: 'request_demo', label: 'Request a Demo' },
