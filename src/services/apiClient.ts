@@ -1,7 +1,6 @@
 // src/services/apiClient.ts
 import { BACKEND_CONFIG, clearTokens, getAccessToken } from '../config/api';
 
-// Types for API responses
 export interface ApiResponse<T = any> {
   data?: T;
   message?: string;
@@ -22,10 +21,6 @@ export interface ApiError {
   data?: any;
 }
 
-/**
- * API Client - No refresh token logic
- * Handles all HTTP requests to the backend API
- */
 class ApiClient {
   private baseUrl: string;
   private timeout: number;
@@ -35,14 +30,9 @@ class ApiClient {
     this.timeout = BACKEND_CONFIG.timeout;
   }
 
-  /**
-   * Helper to detect real network-level failures across browsers
-   */
   private isNetworkError(error: unknown): boolean {
     if (!(error instanceof TypeError)) return false;
-
     const msg = (error.message || '').toLowerCase();
-
     return (
       msg.includes('failed to fetch') ||
       msg.includes('networkerror') ||
@@ -52,9 +42,6 @@ class ApiClient {
     );
   }
 
-  /**
-   * Core request handler
-   */
   private async request<T>(
     endpoint: string,
     method: string = 'GET',
@@ -66,14 +53,9 @@ class ApiClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
-    const requestHeaders: Record<string, string> = {
-      ...headers,
-    };
+    const requestHeaders: Record<string, string> = { ...headers };
 
-    // Get token - already decoded from memory
     const token = getAccessToken();
-
-    // Add token for all requests except login
     if (token && !endpoint.includes('/auth/login/')) {
       requestHeaders['Authorization'] = `Bearer ${token}`;
     }
@@ -97,7 +79,6 @@ class ApiClient {
       const response = await fetch(url, config);
       clearTimeout(timeoutId);
 
-      // Handle 401 Unauthorized - NO REFRESH ATTEMPT
       if (response.status === 401 && !endpoint.includes('/auth/login/')) {
         clearTokens();
         window.dispatchEvent(new CustomEvent('auth-expired'));
@@ -120,9 +101,6 @@ class ApiClient {
         } as ApiError;
       }
 
-      // ────────────────────────────────────────────────
-      //           Improved network error detection
-      // ────────────────────────────────────────────────
       if (this.isNetworkError(error)) {
         throw {
           message: 'Network error occurred. Please check your internet connection or try again later.',
@@ -131,12 +109,10 @@ class ApiClient {
         } as ApiError;
       }
 
-      // Re-throw if already an ApiError (from handleResponse or elsewhere)
       if (error && typeof error === 'object' && 'status' in error) {
         throw error;
       }
 
-      // Fallback for any other unexpected error
       throw {
         message: error instanceof Error ? error.message : 'An unexpected error occurred',
         status: 0,
@@ -145,9 +121,6 @@ class ApiClient {
     }
   }
 
-  /**
-   * Process API response
-   */
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
     const responseText = await response.text();
 
@@ -172,7 +145,6 @@ class ApiClient {
       let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
       let validationErrors: ValidationError[] = [];
 
-      // Parse Django REST Framework error formats
       if (responseData.detail) {
         errorMessage = responseData.detail;
       } else if (responseData.error) {
@@ -182,10 +154,11 @@ class ApiClient {
       } else if (typeof responseData === 'string') {
         errorMessage = responseData;
       } else if (Array.isArray(responseData)) {
-        errorMessage = responseData.map(err => typeof err === 'object' ? JSON.stringify(err) : err).join(', ');
+        errorMessage = responseData
+          .map((err) => (typeof err === 'object' ? JSON.stringify(err) : err))
+          .join(', ');
       }
 
-      // Parse field-specific validation errors
       if (responseData && typeof responseData === 'object' && !Array.isArray(responseData)) {
         validationErrors = Object.entries(responseData)
           .filter(([key]) => key !== 'detail' && key !== 'error' && key !== 'message')
@@ -205,7 +178,7 @@ class ApiClient {
         status: response.status,
         errors: validationErrors.length > 0 ? validationErrors : undefined,
         code: responseData.code || `HTTP_${response.status}`,
-        data: responseData
+        data: responseData,
       };
 
       throw apiError;
@@ -219,20 +192,34 @@ class ApiClient {
     };
   }
 
-  // HTTP Methods
   async get<T>(endpoint: string, headers?: Record<string, string>): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'GET', undefined, headers);
   }
 
-  async post<T>(endpoint: string, data: any, headers?: Record<string, string>, isFormData: boolean = false): Promise<ApiResponse<T>> {
+  async post<T>(
+    endpoint: string,
+    data: any,
+    headers?: Record<string, string>,
+    isFormData = false
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'POST', data, headers, isFormData);
   }
 
-  async put<T>(endpoint: string, data: any, headers?: Record<string, string>, isFormData: boolean = false): Promise<ApiResponse<T>> {
+  async put<T>(
+    endpoint: string,
+    data: any,
+    headers?: Record<string, string>,
+    isFormData = false
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'PUT', data, headers, isFormData);
   }
 
-  async patch<T>(endpoint: string, data: any, headers?: Record<string, string>, isFormData: boolean = false): Promise<ApiResponse<T>> {
+  async patch<T>(
+    endpoint: string,
+    data: any,
+    headers?: Record<string, string>,
+    isFormData = false
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'PATCH', data, headers, isFormData);
   }
 
@@ -240,9 +227,6 @@ class ApiClient {
     return this.request<T>(endpoint, 'DELETE', undefined, headers);
   }
 
-  /**
-   * File upload with progress tracking
-   */
   async uploadFile(
     endpoint: string,
     file: File,
@@ -252,7 +236,7 @@ class ApiClient {
     if (!onProgress) {
       const formData = new FormData();
       formData.append('file', file);
-      Object.keys(additionalData).forEach(key => formData.append(key, additionalData[key]));
+      Object.entries(additionalData).forEach(([key, value]) => formData.append(key, value));
       return this.post(endpoint, formData, {}, true);
     }
 
@@ -289,15 +273,12 @@ class ApiClient {
 
       const formData = new FormData();
       formData.append('file', file);
-      Object.keys(additionalData).forEach(key => formData.append(key, additionalData[key]));
+      Object.entries(additionalData).forEach(([key, value]) => formData.append(key, value));
 
       xhr.send(formData);
     });
   }
 
-  /**
-   * File download
-   */
   async downloadFile(endpoint: string): Promise<Blob> {
     const url = `${this.baseUrl}${endpoint}`;
     const token = getAccessToken();

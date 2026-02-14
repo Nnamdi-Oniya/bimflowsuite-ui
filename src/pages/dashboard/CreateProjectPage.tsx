@@ -70,7 +70,6 @@ const RISK_CLASSIFICATIONS = [
 export default function CreateProjectPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ProjectFormData>(() => {
-    // REMOVED: project_number generation - let backend handle it
     return { ...initialFormState };
   });
   
@@ -91,17 +90,43 @@ export default function CreateProjectPage() {
     const err: Partial<Record<keyof ProjectFormData, string>> = {};
 
     if (currentSection === "basic") {
-      if (!formData.name.trim()) err.name = "Project name is required";
-      if (!formData.project_type) err.project_type = "Project type is required";
-      if (formData.description.length < 20) {
+      // Project Name validation
+      if (!formData.name.trim()) {
+        err.name = "Project name is required";
+      } else if (formData.name.length < 3) {
+        err.name = "Project name must be at least 3 characters";
+      }
+
+      // Project Type validation
+      if (!formData.project_type) {
+        err.project_type = "Project type is required";
+      }
+
+      // Description validation
+      if (!formData.description.trim()) {
+        err.description = "Project description is required";
+      } else if (formData.description.length < 20) {
         err.description = "Description must be at least 20 characters";
       }
     }
 
     if (currentSection === "schedule") {
+      // Date logic validation
       if (formData.project_start_date && formData.expected_completion_date) {
-        if (new Date(formData.project_start_date) > new Date(formData.expected_completion_date)) {
+        const start = new Date(formData.project_start_date);
+        const end = new Date(formData.expected_completion_date);
+        
+        if (start > end) {
           err.expected_completion_date = "Completion date must be after start date";
+        }
+      }
+
+      if (formData.project_start_date && formData.construction_start_date) {
+        const start = new Date(formData.project_start_date);
+        const construction = new Date(formData.construction_start_date);
+        
+        if (construction < start) {
+          err.construction_start_date = "Construction date cannot be before project start";
         }
       }
     }
@@ -115,23 +140,33 @@ export default function CreateProjectPage() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
     if (errors[name as keyof ProjectFormData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+    // Clear submit error when user makes changes
+    if (submitError) {
+      setSubmitError(null);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate all sections before submission
     let isValid = true;
+    
     setCurrentSection("basic");
     if (!validateSection()) isValid = false;
+    
     setCurrentSection("client");
     if (!validateSection()) isValid = false;
+    
     setCurrentSection("schedule");
     if (!validateSection()) isValid = false;
     
     if (!isValid) {
+      // Return to first section with errors
       setCurrentSection("basic");
       return;
     }
@@ -143,15 +178,15 @@ export default function CreateProjectPage() {
       // IMPORTANT: Never send 'id' field - backend generates it
       // Also, don't send project_number - backend generates it
       const payload = {
-        name: formData.name,
-        description: formData.description,
+        name: formData.name.trim(),
+        description: formData.description.trim(),
         phase: formData.phase,
         project_type: formData.project_type,
-        client_name: formData.client_name,
-        client_type: formData.client_type,
-        project_scale: formData.project_scale,
-        risk_classification: formData.risk_classification,
-        project_address: formData.project_address,
+        client_name: formData.client_name?.trim() || "",
+        client_type: formData.client_type || "private",
+        project_scale: formData.project_scale || "medium",
+        risk_classification: formData.risk_classification || "medium",
+        project_address: formData.project_address?.trim() || "",
         project_start_date: formData.project_start_date 
           ? new Date(formData.project_start_date).toISOString() 
           : null,
@@ -161,7 +196,7 @@ export default function CreateProjectPage() {
         expected_completion_date: formData.expected_completion_date 
           ? new Date(formData.expected_completion_date).toISOString() 
           : null,
-        approval_status: formData.approval_status || "pending",
+        approval_status: "pending",
       };
 
       const response = await projectService.createProject(payload);
@@ -174,6 +209,20 @@ export default function CreateProjectPage() {
         });
         setShowSuccessModal(true);
       } else {
+        // Handle backend validation errors
+        if (response.data && typeof response.data === 'object') {
+          const backendErrors: string[] = [];
+          Object.entries(response.data).forEach(([field, messages]) => {
+            if (Array.isArray(messages)) {
+              backendErrors.push(`${field}: ${messages.join(', ')}`);
+            } else if (typeof messages === 'string') {
+              backendErrors.push(`${field}: ${messages}`);
+            }
+          });
+          if (backendErrors.length > 0) {
+            throw new Error(backendErrors.join('\n'));
+          }
+        }
         throw new Error(response.message || "Failed to create project");
       }
     } catch (err: any) {
@@ -229,6 +278,7 @@ export default function CreateProjectPage() {
             <div className="error-banner">
               <span>⚠️</span>
               <p>{submitError}</p>
+              <button className="close-btn" onClick={() => setSubmitError(null)}>×</button>
             </div>
           )}
 
@@ -460,8 +510,11 @@ export default function CreateProjectPage() {
                       name="construction_start_date"
                       value={formData.construction_start_date || ""}
                       onChange={handleInputChange}
-                      className="form-input"
+                      className={`form-input ${errors.construction_start_date ? "error" : ""}`}
                     />
+                    {errors.construction_start_date && (
+                      <span className="error-text">{errors.construction_start_date}</span>
+                    )}
                   </div>
 
                   {/* Expected Completion */}
