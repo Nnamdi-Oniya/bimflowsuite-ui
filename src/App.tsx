@@ -23,7 +23,8 @@ const LoginPage = React.lazy(() => import("./pages/LoginPage"));
 const ForgotPasswordPage = React.lazy(() => import("./pages/ForgotPasswordPage"));
 const ResetPasswordPage = React.lazy(() => import("./pages/ResetPasswordPage"));
 const SetPasswordPage = React.lazy(() => import("./pages/SetPasswordPage"));
-const ProjectGeneratePage = React.lazy(() => import("./pages/ProjectGeneratePage")); 
+const ProjectGeneratePage = React.lazy(() => import("./pages/ProjectGeneratePage"));
+const BookDemoPage = React.lazy(() => import("./pages/BookDemoPage")); // Added BookDemoPage
 
 // Dashboard imports
 const DashboardLayout = React.lazy(() => import("./components/DashboardLayout"));
@@ -173,7 +174,7 @@ const NotFoundPage: React.FC = () => (
 const AppContent: React.FC = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard");
-  const hideFooterPaths = ["/login", "/forgot-password", "/set-password", "/reset-password"];
+  const hideFooterPaths = ["/login", "/forgot-password", "/set-password", "/reset-password", "/book-demo"]; // Added /book-demo to hide footer paths
   const hideFooter = isDashboard || hideFooterPaths.includes(location.pathname);
 
   return (
@@ -203,6 +204,7 @@ const AppContent: React.FC = () => {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/project-generate" element={<ProjectGeneratePage />} />
+            <Route path="/book-demo" element={<BookDemoPage />} /> {/* Added BookDemoPage route */}
 
             {/* Auth Routes */}
             <Route path="/login" element={<LoginPage />} />
