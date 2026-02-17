@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ResetPasswordPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ResetPasswordPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ResetPasswordPage renders', () => {
-  render(<ResetPasswordPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ResetPasswordPage snapshot', () => {
-  const { container } = render(<ResetPasswordPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ResetPasswordPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

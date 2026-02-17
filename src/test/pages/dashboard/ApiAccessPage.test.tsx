@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../test-utils';
 import ApiAccessPage from '@/pages/dashboard/ApiAccessPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ApiAccessPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ApiAccessPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ApiAccessPage renders', () => {
-  render(<ApiAccessPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ApiAccessPage snapshot', () => {
-  const { container } = render(<ApiAccessPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ApiAccessPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

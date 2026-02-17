@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DashboardPage snapshot 1`] = `
+exports[`DashboardPage > matches snapshot 1`] = `
 <div>
   <section
     class="dashboard-hero"

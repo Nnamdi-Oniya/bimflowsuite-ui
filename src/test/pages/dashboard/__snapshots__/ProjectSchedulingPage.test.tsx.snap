@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ProjectSchedulingPage snapshot 1`] = `
+exports[`ProjectSchedulingPage > matches snapshot 1`] = `
 <div>
   <div
     class="dashboard-schedule-pro"

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ProjectsTestimonialsSection snapshot 1`] = `
+exports[`ProjectsTestimonialsSection > matches snapshot 1`] = `
 <div>
   <section
     class="latest-projects"

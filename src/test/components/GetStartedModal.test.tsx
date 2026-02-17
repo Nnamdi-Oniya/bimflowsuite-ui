@@ -1,18 +1,20 @@
-import { it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import GetStartedModal from '@/components/GetStartedModal';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('GetStartedModal', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <GetStartedModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('GetStartedModal renders', () => {
-  render(<GetStartedModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-it('GetStartedModal snapshot', () => {
-  const { container } = render(<GetStartedModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <GetStartedModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

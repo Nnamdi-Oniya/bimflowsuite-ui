@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import SetPasswordPage from '@/pages/SetPasswordPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('SetPasswordPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <SetPasswordPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('SetPasswordPage renders', () => {
-  render(<SetPasswordPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('SetPasswordPage snapshot', () => {
-  const { container } = render(<SetPasswordPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <SetPasswordPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

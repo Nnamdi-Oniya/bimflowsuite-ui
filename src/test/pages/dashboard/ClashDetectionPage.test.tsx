@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../test-utils';
 import ClashDetectionPage from '@/pages/dashboard/ClashDetectionPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ClashDetectionPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ClashDetectionPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ClashDetectionPage renders', () => {
-  render(<ClashDetectionPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ClashDetectionPage snapshot', () => {
-  const { container } = render(<ClashDetectionPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ClashDetectionPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

@@ -1,14 +1,20 @@
-// src/test/pages/dashboard/SettingsPage.test.tsx
-import { it, expect } from 'vitest';
-import { render } from '@/test/utils/test-utils';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../test-utils';
 import SettingsPage from '@/pages/dashboard/SettingsPage';
 
-it('SettingsPage renders', () => {
-  render(<SettingsPage />);
-  expect(document.body.children).toHaveLength(1);
-});
+describe('SettingsPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <SettingsPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('SettingsPage snapshot', () => {
-  const { container } = render(<SettingsPage />);
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <SettingsPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

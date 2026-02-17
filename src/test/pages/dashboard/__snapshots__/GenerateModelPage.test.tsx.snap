@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GenerateModelPage snapshot 1`] = `
+exports[`GenerateModelPage > matches snapshot 1`] = `
 <div>
   <div
     class="generate-page"

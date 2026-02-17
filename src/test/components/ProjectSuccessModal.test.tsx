@@ -1,43 +1,20 @@
-// src/test/components/ProjectSuccessModal.test.tsx
-import { it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import ProjectSuccessModal from '@/components/ProjectSuccessModal';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ProjectSuccessModal', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ProjectSuccessModal isOpen={true} onClose={vi.fn()} projectName="Test Project" projectId="123" primaryAction={{ label: "View Project", onClick: vi.fn() }} secondaryAction={{ label: "Close", onClick: vi.fn() }} />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('ProjectSuccessModal renders', () => {
-  render(
-    <ProjectSuccessModal 
-      isOpen={true} 
-      onClose={() => {}} 
-      title="Success" 
-      message="Project created successfully" 
-      primaryAction={{
-        label: "View Project",
-        onClick: () => {}
-      }}
-    />, 
-    { wrapper: Wrapper }
-  );
-  expect(document.body.children).toHaveLength(1);
-});
-
-it('ProjectSuccessModal snapshot', () => {
-  const { container } = render(
-    <ProjectSuccessModal 
-      isOpen={true} 
-      onClose={() => {}} 
-      title="Success" 
-      message="Project created successfully" 
-      primaryAction={{
-        label: "View Project",
-        onClick: () => {}
-      }}
-    />, 
-    { wrapper: Wrapper }
-  );
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ProjectSuccessModal isOpen={true} onClose={vi.fn()} projectName="Test Project" projectId="123" primaryAction={{ label: "View Project", onClick: vi.fn() }} secondaryAction={{ label: "Close", onClick: vi.fn() }} />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

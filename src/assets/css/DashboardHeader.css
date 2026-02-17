@@ -1,4 +1,3 @@
-/* src/assets/DashboardHeader.css */
 /* Enhanced for SVG icons and dark mode via .dark class */
 /* All selectors scoped under .dashboard-header to prevent bleed from other pages */
 .dashboard-header {
@@ -255,27 +254,69 @@
   color: #dc2626;
 }
 
-/* Responsive */
+/* ===== RESPONSIVE STYLES WITH LARGER MOBILE MENU ===== */
 @media (max-width: 768px) {
   .dashboard-header {
     left: 0;
   }
+  
   .dashboard-header .menu-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0.75rem; /* Increase padding for larger tap area */
+    font-size: 2rem; /* Make the hamburger icon larger */
   }
+  
+  .dashboard-header .menu-toggle svg {
+    width: 32px; /* Larger SVG icon */
+    height: 32px;
+    stroke-width: 2.5; /* Slightly thicker lines */
+  }
+  
   .dashboard-header .dashboard-header__container {
     padding: 0 1rem;
   }
+  
   .dashboard-header .user-info {
     display: none;
   }
+  
   .dashboard-header .dropdown-arrow {
     display: none;
   }
+  
   .dashboard-header .user-profile {
     padding: 0.25rem;
+  }
+}
+
+/* Even smaller devices */
+@media (max-width: 480px) {
+  .dashboard-header .menu-toggle {
+    padding: 0.875rem; /* Even larger tap area */
+    font-size: 2.25rem; /* Even larger icon */
+  }
+  
+  .dashboard-header .menu-toggle svg {
+    width: 36px; /* Even larger SVG */
+    height: 36px;
+    stroke-width: 3; /* Even thicker lines for better visibility */
+  }
+  
+  .dashboard-header .action-btn {
+    width: 42px; /* Larger action buttons */
+    height: 42px;
+  }
+  
+  .dashboard-header .action-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .dashboard-header .user-profile .avatar {
+    width: 38px; /* Slightly larger avatar */
+    height: 38px;
   }
 }
 
@@ -381,4 +422,10 @@
 .dark .dashboard-header .notification-badge {
   border-color: #111827;
   background: #fbbf24; /* Lighter orange badge in dark mode */
+}
+
+/* Dark mode hover states for mobile menu */
+.dark .dashboard-header .menu-toggle:hover {
+  background: #374151;
+  color: #e5e7eb;
 }

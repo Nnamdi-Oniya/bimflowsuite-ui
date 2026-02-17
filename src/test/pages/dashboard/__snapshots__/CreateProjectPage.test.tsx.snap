@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CreateProjectPage matches snapshot 1`] = `
+exports[`CreateProjectPage > matches snapshot 1`] = `
 <div>
   <div
     class="create-project-page"
@@ -226,30 +226,6 @@ exports[`CreateProjectPage matches snapshot 1`] = `
                 0
                  / 1200
               </div>
-            </div>
-            <div
-              class="form-group"
-            >
-              <label
-                class="form-label"
-                for="project-number"
-              >
-                Project Number
-              </label>
-              <input
-                class="form-input"
-                disabled=""
-                id="project-number"
-                name="project_number"
-                readonly=""
-                type="text"
-                value="PRJ-MLL3TP23"
-              />
-              <small
-                class="field-hint"
-              >
-                Auto-generated unique identifier
-              </small>
             </div>
             <div
               class="form-group"

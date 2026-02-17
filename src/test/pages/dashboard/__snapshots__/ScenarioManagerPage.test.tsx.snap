@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ScenarioManagerPage snapshot 1`] = `
+exports[`ScenarioManagerPage > matches snapshot 1`] = `
 <div>
   <div
     class="scenario-manager-pro"

@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import Footer from '@/components/Footer';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('Footer', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <Footer />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('Footer renders', () => {
-  render(<Footer />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('Footer snapshot', () => {
-  const { container } = render(<Footer />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <Footer />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

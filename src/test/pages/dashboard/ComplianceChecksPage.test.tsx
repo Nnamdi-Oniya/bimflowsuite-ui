@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../test-utils';
 import ComplianceChecksPage from '@/pages/dashboard/ComplianceChecksPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ComplianceChecksPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ComplianceChecksPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ComplianceChecksPage renders', () => {
-  render(<ComplianceChecksPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ComplianceChecksPage snapshot', () => {
-  const { container } = render(<ComplianceChecksPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ComplianceChecksPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

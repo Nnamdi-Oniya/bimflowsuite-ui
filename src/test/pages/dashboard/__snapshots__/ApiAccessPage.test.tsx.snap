@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ApiAccessPage snapshot 1`] = `
+exports[`ApiAccessPage > matches snapshot 1`] = `
 <div>
   <div
     class="dashboard-api"

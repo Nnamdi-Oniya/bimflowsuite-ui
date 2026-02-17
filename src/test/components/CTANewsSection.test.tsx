@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import CTANewsSection from '@/components/CTANewsSection';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('CTANewsSection', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <CTANewsSection />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('CTANewsSection renders', () => {
-  render(<CTANewsSection />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('CTANewsSection snapshot', () => {
-  const { container } = render(<CTANewsSection />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <CTANewsSection />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

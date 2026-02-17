@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ReportsCenterPage snapshot 1`] = `
+exports[`ReportsCenterPage > matches snapshot 1`] = `
 <div>
   <div
     class="reports-center-clean"

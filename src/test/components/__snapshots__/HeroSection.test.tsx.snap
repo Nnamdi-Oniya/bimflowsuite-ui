@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`HeroSection snapshot 1`] = `
+exports[`HeroSection > matches snapshot 1`] = `
 <div>
   <section
     aria-label="BIMFlow Suite BIM Automation Platform"

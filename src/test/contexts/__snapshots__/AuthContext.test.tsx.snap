@@ -1,17 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AuthProvider snapshot (authenticated) 1`] = `
+exports[`AuthContext > matches snapshot 1`] = `
 <div>
   <div>
     <div
       data-testid="auth-status"
     >
-      Not Authenticated
+      Authenticated
     </div>
     <div
-      data-testid="user-display"
+      data-testid="user-email"
     >
-      Test User
+      test@example.com
     </div>
   </div>
 </div>

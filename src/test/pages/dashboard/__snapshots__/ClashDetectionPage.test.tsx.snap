@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ClashDetectionPage snapshot 1`] = `
+exports[`ClashDetectionPage > matches snapshot 1`] = `
 <div>
   <div
     class="clash-detection-pro"

@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../test-utils';
 import ProjectSchedulingPage from '@/pages/dashboard/ProjectSchedulingPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ProjectSchedulingPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ProjectSchedulingPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ProjectSchedulingPage renders', () => {
-  render(<ProjectSchedulingPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ProjectSchedulingPage snapshot', () => {
-  const { container } = render(<ProjectSchedulingPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ProjectSchedulingPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

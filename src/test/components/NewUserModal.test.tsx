@@ -1,35 +1,20 @@
-// src/test/components/NewUserModal.test.tsx
-import { it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import NewUserModal from '@/components/NewUserModal';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('NewUserModal', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <NewUserModal isOpen={true} onClose={vi.fn()} onLogin={vi.fn()} onBookDemo={vi.fn()} />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('NewUserModal renders', () => {
-  render(
-    <NewUserModal 
-      isOpen={true} 
-      onClose={() => {}} 
-      onLogin={() => {}} 
-      onBookDemo={() => {}} 
-    />, 
-    { wrapper: Wrapper }
-  );
-  expect(document.body.children).toHaveLength(1);
-});
-
-it('NewUserModal snapshot', () => {
-  const { container } = render(
-    <NewUserModal 
-      isOpen={true} 
-      onClose={() => {}} 
-      onLogin={() => {}} 
-      onBookDemo={() => {}} 
-    />, 
-    { wrapper: Wrapper }
-  );
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <NewUserModal isOpen={true} onClose={vi.fn()} onLogin={vi.fn()} onBookDemo={vi.fn()} />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

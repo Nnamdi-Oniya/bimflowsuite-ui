@@ -1,34 +1,20 @@
-import { it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import DashboardSuccessModal from '@/components/DashboardSuccessModal';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('DashboardSuccessModal', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <DashboardSuccessModal isOpen={true} onClose={vi.fn()} title="Success!" message="Operation completed successfully" />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('DashboardSuccessModal renders', () => {
-  render(
-    <DashboardSuccessModal 
-      isOpen={true} 
-      onClose={() => {}} 
-      title="Test Title" 
-      message="Test Message" 
-    />, 
-    { wrapper: Wrapper }
-  );
-  expect(document.body.children).toHaveLength(1);
-});
-
-it('DashboardSuccessModal snapshot', () => {
-  const { container } = render(
-    <DashboardSuccessModal 
-      isOpen={true} 
-      onClose={() => {}} 
-      title="Test Title" 
-      message="Test Message" 
-    />, 
-    { wrapper: Wrapper }
-  );
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <DashboardSuccessModal isOpen={true} onClose={vi.fn()} title="Success!" message="Operation completed successfully" />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

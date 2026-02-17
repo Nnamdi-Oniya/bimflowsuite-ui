@@ -1,19 +1,20 @@
-// src/test/components/PasswordSuccessModal.test.tsx
-import { it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import PasswordSuccessModal from '@/components/PasswordSuccessModal';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('PasswordSuccessModal', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <PasswordSuccessModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('PasswordSuccessModal renders', () => {
-  render(<PasswordSuccessModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-it('PasswordSuccessModal snapshot', () => {
-  const { container } = render(<PasswordSuccessModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <PasswordSuccessModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

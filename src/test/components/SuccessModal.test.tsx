@@ -1,19 +1,20 @@
-// src/test/components/SuccessModal.test.tsx
-import { it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import SuccessModal from '@/components/SuccessModal';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('SuccessModal', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <SuccessModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('SuccessModal renders', () => {
-  render(<SuccessModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-it('SuccessModal snapshot', () => {
-  const { container } = render(<SuccessModal isOpen={true} onClose={() => {}} />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <SuccessModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

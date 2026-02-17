@@ -1,7 +1,5 @@
-// vite.config.ts
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';   // ← NEW
 import path from 'path';
 import { fileURLToPath } from 'node:url';
 
@@ -13,7 +11,6 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
-      tsconfigPaths(),           // ← Add here (helps dev + build)
     ],
 
     resolve: {
@@ -42,10 +39,6 @@ export default defineConfig(({ mode }) => {
       },
     },
 
-    esbuild: {
-      drop: ['console', 'debugger'],
-    },
-
     build: {
       outDir: 'dist',
       sourcemap: mode === 'development',
@@ -70,23 +63,43 @@ export default defineConfig(({ mode }) => {
 
     test: {
       globals: true,
-      css: true,
       environment: 'jsdom',
-
-      setupFiles: ['./src/setupTests.ts'], // keep this — relative path is correct
-
-      // Extra safety: explicitly repeat alias + plugin inside test
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, './src'),
-        },
-      },
-
-      // Many people add the plugin here too (especially if setup file uses @/)
-      plugins: [
-        tsconfigPaths(),
+      setupFiles: ['./src/setupTests.ts'],
+      
+      // Enable alias resolution in tests
+      alias: [
+        { find: '@', replacement: path.resolve(__dirname, './src') }
       ],
-
+      
+      deps: {
+        inline: [
+          '@testing-library/user-event',
+          'react-pdf',
+          'pdfjs-dist'
+        ],
+        // Optimize these dependencies for tests
+        optimizer: {
+          web: {
+            include: ['react-pdf', 'pdfjs-dist']
+          }
+        }
+      },
+      
+      include: ['src/test/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+      
+      testTimeout: 10000,
+      hookTimeout: 10000,
+      
+      // Mock browser APIs that might be missing
+      environmentOptions: {
+        jsdom: {
+          resources: 'usable',
+          runScripts: 'dangerously',
+          // Add missing browser globals
+          pretendToBeVisual: true,
+        }
+      },
+      
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],

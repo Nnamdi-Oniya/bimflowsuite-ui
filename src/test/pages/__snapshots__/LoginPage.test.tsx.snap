@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`LoginPage snapshot 1`] = `
+exports[`LoginPage > matches snapshot 1`] = `
 <div>
   <div
     class="login-page"

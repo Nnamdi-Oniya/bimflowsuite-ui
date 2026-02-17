@@ -1,18 +1,50 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+// src/test/components/ProtectedRoute.test.tsx
+
+import { describe, it, expect, beforeEach } from 'vitest';
+import { screen, waitFor } from '@testing-library/react';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { vi } from 'vitest';
+import { renderWithMemoryRouter, setAuthenticated } from '../protected-route-test-utils';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+// IMPORTANT: mock the correct path
+vi.mock('../../utils/authUtils', () => ({
+  isUserAuthenticated: () => mockIsAuthenticated
+}));
 
-test('ProtectedRoute renders', () => {
-  render(<ProtectedRoute />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
+let mockIsAuthenticated = true;
 
-test('ProtectedRoute snapshot', () => {
-  const { container } = render(<ProtectedRoute />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+describe('ProtectedRoute', () => {
+
+  beforeEach(() => {
+    mockIsAuthenticated = true;
+  });
+
+  it('renders children when authenticated', async () => {
+    mockIsAuthenticated = true;
+
+    renderWithMemoryRouter(
+      <ProtectedRoute>
+        <div>Protected Content</div>
+      </ProtectedRoute>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Protected Content')).toBeInTheDocument();
+    });
+  });
+
+  it('redirects to login when not authenticated', async () => {
+    mockIsAuthenticated = false;
+
+    renderWithMemoryRouter(
+      <ProtectedRoute>
+        <div>Protected Content</div>
+      </ProtectedRoute>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Login Page')).toBeInTheDocument();
+    });
+  });
+
 });

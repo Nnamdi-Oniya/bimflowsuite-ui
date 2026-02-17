@@ -1,9 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DashboardSidebar snapshot 1`] = `
+exports[`DashboardSidebar > matches snapshot 1`] = `
 <div>
+  <div
+    class="sidebar-backdrop"
+  />
   <nav
-    class="dashboard-sidebar "
+    class="dashboard-sidebar active"
   >
     <div
       class="sidebar-header"

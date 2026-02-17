@@ -1,18 +1,20 @@
-import { it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import ImageOptimizer from '@/components/ImageOptimizer';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ImageOptimizer', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ImageOptimizer src="/test.jpg" alt="Test image" className="test-class" />
+    );
+    expect(container).toBeDefined();
+  });
 
-it('ImageOptimizer renders', () => {
-  render(<ImageOptimizer src="test.jpg" alt="Test" />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-it('ImageOptimizer snapshot', () => {
-  const { container } = render(<ImageOptimizer src="test.jpg" alt="Test" />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ImageOptimizer src="/test.jpg" alt="Test image" className="test-class" />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`matches snapshot (authenticated) 1`] = `
+exports[`DashboardHeader > matches snapshot 1`] = `
 <div>
   <header
     class="dashboard-header"
@@ -97,9 +97,9 @@ exports[`matches snapshot (authenticated) 1`] = `
             class="user-profile "
           >
             <img
-              alt="Test User"
+              alt="test"
               class="avatar"
-              src="https://ui-avatars.com/api/?name=TU&background=3b82f6&color=ffffff&bold=true&length=2&size=40"
+              src="https://ui-avatars.com/api/?name=T&background=3b82f6&color=ffffff&bold=true&length=2&size=40"
             />
             <svg
               class="chevron-icon "
@@ -127,7 +127,7 @@ exports[`matches snapshot (authenticated) 1`] = `
               <div
                 class="dropdown-user-name"
               >
-                Test User
+                test
               </div>
               <div
                 class="dropdown-user-email"
