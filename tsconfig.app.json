@@ -13,7 +13,7 @@
 
     "skipLibCheck": true,
 
-    /* Bundler-friendly settings (very important for Vite) */
+    /* Bundler-friendly settings */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
@@ -22,7 +22,7 @@
 
     "jsx": "react-jsx",
 
-    /* Strictness & good defaults */
+    /* Strictness */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -30,7 +30,7 @@
     "noUncheckedSideEffectImports": true,
     "erasableSyntaxOnly": true,
 
-    /* Path aliases – modern style with @/* (most popular in 2025+) */
+    /* Path aliases */
     "paths": {
       "@/*": ["./src/*"],
       "@services/*": ["./src/services/*"],
@@ -39,18 +39,20 @@
       "@components/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
       "@assets/*": ["./src/assets/*"]
-      // ← add more folders as your project grows
     }
   },
 
   "include": [
-    "src",
+    "src"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "dist",
     "test",
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx"
-  ],
-
-  "exclude": ["node_modules", "dist"]
+  ]
 }

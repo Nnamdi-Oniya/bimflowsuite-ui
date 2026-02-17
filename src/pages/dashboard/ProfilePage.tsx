@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { profileService } from "../../services/profileService";
+import { resolveMediaUrl } from "../../config/api";
 import DashboardSuccessModal from "../../components/DashboardSuccessModal";
 import "../../assets/css/ProfilePage.css";
 
@@ -29,6 +30,7 @@ const DashboardProfile: React.FC = () => {
     company: "",
     job_title: "",
     profile_picture: "",
+    raw_profile_picture: "", // Store the raw path from backend
     date_joined: "",
   });
   
@@ -45,7 +47,8 @@ const DashboardProfile: React.FC = () => {
         location: user.location || "",
         company: user.company || "",
         job_title: user.job_title || "",
-        profile_picture: user.profile_picture || "",
+        profile_picture: resolveMediaUrl(user.profile_picture),
+        raw_profile_picture: user.profile_picture || "",
         date_joined: formatDate(user.date_joined),
       };
       setUserData(formattedData);
@@ -174,9 +177,20 @@ const DashboardProfile: React.FC = () => {
       const response = await profileService.uploadAvatar(file);
       
       if (response.success && response.data) {
-        const profilePicture = response.data.profile_picture || '';
-        setTempData((prev) => ({ ...prev, profile_picture: profilePicture }));
-        setUserData((prev) => ({ ...prev, profile_picture: profilePicture }));
+        const rawPath = response.data.profile_picture || '';
+        const fullUrl = resolveMediaUrl(rawPath);
+        
+        // Update both tempData and userData with the new profile picture
+        setTempData((prev) => ({ 
+          ...prev, 
+          profile_picture: fullUrl,
+          raw_profile_picture: rawPath 
+        }));
+        setUserData((prev) => ({ 
+          ...prev, 
+          profile_picture: fullUrl,
+          raw_profile_picture: rawPath 
+        }));
         await refreshUser();
         
         // Show success modal for avatar
@@ -202,8 +216,16 @@ const DashboardProfile: React.FC = () => {
       const response = await profileService.removeAvatar();
       
       if (response.success) {
-        setTempData((prev) => ({ ...prev, profile_picture: '' }));
-        setUserData((prev) => ({ ...prev, profile_picture: '' }));
+        setTempData((prev) => ({ 
+          ...prev, 
+          profile_picture: '',
+          raw_profile_picture: '' 
+        }));
+        setUserData((prev) => ({ 
+          ...prev, 
+          profile_picture: '',
+          raw_profile_picture: '' 
+        }));
         await refreshUser();
         
         // Show success modal for avatar removal
@@ -226,16 +248,13 @@ const DashboardProfile: React.FC = () => {
     navigate("/login", { replace: true });
   };
 
-  // Get avatar URL
+  // Get avatar URL - uses the resolved URL from state
   const getAvatarUrl = (): string => {
-    if (tempData.profile_picture && !tempData.profile_picture.includes('placeholder')) {
-      if (tempData.profile_picture.startsWith('http')) {
-        return tempData.profile_picture;
-      }
+    if (tempData.profile_picture) {
       return tempData.profile_picture;
     }
     
-    // Fallback to UI Avatar with orange theme
+    // Fallback to UI Avatar with orange theme if no profile picture exists
     const name = getFullName();
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=F8780F&color=FFFFFF&bold=true&length=2&size=120`;
   };
@@ -283,17 +302,20 @@ const DashboardProfile: React.FC = () => {
             </div>
           )}
 
-          {/* Avatar Section - WITH ALL ICONS PRESERVED */}
+          {/* Avatar Section */}
           <div className="profile-avatar-section">
             <div className="avatar-upload">
               <img 
                 src={getAvatarUrl()} 
                 alt={getFullName()} 
                 className="avatar-large"
+                key={tempData.profile_picture} // Force re-render when profile picture changes
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.onerror = null;
-                  target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(getFullName())}&background=F8780F&color=FFFFFF&bold=true&length=2&size=120`;
+                  // Only fallback to UI Avatar if the image fails to load
+                  const name = getFullName();
+                  target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=F8780F&color=FFFFFF&bold=true&length=2&size=120`;
                 }}
               />
               {isEditing && (
@@ -315,7 +337,7 @@ const DashboardProfile: React.FC = () => {
                   </label>
                   
                   {/* Trash Icon - Remove - Only show if profile picture exists */}
-                  {tempData.profile_picture && (
+                  {tempData.raw_profile_picture && (
                     <button 
                       className="avatar-remove-btn"
                       onClick={handleRemoveAvatar}

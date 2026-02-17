@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../assets/css/DashboardSidebar.css";
 
@@ -92,6 +92,15 @@ const TemplatesIcon = () => (
   </svg>
 );
 
+// Menu Icon for mobile toggle - smaller icon
+const MenuIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+);
+
 // ─── Component ──────────────────────────────────────────────────────
 
 interface DashboardSidebarProps {
@@ -101,6 +110,16 @@ interface DashboardSidebarProps {
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, onToggle }) => {
   const location = useLocation();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const items = [
     { id: "overview",   label: "Overview",          icon: <HomeIcon />,       to: "/dashboard"               },
@@ -120,11 +139,25 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, onToggle })
     path === "/dashboard" ? location.pathname === "/dashboard" : location.pathname.startsWith(path);
 
   const closeOnMobile = () => {
-    if (window.innerWidth <= 1024) onToggle();
+    if (isMobile) onToggle();
   };
+
+  // Hide toggle button when sidebar is open on mobile
+  const shouldShowToggle = isMobile && !isOpen;
 
   return (
     <>
+      {/* Mobile Menu Toggle Button - Only shows when sidebar is closed */}
+      {shouldShowToggle && (
+        <button 
+          className="mobile-menu-toggle" 
+          onClick={onToggle}
+          aria-label="Open menu"
+        >
+          <MenuIcon />
+        </button>
+      )}
+
       {isOpen && <div className="sidebar-backdrop" onClick={onToggle} />}
 
       <nav className={`dashboard-sidebar ${isOpen ? "active" : ""}`}>

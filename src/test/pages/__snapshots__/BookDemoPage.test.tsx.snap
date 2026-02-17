@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`BookDemoPage snapshot 1`] = `
+exports[`BookDemoPage > matches snapshot 1`] = `
 <div>
   <div
     class="book-demo-page"
@@ -34,13 +34,14 @@ exports[`BookDemoPage snapshot 1`] = `
             <p
               class="book-demo-subtitle"
             >
-              Schedule a call with our team to explore SME BIM Automation Toolkit.
+              Schedule a call with our team to explore BIMFlow Suite.
             </p>
             <div
               class="login-prompt-top"
             >
               <p>
-                Already have an account? 
+                Already have an account?
+                 
                 <a
                   class="login-link"
                   data-discover="true"
@@ -52,44 +53,40 @@ exports[`BookDemoPage snapshot 1`] = `
             </div>
             <form
               class="book-demo-form"
+              novalidate=""
             >
               <div
                 class="form-group"
               >
                 <label
                   class="form-label"
-                  for="requestType"
+                  for="request_type"
                 >
-                  Request type *
+                  Request Type *
                 </label>
                 <select
                   class="form-input "
-                  id="requestType"
-                  name="requestType"
+                  id="request_type"
+                  name="request_type"
                   required=""
                 >
                   <option
-                    value=""
+                    value="request_demo"
                   >
-                    Select a request type
+                    Request a Demo
                   </option>
                   <option
-                    value="book-demo"
-                  >
-                    Book a Demo
-                  </option>
-                  <option
-                    value="compliance-validation"
+                    value="compliance_validation"
                   >
                     Compliance Validation
                   </option>
                   <option
-                    value="request-a-trial"
+                    value="request_a_trial"
                   >
                     Request a Trial
                   </option>
                   <option
-                    value="general-inquiry"
+                    value="general_inquiry"
                   >
                     General Inquiry
                   </option>
@@ -108,14 +105,14 @@ exports[`BookDemoPage snapshot 1`] = `
                 >
                   <label
                     class="form-label"
-                    for="firstName"
+                    for="firstname"
                   >
-                    First name *
+                    First Name *
                   </label>
                   <input
                     class="form-input "
-                    id="firstName"
-                    name="firstName"
+                    id="firstname"
+                    name="firstname"
                     placeholder="John"
                     required=""
                     type="text"
@@ -127,14 +124,14 @@ exports[`BookDemoPage snapshot 1`] = `
                 >
                   <label
                     class="form-label"
-                    for="lastName"
+                    for="lastname"
                   >
-                    Last name *
+                    Last Name *
                   </label>
                   <input
                     class="form-input "
-                    id="lastName"
-                    name="lastName"
+                    id="lastname"
+                    name="lastname"
                     placeholder="Doe"
                     required=""
                     type="text"
@@ -155,7 +152,7 @@ exports[`BookDemoPage snapshot 1`] = `
                   class="form-input "
                   id="email"
                   name="email"
-                  placeholder="john@bimflow.dev"
+                  placeholder="john@company.com"
                   required=""
                   type="email"
                   value=""
@@ -166,33 +163,14 @@ exports[`BookDemoPage snapshot 1`] = `
               >
                 <label
                   class="form-label"
-                  for="country"
+                  for="company_name"
                 >
-                  Country *
+                  Company Name *
                 </label>
                 <input
                   class="form-input "
-                  id="country"
-                  name="country"
-                  placeholder="United States"
-                  required=""
-                  type="text"
-                  value=""
-                />
-              </div>
-              <div
-                class="form-group"
-              >
-                <label
-                  class="form-label"
-                  for="company"
-                >
-                  Company name *
-                </label>
-                <input
-                  class="form-input "
-                  id="company"
-                  name="company"
+                  id="company_name"
+                  name="company_name"
                   placeholder="Your Company Ltd."
                   required=""
                   type="text"
@@ -204,34 +182,186 @@ exports[`BookDemoPage snapshot 1`] = `
               >
                 <label
                   class="form-label"
-                  for="jobTitle"
+                  for="company_address"
                 >
-                  Job title *
+                  Company Address *
                 </label>
                 <input
                   class="form-input "
-                  id="jobTitle"
-                  name="jobTitle"
-                  placeholder="BIM Manager"
+                  id="company_address"
+                  name="company_address"
+                  placeholder="123 Main Street, City, State, ZIP"
                   required=""
                   type="text"
                   value=""
                 />
               </div>
               <div
+                class="form-row"
+              >
+                <div
+                  class="form-group"
+                >
+                  <label
+                    class="form-label"
+                    for="country"
+                  >
+                    Country *
+                  </label>
+                  <input
+                    class="form-input "
+                    id="country"
+                    name="country"
+                    placeholder="United States"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    class="form-label"
+                    for="sector"
+                  >
+                    Sector *
+                  </label>
+                  <select
+                    class="form-input "
+                    id="sector"
+                    name="sector"
+                    required=""
+                  >
+                    <option
+                      value=""
+                    >
+                      Select your sector
+                    </option>
+                    <option
+                      value="architecture"
+                    >
+                      Architecture
+                    </option>
+                    <option
+                      value="engineering"
+                    >
+                      Engineering
+                    </option>
+                    <option
+                      value="construction"
+                    >
+                      Construction
+                    </option>
+                    <option
+                      value="real_estate"
+                    >
+                      Real Estate
+                    </option>
+                    <option
+                      value="facility_management"
+                    >
+                      Facility Management
+                    </option>
+                    <option
+                      value="government"
+                    >
+                      Government
+                    </option>
+                    <option
+                      value="education"
+                    >
+                      Education
+                    </option>
+                    <option
+                      value="healthcare"
+                    >
+                      Healthcare
+                    </option>
+                    <option
+                      value="manufacturing"
+                    >
+                      Manufacturing
+                    </option>
+                    <option
+                      value="energy"
+                    >
+                      Energy
+                    </option>
+                    <option
+                      value="telecom"
+                    >
+                      Telecommunications
+                    </option>
+                    <option
+                      value="transportation"
+                    >
+                      Transportation
+                    </option>
+                    <option
+                      value="other"
+                    >
+                      Other
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div
+                class="form-row"
+              >
+                <div
+                  class="form-group"
+                >
+                  <label
+                    class="form-label"
+                    for="job_title"
+                  >
+                    Job Title *
+                  </label>
+                  <input
+                    class="form-input "
+                    id="job_title"
+                    name="job_title"
+                    placeholder="BIM Manager"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    class="form-label"
+                    for="company_position"
+                  >
+                    Company Position *
+                  </label>
+                  <input
+                    class="form-input "
+                    id="company_position"
+                    name="company_position"
+                    placeholder="e.g., Director, Manager, Engineer"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
                 class="form-group"
               >
                 <label
                   class="form-label"
-                  for="phone"
+                  for="phone_number"
                 >
-                  Phone number *
+                  Phone Number *
                 </label>
                 <input
                   class="form-input "
-                  id="phone"
-                  name="phone"
-                  placeholder="+1 123 456 7890"
+                  id="phone_number"
+                  name="phone_number"
+                  placeholder="+1 123 456 7890 or 0123 456 789"
                   required=""
                   type="tel"
                   value=""
@@ -239,7 +369,7 @@ exports[`BookDemoPage snapshot 1`] = `
                 <small
                   class="form-note"
                 >
-                  Enter your phone number, including the country code
+                  Enter your phone number with country code
                 </small>
               </div>
               <div
@@ -247,16 +377,16 @@ exports[`BookDemoPage snapshot 1`] = `
               >
                 <label
                   class="form-label"
-                  for="additionalInfo"
+                  for="additional_details"
                 >
-                  Additional information
+                  Additional Details 
                 </label>
                 <textarea
                   class="form-input"
-                  id="additionalInfo"
-                  name="additionalInfo"
-                  placeholder="Tell us more about your needs..."
-                  rows="4"
+                  id="additional_details"
+                  name="additional_details"
+                  placeholder="Tell us more about your needs, specific requirements, or questions..."
+                  rows="6"
                 />
               </div>
               <div
@@ -266,49 +396,60 @@ exports[`BookDemoPage snapshot 1`] = `
                   class="consent-label"
                 >
                   <input
-                    name="communications"
+                    name="consent_privacy"
                     required=""
                     type="checkbox"
                   />
                   <span>
-                    I consent to receive communications from SME BIM Automation Toolkit entities and their partners according to Sections 4.1 (g) and 4.1 (i) and to the transfer of my personal data to SME BIM Automation Toolkit’s partners according to Section 4.1 (g) of the Privacy Policy.
+                    I agree to the 
+                    <a
+                      class="privacy-link"
+                      data-discover="true"
+                      href="/privacy-policy"
+                    >
+                      Privacy Policy
+                    </a>
+                    .
                   </span>
                 </label>
                 <label
                   class="consent-label"
                 >
                   <input
-                    name="marketing"
+                    name="consent_marketing"
                     type="checkbox"
                   />
                   <span>
-                    I agree to receive marketing communications from SME BIM Automation Toolkit.
+                    I agree to receive marketing communications from BIMFlow Suite.
                   </span>
                 </label>
                 <p
-                  class="consent-note"
+                  class="consent-disclaimer"
                 >
-                  You may unsubscribe from these communications at any time. For more information on how to unsubscribe, our privacy practices, and how we are committed to protecting and respecting your privacy, please review our 
+                  By submitting this form, you acknowledge that you have read and agree to our
+                  <a
+                    class="privacy-link"
+                    data-discover="true"
+                    href="/terms"
+                  >
+                     Terms of Service
+                  </a>
+                   and
                   <a
                     class="privacy-link"
                     data-discover="true"
                     href="/privacy-policy"
                   >
-                    Privacy Policy
+                     Privacy Policy
                   </a>
                   .
-                </p>
-                <p
-                  class="consent-disclaimer"
-                >
-                  By clicking submit below, you consent to allow smebimautomationtoolkit.com to store and process the personal information submitted above to provide you the content requested.
                 </p>
               </div>
               <button
                 class="book-demo-btn"
                 type="submit"
               >
-                Submit
+                Submit Request
               </button>
             </form>
           </div>

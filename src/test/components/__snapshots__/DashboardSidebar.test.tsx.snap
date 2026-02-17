@@ -1,18 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DashboardSidebar snapshot 1`] = `
+exports[`DashboardSidebar > matches snapshot 1`] = `
 <div>
+  <div
+    class="sidebar-backdrop"
+  />
   <nav
-    class="dashboard-sidebar "
+    class="dashboard-sidebar active"
   >
     <div
       class="sidebar-header"
     >
-      <h2
-        class="sidebar-title"
+      <a
+        class="sidebar-brand"
+        data-discover="true"
+        href="/"
       >
-        BIMFlow Suite
-      </h2>
+        <h2
+          class="sidebar-title"
+        >
+          BIMFlow Suite
+        </h2>
+      </a>
       <button
         aria-label="Close sidebar"
         class="sidebar-close"

@@ -1,0 +1,310 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProjectGeneratePage > matches snapshot 1`] = `
+<div>
+  <div
+    class="generate-model-page"
+  >
+    <section
+      class="generate-model-hero"
+      style="background-image: linear-gradient(rgba(78, 68, 60, 0.6), rgba(42, 36, 32, 0.6)), url("/src/assets/images/generateModelHero.jpg"); background-size: cover; background-position: center center; background-attachment: fixed;"
+    >
+      <div
+        class="generate-model-hero__overlay"
+      />
+      <div
+        class="generate-model-hero__content"
+      >
+        <h1
+          class="generate-model-hero__title"
+        >
+          Generate Your BIM Model
+        </h1>
+        <p
+          class="generate-model-hero__subtitle"
+        >
+          Describe your project — we create compliant IFC models fast.
+        </p>
+      </div>
+    </section>
+    <div
+      class="section-navigation"
+    >
+      <div
+        class="section-nav-container"
+      >
+        <button
+          class="section-nav-btn active"
+        >
+          <span
+            class="nav-number"
+          >
+            1
+          </span>
+          <span
+            class="nav-text"
+          >
+            Basics
+          </span>
+        </button>
+        <button
+          class="section-nav-btn "
+        >
+          <span
+            class="nav-number"
+          >
+            2
+          </span>
+          <span
+            class="nav-text"
+          >
+            Site
+          </span>
+        </button>
+        <button
+          class="section-nav-btn "
+        >
+          <span
+            class="nav-number"
+          >
+            3
+          </span>
+          <span
+            class="nav-text"
+          >
+            Generate
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="generate-model-container"
+    >
+      <form
+        class="project-form"
+      >
+        <div
+          class="form-section"
+        >
+          <h3
+            class="section-title"
+          >
+            <span
+              class="section-icon"
+            >
+              📋
+            </span>
+            Project Basics
+          </h3>
+          <div
+            class="form-grid"
+          >
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+              >
+                Project Name
+              </label>
+              <input
+                class="form-input "
+                placeholder="e.g. Victoria Island Tower"
+                value=""
+              />
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+              >
+                Project Type
+              </label>
+              <select
+                class="form-select "
+              >
+                <option
+                  value=""
+                >
+                  Select project type
+                </option>
+                <option
+                  value="IFC_BUILDING"
+                >
+                  🏢 Building
+                </option>
+                <option
+                  value="IFC_ROAD"
+                >
+                  🛣️ Road
+                </option>
+                <option
+                  value="IFC_RAILWAY"
+                >
+                  🚄 Railway
+                </option>
+                <option
+                  value="IFC_BRIDGE"
+                >
+                  🌉 Bridge
+                </option>
+                <option
+                  value="IFC_TUNNEL"
+                >
+                  🚇 Tunnel
+                </option>
+                <option
+                  value="IFC_MARINE_FACILITY"
+                >
+                  ⚓ Marine Facility
+                </option>
+                <option
+                  value="IFC_FACTORY"
+                >
+                  🏭 Factory
+                </option>
+                <option
+                  value="IFC_PROCESS_PLANT"
+                >
+                  🧪 Process Plant
+                </option>
+                <option
+                  value="IFC_DISTRIBUTION_SYSTEM"
+                >
+                  🔌 Distribution System
+                </option>
+                <option
+                  value="IFC_SITE"
+                >
+                  🌍 Site / Land
+                </option>
+                <option
+                  value="OTHER"
+                >
+                  ❓ Other / Custom
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group full-width"
+            >
+              <label
+                class="form-label required"
+              >
+                Description
+              </label>
+              <textarea
+                class="form-textarea "
+                placeholder="Purpose, scope, size, special notes..."
+                rows="5"
+              />
+              <div
+                class="character-count"
+              >
+                0
+                 / 1200
+              </div>
+            </div>
+          </div>
+          <div
+            class="form-section-navigation"
+          >
+            <button
+              class="btn btn--secondary"
+              type="button"
+            >
+              ← Back to Home
+            </button>
+            <button
+              class="btn btn--primary"
+              type="button"
+            >
+              Next: Site →
+            </button>
+          </div>
+        </div>
+      </form>
+      <div
+        class="features-highlight"
+      >
+        <h4>
+          What You'll Get
+        </h4>
+        <div
+          class="features-grid"
+        >
+          <div
+            class="feature"
+          >
+            <span
+              class="feature-icon"
+            >
+              📐
+            </span>
+            <div>
+              <strong>
+                IFC 4.3 Compliant
+              </strong>
+              <p>
+                Open BIM standard compatible with all major software
+              </p>
+            </div>
+          </div>
+          <div
+            class="feature"
+          >
+            <span
+              class="feature-icon"
+            >
+              ⚡
+            </span>
+            <div>
+              <strong>
+                Project + Site + Models
+              </strong>
+              <p>
+                Complete project structure with all components
+              </p>
+            </div>
+          </div>
+          <div
+            class="feature"
+          >
+            <span
+              class="feature-icon"
+            >
+              📊
+            </span>
+            <div>
+              <strong>
+                Type-Specific Metadata
+              </strong>
+              <p>
+                Smart parameters based on your project type
+              </p>
+            </div>
+          </div>
+          <div
+            class="feature"
+          >
+            <span
+              class="feature-icon"
+            >
+              🔧
+            </span>
+            <div>
+              <strong>
+                Ready for Construction
+              </strong>
+              <p>
+                Production-ready BIM models at your specified LOD
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

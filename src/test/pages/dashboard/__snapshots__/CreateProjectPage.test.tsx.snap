@@ -1,0 +1,310 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CreateProjectPage > matches snapshot 1`] = `
+<div>
+  <div
+    class="create-project-page"
+  >
+    <div
+      class="create-project-container"
+    >
+      <div
+        class="create-project-header"
+      >
+        <button
+          class="back-btn"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-arrow-left"
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m12 19-7-7 7-7"
+            />
+            <path
+              d="M19 12H5"
+            />
+          </svg>
+          Back to Projects
+        </button>
+        <h1>
+          Create New Project
+        </h1>
+        <p
+          class="subtitle"
+        >
+          Fill in the details below to create a new BIM project
+        </p>
+      </div>
+      <div
+        class="section-navigation"
+      >
+        <button
+          class="section-btn active"
+        >
+          <span
+            class="section-number"
+          >
+            1
+          </span>
+          <span
+            class="section-label"
+          >
+            Basic Info
+          </span>
+        </button>
+        <button
+          class="section-btn "
+        >
+          <span
+            class="section-number"
+          >
+            2
+          </span>
+          <span
+            class="section-label"
+          >
+            Client Details
+          </span>
+        </button>
+        <button
+          class="section-btn "
+        >
+          <span
+            class="section-number"
+          >
+            3
+          </span>
+          <span
+            class="section-label"
+          >
+            Schedule
+          </span>
+        </button>
+      </div>
+      <form
+        class="create-project-form"
+      >
+        <div
+          class="form-section"
+        >
+          <h2
+            class="section-title"
+          >
+            <span
+              class="section-icon"
+            >
+              📋
+            </span>
+            Project Basics
+          </h2>
+          <div
+            class="form-grid"
+          >
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+                for="project-name"
+              >
+                Project Name
+              </label>
+              <input
+                class="form-input "
+                id="project-name"
+                name="name"
+                placeholder="e.g., Downtown Office Tower"
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label required"
+                for="project-type"
+              >
+                Project Type
+              </label>
+              <select
+                class="form-select "
+                id="project-type"
+                name="project_type"
+              >
+                <option
+                  value=""
+                >
+                  Select project type
+                </option>
+                <option
+                  value="IFC_BUILDING"
+                >
+                  🏢 Building
+                </option>
+                <option
+                  value="IFC_ROAD"
+                >
+                  🛣️ Road
+                </option>
+                <option
+                  value="IFC_RAILWAY"
+                >
+                  🚄 Railway
+                </option>
+                <option
+                  value="IFC_BRIDGE"
+                >
+                  🌉 Bridge
+                </option>
+                <option
+                  value="IFC_TUNNEL"
+                >
+                  🚇 Tunnel
+                </option>
+                <option
+                  value="IFC_MARINE_FACILITY"
+                >
+                  ⚓ Marine Facility
+                </option>
+                <option
+                  value="IFC_FACTORY"
+                >
+                  🏭 Factory
+                </option>
+                <option
+                  value="IFC_PROCESS_PLANT"
+                >
+                  🧪 Process Plant
+                </option>
+                <option
+                  value="IFC_DISTRIBUTION_SYSTEM"
+                >
+                  🔌 Distribution System
+                </option>
+                <option
+                  value="IFC_SITE"
+                >
+                  🌍 Site / Land Project
+                </option>
+                <option
+                  value="OTHER"
+                >
+                  ❓ Other / Custom
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group full-width"
+            >
+              <label
+                class="form-label required"
+                for="project-description"
+              >
+                Description
+              </label>
+              <textarea
+                class="form-textarea "
+                id="project-description"
+                name="description"
+                placeholder="Describe the project scope, objectives, and key requirements..."
+                rows="5"
+              />
+              <div
+                class="character-count"
+              >
+                0
+                 / 1200
+              </div>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="project-phase"
+              >
+                Phase
+              </label>
+              <select
+                class="form-select"
+                id="project-phase"
+                name="phase"
+              >
+                <option
+                  value="concept"
+                >
+                  Concept
+                </option>
+                <option
+                  value="schematic"
+                >
+                  Schematic
+                </option>
+                <option
+                  value="detailed"
+                >
+                  Detailed Design
+                </option>
+                <option
+                  value="as-built"
+                >
+                  As-Built
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-group"
+            >
+              <label
+                class="form-label"
+                for="project-address"
+              >
+                Address
+              </label>
+              <input
+                class="form-input"
+                id="project-address"
+                name="project_address"
+                placeholder="Project location"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="form-actions"
+        >
+          <button
+            class="btn btn-secondary"
+            type="button"
+          >
+            Cancel
+          </button>
+          <div
+            class="action-group"
+          >
+            <button
+              class="btn btn-primary"
+              type="button"
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`UploadIFCPage snapshot 1`] = `
+exports[`UploadIFCPage > matches snapshot 1`] = `
 <div>
   <div
     class="upload-ifc-pro"
@@ -311,7 +311,7 @@ exports[`UploadIFCPage snapshot 1`] = `
           class="btn primary large"
           disabled=""
         >
-          🚀 Generate 3D Model & Analyze
+          Generate 3D Model & Analyze
         </button>
       </div>
     </div>

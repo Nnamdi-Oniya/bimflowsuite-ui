@@ -1,3 +1,88 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GetStartedModal snapshot 1`] = `<div />`;
+exports[`GetStartedModal > matches snapshot 1`] = `
+<div>
+  <div
+    class="get-started-modal-overlay"
+  >
+    <div
+      class="get-started-modal"
+    >
+      <div
+        class="get-started-modal-header"
+      >
+        <h2>
+          Get Started with BIMFlow Suite
+        </h2>
+        <button
+          aria-label="Close modal"
+          class="close-btn"
+        >
+          ×
+        </button>
+      </div>
+      <div
+        class="get-started-content"
+      >
+        <p
+          class="get-started-description"
+        >
+          Choose how you would like to start your BIM journey with our platform.
+        </p>
+        <div
+          class="get-started-options"
+        >
+          <button
+            class="option-btn option-btn--create"
+          >
+            <div
+              class="option-icon"
+            >
+              🏗️
+            </div>
+            <div
+              class="option-details"
+            >
+              <h3>
+                Create New Project
+              </h3>
+              <p>
+                Start a new BIM project from scratch. Describe your building, bridge, road, or infrastructure project using simple inputs. Our system will generate a fully compliant IFC 4.3 model for your project requirements.
+              </p>
+            </div>
+          </button>
+          <button
+            class="option-btn option-btn--upload"
+          >
+            <div
+              class="option-icon"
+            >
+              📅
+            </div>
+            <div
+              class="option-details"
+            >
+              <h3>
+                Book a Personalized Demo
+              </h3>
+              <p>
+                Schedule a live demo with our team. See how BIMFlow Suite can transform your BIM workflows with your existing models. Get a personalized walkthrough of validation, compliance, quantities, costs, and scheduling features.
+              </p>
+            </div>
+          </button>
+        </div>
+        <div
+          class="modal-footer-note"
+        >
+          <p>
+            <strong>
+              Note:
+            </strong>
+             Both options will guide you through the next steps. New users are recommended to book a demo first to get full platform access.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

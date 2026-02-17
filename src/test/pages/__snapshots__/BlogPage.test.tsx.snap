@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`BlogPage snapshot 1`] = `
+exports[`BlogPage > matches snapshot 1`] = `
 <div>
   <div
     class="app-container"

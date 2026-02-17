@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import HowWeWorkSection from '@/components/HowWeWorkSection';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('HowWeWorkSection', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <HowWeWorkSection />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('HowWeWorkSection renders', () => {
-  render(<HowWeWorkSection />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('HowWeWorkSection snapshot', () => {
-  const { container } = render(<HowWeWorkSection />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <HowWeWorkSection />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

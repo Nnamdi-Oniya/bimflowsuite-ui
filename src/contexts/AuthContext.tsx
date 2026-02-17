@@ -4,7 +4,8 @@ import { authService } from "../services/authService";
 import type { UserProfile } from "../services/authService";
 import { 
   getAccessToken,
-  isAuthenticated as checkIsAuthenticated
+  isAuthenticated as checkIsAuthenticated,
+  refreshTokensFromStorage
 } from "../config/api";
 
 interface AuthContextType {
@@ -18,6 +19,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * Authentication Provider Component
+ * Manages authentication state throughout the application
+ */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
     // Initialize from storage
@@ -25,6 +30,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Refresh tokens from storage first
+    refreshTokensFromStorage();
     // Check if we have a valid token
     return checkIsAuthenticated() && !!getAccessToken();
   });
@@ -33,6 +40,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Verify token validity and fetch fresh user data
     const initAuth = async () => {
       try {
+        // Refresh tokens from storage on each init
+        refreshTokensFromStorage();
+        
         const hasValidToken = checkIsAuthenticated() && !!getAccessToken();
         setIsAuthenticated(hasValidToken);
         
@@ -54,8 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
           }
         }
-      } catch (error) {
-        console.error("Failed to initialize auth:", error);
+      } catch {
         // Don't clear data on error, keep existing state
         const storedUser = authService.getStoredUser();
         if (storedUser && checkIsAuthenticated()) {
@@ -96,6 +105,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
+  /**
+   * Handle user login
+   */
   const login = async (credentials: any) => {
     const response = await authService.login(credentials);
     if (response.success && response.data) {
@@ -105,12 +117,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return response;
   };
 
+  /**
+   * Handle user logout
+   */
   const logout = async () => {
     await authService.logout();
     setUser(null);
     setIsAuthenticated(false);
   };
 
+  /**
+   * Refresh user data from API
+   */
   const refreshUser = async () => {
     const response = await authService.getCurrentUser();
     if (response.success && response.data) {
@@ -132,6 +150,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
+/**
+ * Custom hook to use auth context
+ */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

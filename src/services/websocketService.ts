@@ -1,10 +1,10 @@
+// src/services/websocketService.ts
 import { BACKEND_CONFIG, getAccessToken, getWebSocketUrl } from '../config/api';
 
-// Types
 export interface WebSocketMessage {
   type: string;
   data: any;
-  timestamp: string;
+  timestamp?: string;
 }
 
 export interface WebSocketEventHandlers {
@@ -12,144 +12,186 @@ export interface WebSocketEventHandlers {
   onClose?: (event: CloseEvent) => void;
   onError?: (error: Event) => void;
   onMessage?: (message: WebSocketMessage) => void;
-  onReconnect?: () => void;
+  onReconnectAttempt?: (attempt: number) => void;
 }
 
 class WebSocketService {
   private ws: WebSocket | null = null;
   private reconnectAttempts = 0;
-  private maxReconnectAttempts = 5;
-  private reconnectDelay = 1000;
+  private maxReconnectAttempts = 8;
+  private baseDelay = 1000;
+  private maxDelay = 30000;
+  private jitter = 0.3;
+  private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private lastPongReceived = Date.now();
   private handlers: WebSocketEventHandlers = {};
   private isConnecting = false;
+  private pendingMessages: WebSocketMessage[] = [];
+  private shouldQueueMessages = false;
+  private currentEndpoint: string | null = null;
 
-  // Connect to WebSocket
   connect(endpoint: string, handlers: WebSocketEventHandlers = {}): void {
-    if (this.ws?.readyState === WebSocket.OPEN) {
-      console.log('WebSocket already connected');
-      return;
-    }
+    if (this.ws?.readyState === WebSocket.OPEN) return;
+    if (this.isConnecting) return;
 
-    this.handlers = handlers;
-    
+    this.handlers = { ...this.handlers, ...handlers };
+
     const token = getAccessToken();
-    const wsUrl = getWebSocketUrl(endpoint);
-    const url = token ? `${wsUrl}?token=${token}` : wsUrl;
+    const baseUrl = getWebSocketUrl(endpoint);
+    const url = token ? `${baseUrl}?token=${encodeURIComponent(token)}` : baseUrl;
 
-    try {
-      this.ws = new WebSocket(url);
-      this.setupEventListeners();
-      this.isConnecting = true;
-    } catch (error) {
-      console.error('Failed to create WebSocket:', error);
-      this.handleReconnect(endpoint);
-    }
+    this.isConnecting = true;
+    this.ws = new WebSocket(url);
+    this.setupEventListeners();
   }
 
-  // Setup event listeners
   private setupEventListeners(): void {
     if (!this.ws) return;
 
     this.ws.onopen = () => {
-      console.log('WebSocket connected');
-      this.reconnectAttempts = 0;
       this.isConnecting = false;
+      this.reconnectAttempts = 0;
+      this.lastPongReceived = Date.now();
+
+      if (this.shouldQueueMessages) this.flushQueue();
+
       this.handlers.onOpen?.();
+
+      if (BACKEND_CONFIG.debug) console.log('[WS] Connected');
+
+      this.startHeartbeat();
     };
 
     this.ws.onclose = (event) => {
-      console.log('WebSocket disconnected:', event.code, event.reason);
       this.isConnecting = false;
+      this.stopHeartbeat();
+
       this.handlers.onClose?.(event);
-      
-      // Attempt reconnect if not normal closure
+
       if (event.code !== 1000 && this.reconnectAttempts < this.maxReconnectAttempts) {
-        this.handleReconnect(this.ws?.url || '');
+        this.handleReconnect(this.currentEndpoint || '');
       }
     };
 
-    this.ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-      this.isConnecting = false;
-      this.handlers.onError?.(error);
+    this.ws.onerror = (event) => {
+      this.handlers.onError?.(event);
     };
 
     this.ws.onmessage = (event) => {
       try {
-        const message: WebSocketMessage = JSON.parse(event.data);
-        this.handlers.onMessage?.(message);
-      } catch (error) {
-        console.error('Failed to parse WebSocket message:', error);
+        const msg: WebSocketMessage = JSON.parse(event.data);
+        if (msg.type === 'pong') {
+          this.lastPongReceived = Date.now();
+          return;
+        }
+        this.handlers.onMessage?.(msg);
+      } catch (err) {
+        console.error('[WS] Parse error:', err);
       }
     };
   }
 
-  // Handle reconnection
   private handleReconnect(endpoint: string): void {
-    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error('Max reconnection attempts reached');
-      return;
-    }
-
+    this.currentEndpoint = endpoint;
     this.reconnectAttempts++;
-    const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-    
-    console.log(`Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
-    
-    setTimeout(() => {
+
+    let delay = this.baseDelay * Math.pow(2, this.reconnectAttempts - 1);
+    delay = Math.min(delay, this.maxDelay);
+    const jitterAmount = delay * this.jitter * (Math.random() * 2 - 1);
+    delay += jitterAmount;
+
+    this.reconnectTimer = setTimeout(() => {
       if (!this.isConnecting) {
         this.connect(endpoint, this.handlers);
       }
     }, delay);
   }
 
-  // Send message
+  private startHeartbeat(): void {
+    this.stopHeartbeat();
+
+    this.heartbeatTimer = setInterval(() => {
+      if (Date.now() - this.lastPongReceived > 45000) {
+        this.ws?.close(3008, 'Heartbeat timeout');
+        return;
+      }
+
+      this.send({
+        type: 'ping',
+        data: null,
+        timestamp: new Date().toISOString(),
+      });
+    }, 25000);
+  }
+
+  private stopHeartbeat(): void {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = null;
+    }
+  }
+
   send(message: WebSocketMessage): boolean {
     if (this.ws?.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify(message));
+      this.ws.send(JSON.stringify({
+        ...message,
+        timestamp: message.timestamp || new Date().toISOString(),
+      }));
       return true;
     }
-    
-    console.warn('WebSocket not connected, message not sent');
+
+    if (this.shouldQueueMessages) {
+      this.pendingMessages.push(message);
+      return false;
+    }
+
     return false;
   }
 
-  // Disconnect
-  disconnect(): void {
-    if (this.ws) {
-      this.ws.close(1000, 'Normal closure');
-      this.ws = null;
-      this.handlers = {};
+  private flushQueue(): void {
+    while (this.pendingMessages.length > 0) {
+      const msg = this.pendingMessages.shift()!;
+      this.send(msg);
     }
   }
 
-  // Get connection status
-  getStatus(): 'connecting' | 'connected' | 'disconnected' | 'error' {
+  disconnect(code = 1000, reason = 'Normal closure'): void {
+    this.stopHeartbeat();
+    if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+
+    this.ws?.close(code, reason);
+    this.ws = null;
+    this.pendingMessages = [];
+    this.reconnectAttempts = 0;
+    this.isConnecting = false;
+    this.currentEndpoint = null;
+  }
+
+  getStatus(): 'connecting' | 'open' | 'closed' | 'error' {
     if (this.isConnecting) return 'connecting';
-    if (!this.ws) return 'disconnected';
-    
+    if (!this.ws) return 'closed';
+
     switch (this.ws.readyState) {
-      case WebSocket.CONNECTING:
-        return 'connecting';
-      case WebSocket.OPEN:
-        return 'connected';
+      case WebSocket.CONNECTING: return 'connecting';
+      case WebSocket.OPEN: return 'open';
       case WebSocket.CLOSING:
-      case WebSocket.CLOSED:
-        return 'disconnected';
-      default:
-        return 'error';
+      case WebSocket.CLOSED: return 'closed';
+      default: return 'error';
     }
   }
 
-  // Connect to notifications
-  connectToNotifications(handlers: WebSocketEventHandlers): void {
+  connectToNotifications(handlers: WebSocketEventHandlers = {}): void {
     this.connect(BACKEND_CONFIG.wsEndpoints.notifications, handlers);
   }
 
-  // Connect to collaboration
-  connectToCollaboration(sessionId: string, handlers: WebSocketEventHandlers): void {
+  connectToCollaboration(sessionId: string, handlers: WebSocketEventHandlers = {}): void {
     const endpoint = `${BACKEND_CONFIG.wsEndpoints.collaboration}${sessionId}/`;
     this.connect(endpoint, handlers);
+  }
+
+  enableMessageQueue(enable = true): void {
+    this.shouldQueueMessages = enable;
   }
 }
 

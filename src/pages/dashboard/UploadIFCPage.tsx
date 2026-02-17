@@ -550,7 +550,7 @@ const UploadIFCPage: React.FC = () => {
                 Processing...
               </>
             ) : (
-              "🚀 Generate 3D Model & Analyze"
+              "Generate 3D Model & Analyze"
             )}
           </button>
         </div>

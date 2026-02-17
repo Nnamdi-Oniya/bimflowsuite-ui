@@ -1,4 +1,4 @@
-// src/pages/GenerateModelPage.tsx
+// src/pages/ProjectGeneratePage.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/GenerateModelPage.css";
@@ -8,6 +8,28 @@ import { authService } from "../services/authService";
 import NewUserModal from "../components/NewUserModal";
 import { saveFormData, loadFormData, clearFormData } from "../utils/formStorage";
 import { bookDemoService } from "../services/bookDemoService";
+import ProjectSuccessModal from "../components/ProjectSuccessModal";
+
+interface ProjectCreateResponse {
+  id: number;  // Backend generates this - NEVER send from frontend
+  name: string;
+  project_number: string;
+  description: string;
+  phase: string;
+  project_type: string;
+  client_name?: string;
+  client_type?: string;
+  project_scale?: string;
+  risk_classification?: string;
+  project_address?: string;
+  project_start_date?: string;
+  construction_start_date?: string | null;
+  expected_completion_date?: string | null;
+  approval_status?: string;
+  organization: number;
+  created_at: string;
+  updated_at: string;
+}
 
 interface ProjectFormData {
   name: string;
@@ -62,7 +84,6 @@ const PROJECT_TYPES = [
 const LOD_LEVELS = ["LOD100", "LOD200", "LOD300", "LOD400", "LOD500"];
 const DELIVERY_FORMATS = ["ifc", "rvt", "dwg", "pdf"];
 
-// Normalize loaded data from localStorage
 function normalizeFormData(raw: any): ProjectFormData {
   const data = { ...initialFormState, ...raw };
 
@@ -82,13 +103,15 @@ function normalizeFormData(raw: any): ProjectFormData {
   return data as ProjectFormData;
 }
 
-export default function GenerateModelPage() {
+export default function ProjectGeneratePage() {
   const navigate = useNavigate();
 
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [createdProjectId, setCreatedProjectId] = useState<number | null>(null); // Store ID from backend response
 
   const [formData, setFormData] = useState<ProjectFormData>(() => {
     const saved = loadFormData();
@@ -100,7 +123,6 @@ export default function GenerateModelPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [currentSection, setCurrentSection] = useState<"basics" | "site" | "generate">("basics");
 
-  // Auth check
   useEffect(() => {
     const check = async () => {
       const auth = authService.isAuthenticated();
@@ -118,13 +140,12 @@ export default function GenerateModelPage() {
     check();
   }, []);
 
-  // Auto-save form
   useEffect(() => {
     if (!isCheckingAuth) saveFormData(formData);
   }, [formData, isCheckingAuth]);
 
   const validateSection = () => {
-    const err: typeof errors = {};
+    const err: Partial<Record<keyof ProjectFormData, string>> = {};
 
     if (currentSection === "basics") {
       if (!formData.name.trim()) err.name = "Project name is required";
@@ -151,64 +172,101 @@ export default function GenerateModelPage() {
     setSubmitError(null);
 
     try {
-      const payload = {
-        request_type: "generate_model",
-        firstname: isAuthenticated ? "User" : "Guest",
-        lastname: " ",
-        email: isAuthenticated ? userEmail : formData.contact_email || "",
-        company_name: "BIMFlow SME",
-        company_address: formData.project_address || "Not specified",
-        country: "Nigeria",
-        sector: "Construction",
-        job_title: "Project Initiator",
-        company_position: "N/A",
-        phone_number: "N/A",
-        additional_details: formData.description.trim(),
-        consent_marketing: true,
-        consent_privacy: true,
-        project_params: {
-          name: formData.name.trim(),
-          project_number: `PRJ-${Date.now().toString(36).toUpperCase()}`,
-          description: formData.description.trim(),
-          project_type: formData.project_type,
-          phase: formData.phase,
-          client_name: formData.client_name?.trim() ?? "",
-          client_type: formData.client_type ?? null,
-          project_scale: formData.project_scale ?? "medium",
-          risk_classification: formData.risk_classification ?? "medium",
-          project_address: formData.project_address?.trim() ?? "",
-          project_start_date: formData.project_start_date ?? null,
-          construction_start_date: formData.construction_start_date ?? null,
-          expected_completion_date: formData.expected_completion_date ?? null,
-          approval_status: "pending",
-          site_name: formData.site_name,
-          site_address: formData.project_address?.trim() ?? "",
-          latitude: formData.latitude ? parseFloat(formData.latitude) : null,
-          longitude: formData.longitude ? parseFloat(formData.longitude) : null,
-          number_of_models: formData.number_of_models,
-          lod_target: formData.lod_target,
-          delivery_format: formData.delivery_format,
-        },
-      };
-
       if (isAuthenticated) {
-        const res = await apiClient.post("/user/request-submission/", payload);
-        if (res.success) {
+        const today = new Date().toISOString().split('T')[0];
+        
+        // IMPORTANT: Never send 'id' field - backend generates it
+        const projectPayload = {
+          name: formData.name.trim(),
+          description: formData.description.trim(),
+          phase: formData.phase,
+          project_type: formData.project_type,
+          client_name: formData.client_name?.trim() || "",
+          client_type: formData.client_type || "private",
+          project_scale: formData.project_scale || "medium",
+          risk_classification: formData.risk_classification || "medium",
+          project_address: formData.project_address?.trim() || "",
+          project_start_date: formData.project_start_date || today,
+          construction_start_date: formData.construction_start_date || null,
+          expected_completion_date: formData.expected_completion_date || null,
+          approval_status: "pending",
+        };
+        
+        const res = await apiClient.post<ProjectCreateResponse>("/projects/create/", projectPayload);
+        
+        if (res.success && res.data) {
           clearFormData();
-          navigate("/dashboard?success=1");
+          // Store the ID returned from backend - NEVER generate on frontend
+          if (res.data.id) {
+            setCreatedProjectId(res.data.id);
+          }
+          setShowSuccessModal(true);
         } else {
-          throw new Error(res.message || "Failed");
+          throw new Error(res.message || "Failed to create project");
         }
       } else {
+        // For guest users, we still need to pass project params to demo request
+        // But NEVER include an ID field
+        const payload = {
+          request_type: "general_inquiry",
+          firstname: "Guest",
+          lastname: "User",
+          email: formData.contact_email || "",
+          company_name: "BIMFlow SME",
+          company_address: formData.project_address || "Not specified",
+          country: "Nigeria",
+          sector: "Construction",
+          job_title: "Project Initiator",
+          company_position: "N/A",
+          phone_number: "N/A",
+          additional_details: `MODEL GENERATION REQUEST: ${formData.name}\n\n${formData.description}\n\nSite: ${formData.site_name}\nModels: ${formData.number_of_models}\nLOD: ${formData.lod_target}\nFormat: ${formData.delivery_format}`,
+          consent_marketing: true,
+          consent_privacy: true,
+          project_params: {
+            name: formData.name.trim(),
+            description: formData.description.trim(),
+            project_type: formData.project_type,
+            phase: formData.phase,
+            client_name: formData.client_name?.trim() ?? "",
+            client_type: formData.client_type ?? "private",
+            project_scale: formData.project_scale ?? "medium",
+            risk_classification: formData.risk_classification ?? "medium",
+            project_address: formData.project_address?.trim() ?? "",
+            site_name: formData.site_name,
+            site_address: formData.project_address?.trim() ?? "",
+            latitude: formData.latitude ? parseFloat(formData.latitude) : null,
+            longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+            number_of_models: formData.number_of_models,
+            lod_target: formData.lod_target,
+            delivery_format: formData.delivery_format,
+          },
+        };
+
         bookDemoService.storeModelFormData(formData);
         bookDemoService.storeProjectParams(payload.project_params);
+        
         setShowModal(true);
       }
     } catch (err: any) {
-      setSubmitError(err?.message || "Could not submit. Please try again.");
+      if (err.status === 405) {
+        setSubmitError("API endpoint not found. Please check the backend configuration.");
+      } else if (err.status === 403) {
+        setSubmitError("You don't have permission to create projects. Please contact support.");
+      } else if (err.status === 401) {
+        setSubmitError("Your session has expired. Please login again.");
+        authService.clearAllData();
+        setIsAuthenticated(false);
+      } else {
+        setSubmitError(err?.message || "Could not submit. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleGoToProjects = () => {
+    setShowSuccessModal(false);
+    navigate("/dashboard/projects");
   };
 
   if (isCheckingAuth) {
@@ -224,17 +282,51 @@ export default function GenerateModelPage() {
 
   return (
     <>
+      <ProjectSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Project Created Successfully!"
+        message={
+          <>
+            <p>Your project <strong>"{formData.name}"</strong> has been created.</p>
+            <p>Your model generation request has been submitted. Our team will process it and notify you when your models are ready.</p>
+            {createdProjectId && (
+              <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
+                Project ID: <strong>{createdProjectId}</strong>
+              </p>
+            )}
+          </>
+        }
+        primaryAction={{
+          label: "View My Projects",
+          onClick: handleGoToProjects
+        }}
+        projectId={createdProjectId || undefined}
+      />
+
       <NewUserModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         userEmail={userEmail}
         hasExistingAccount={!!userEmail}
-        onLogin={() => navigate("/login", { state: { from: "/generate-model" } })}
-        onBookDemo={() => navigate("/book-demo")}
+        onLogin={() => {
+          setShowModal(false);
+          sessionStorage.setItem('pending_generate_redirect', 'true');
+          sessionStorage.setItem('pending_project_data', JSON.stringify(formData));
+          navigate("/login", { state: { from: "/project-generate" } });
+        }}
+        onBookDemo={() => {
+          setShowModal(false);
+          navigate("/book-demo", { 
+            state: { 
+              fromGenerate: true,
+              projectData: formData 
+            } 
+          });
+        }}
       />
 
       <div className="generate-model-page">
-        {/* Hero */}
         <section
           className="generate-model-hero"
           style={{
@@ -259,7 +351,6 @@ export default function GenerateModelPage() {
           </div>
         </section>
 
-        {/* Navigation */}
         <div className="section-navigation">
           <div className="section-nav-container">
             <button
@@ -290,7 +381,6 @@ export default function GenerateModelPage() {
           {submitError && <div className="form-error-banner">{submitError}</div>}
 
           <form onSubmit={handleSubmit} className="project-form">
-            {/* BASICS */}
             {currentSection === "basics" && (
               <div className="form-section">
                 <h3 className="section-title">
@@ -348,7 +438,11 @@ export default function GenerateModelPage() {
                   <button
                     type="button"
                     className="btn btn--primary"
-                    onClick={() => validateSection() && setCurrentSection("site")}
+                    onClick={() => {
+                      if (validateSection()) {
+                        setCurrentSection("site");
+                      }
+                    }}
                   >
                     Next: Site →
                   </button>
@@ -356,7 +450,6 @@ export default function GenerateModelPage() {
               </div>
             )}
 
-            {/* SITE */}
             {currentSection === "site" && (
               <div className="form-section">
                 <h3 className="section-title">
@@ -413,7 +506,11 @@ export default function GenerateModelPage() {
                   <button
                     type="button"
                     className="btn btn--primary"
-                    onClick={() => validateSection() && setCurrentSection("generate")}
+                    onClick={() => {
+                      if (validateSection()) {
+                        setCurrentSection("generate");
+                      }
+                    }}
                   >
                     Next: Generate →
                   </button>
@@ -421,7 +518,6 @@ export default function GenerateModelPage() {
               </div>
             )}
 
-            {/* GENERATE */}
             {currentSection === "generate" && (
               <>
                 <div className="form-section">
@@ -521,7 +617,6 @@ export default function GenerateModelPage() {
             )}
           </form>
 
-          {/* Features Highlight – placed after the entire form */}
           <div className="features-highlight">
             <h4>What You'll Get</h4>
             <div className="features-grid">

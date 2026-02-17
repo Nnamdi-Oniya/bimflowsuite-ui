@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ComplianceChecksPage snapshot 1`] = `
+exports[`ComplianceChecksPage > matches snapshot 1`] = `
 <div>
   <div
     class="compliance-pro"

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ProfilePage snapshot 1`] = `
+exports[`ProfilePage > matches snapshot 1`] = `
 <div>
   <div
     class="profile-page"
@@ -48,9 +48,9 @@ exports[`ProfilePage snapshot 1`] = `
           class="avatar-upload"
         >
           <img
-            alt="Profile Avatar"
+            alt="User"
             class="avatar-large"
-            src="https://ui-avatars.com/api/?name=Nnamdi+Oniya&background=4ade80&color=1f2937&bold=true"
+            src="https://ui-avatars.com/api/?name=User&background=F8780F&color=FFFFFF&bold=true&length=2&size=120"
           />
         </div>
         <div
@@ -59,12 +59,12 @@ exports[`ProfilePage snapshot 1`] = `
           <h2
             class="avatar-name"
           >
-            Nnamdi Oniya
+            User
           </h2>
           <p
             class="avatar-role"
           >
-            Admin
+            Member
           </p>
         </div>
       </div>
@@ -108,17 +108,36 @@ exports[`ProfilePage snapshot 1`] = `
               class="detail-field"
             >
               <label
-                for="name"
+                for="first_name"
               >
-                Full Name
+                First Name
               </label>
               <input
                 class="input-field "
                 disabled=""
-                id="name"
-                name="name"
+                id="first_name"
+                name="first_name"
+                placeholder="First name"
                 type="text"
-                value="Nnamdi Oniya"
+                value=""
+              />
+            </div>
+            <div
+              class="detail-field"
+            >
+              <label
+                for="last_name"
+              >
+                Last Name
+              </label>
+              <input
+                class="input-field "
+                disabled=""
+                id="last_name"
+                name="last_name"
+                placeholder="Last name"
+                type="text"
+                value=""
               />
             </div>
             <div
@@ -130,60 +149,84 @@ exports[`ProfilePage snapshot 1`] = `
                 Email Address
               </label>
               <input
-                class="input-field "
+                class="input-field"
                 disabled=""
                 id="email"
                 name="email"
                 type="email"
-                value="nnamdi.oniya@bimflow.com"
+                value="test@example.com"
               />
             </div>
             <div
               class="detail-field"
             >
               <label
-                for="phone"
+                for="phone_number"
               >
                 Phone Number
               </label>
               <input
                 class="input-field "
                 disabled=""
-                id="phone"
-                name="phone"
+                id="phone_number"
+                name="phone_number"
+                placeholder="Phone number"
                 type="tel"
-                value="+234 123 456 7890"
+                value=""
               />
-            </div>
-            <div
-              class="detail-field full-width"
-            >
-              <label
-                for="bio"
-              >
-                Bio
-              </label>
-              <textarea
-                class="input-field textarea-field "
-                disabled=""
-                id="bio"
-                name="bio"
-                rows="3"
-              >
-                Founder & CEO of BIMFlow Suite. Passionate about democratizing BIM for SMEs.
-              </textarea>
             </div>
             <div
               class="detail-field"
             >
-              <label>
+              <label
+                for="company"
+              >
+                Company
+              </label>
+              <input
+                class="input-field "
+                disabled=""
+                id="company"
+                name="company"
+                placeholder="Company name"
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              class="detail-field"
+            >
+              <label
+                for="job_title"
+              >
+                Job Title
+              </label>
+              <input
+                class="input-field "
+                disabled=""
+                id="job_title"
+                name="job_title"
+                placeholder="Job title"
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              class="detail-field"
+            >
+              <label
+                for="location"
+              >
                 Location
               </label>
               <input
-                class="input-field"
+                class="input-field "
                 disabled=""
+                id="location"
+                name="location"
+                placeholder="City, Country"
                 type="text"
-                value="Lagos, Nigeria"
+                value=""
               />
             </div>
             <div
@@ -196,7 +239,7 @@ exports[`ProfilePage snapshot 1`] = `
                 class="input-field"
                 disabled=""
                 type="text"
-                value="November 2023"
+                value="Invalid Date"
               />
             </div>
           </div>
@@ -302,9 +345,7 @@ exports[`ProfilePage snapshot 1`] = `
                   stroke-width="2"
                 />
               </svg>
-              Billing & Subscription (
-              Pro Plan
-              )
+              Billing & Subscription
             </a>
             <button
               class="action-link danger"

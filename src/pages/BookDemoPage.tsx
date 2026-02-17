@@ -1,3 +1,4 @@
+// src/pages/BookDemoPage.tsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../assets/css/BookDemoPage.css";
@@ -5,7 +6,6 @@ import registerImage from "../assets/images/registerImage.jpg";
 import { bookDemoService } from "../services/bookDemoService";
 import SuccessModal from "../components/SuccessModal";
 
-// Define the interface locally if import doesn't work
 interface BookDemoRequest {
   request_type: 'request_demo' | 'compliance_validation' | 'request_a_trial' | 'general_inquiry' | 'others';
   firstname: string;
@@ -49,11 +49,9 @@ const BookDemoPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Available sectors and request types from service
   const sectors = bookDemoService.getAvailableSectors();
   const requestTypes = bookDemoService.getRequestTypes();
 
-  // Check if coming from generate model page
   useEffect(() => {
     const checkPendingRequest = () => {
       const hasPendingRequest = bookDemoService.hasPendingModelRequest();
@@ -61,16 +59,14 @@ const BookDemoPage: React.FC = () => {
       if (hasPendingRequest) {
         setIsFromGenerateModel(true);
         
-        // Get stored project data
         const storedModelData = bookDemoService.getStoredModelFormData();
         const storedProjectParams = bookDemoService.getStoredProjectParams();
         
         if (storedModelData) {
-          // Update form data with project information
           setFormData(prev => ({
             ...prev,
             email: storedModelData.contactEmail || prev.email,
-            request_type: 'request_demo', // Always set to request_demo for model generation
+            request_type: 'request_demo',
             additional_details: bookDemoService.formatProjectDetails(storedModelData)
           }));
         }
@@ -80,7 +76,6 @@ const BookDemoPage: React.FC = () => {
         }
       }
       
-      // Check location state
       if (location.state?.fromGenerateModel) {
         setIsFromGenerateModel(true);
         if (location.state?.projectData) {
@@ -92,7 +87,6 @@ const BookDemoPage: React.FC = () => {
             additional_details: bookDemoService.formatProjectDetails(projectData)
           }));
           
-          // Store in session for consistency
           bookDemoService.storeModelFormData(projectData);
         }
       }
@@ -125,7 +119,6 @@ const BookDemoPage: React.FC = () => {
       setFormData({ ...formData, [name]: value });
     }
 
-    // Clear error on change
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
     }
@@ -198,7 +191,7 @@ const BookDemoPage: React.FC = () => {
     e.preventDefault();
     
     if (!validateForm()) return;
-    if (isLoading) return; // Prevent double submission
+    if (isLoading) return;
 
     setIsLoading(true);
 
@@ -206,7 +199,6 @@ const BookDemoPage: React.FC = () => {
       let response;
       
       if (isFromGenerateModel && projectParams) {
-        // Submit as model generation demo request with project parameters
         response = await bookDemoService.submitModelGenerationRequest(
           {
             firstname: formData.firstname,
@@ -221,17 +213,15 @@ const BookDemoPage: React.FC = () => {
             phone_number: formData.phone_number
           },
           projectParams,
-          true // isDemoRequest
+          true
         );
       } else {
-        // Submit regular demo request
         response = await bookDemoService.submitDemoRequest(formData, projectParams);
       }
       
       if (response.success) {
         setShowSuccessModal(true);
         
-        // Reset form after successful submission
         setFormData({
           request_type: "request_demo",
           firstname: "",
@@ -250,14 +240,11 @@ const BookDemoPage: React.FC = () => {
         });
         setErrors({});
         
-        // Clear project params
         bookDemoService.clearStoredProjectParams();
       } else {
         throw new Error(response.message || "Submission failed");
       }
     } catch (error: any) {
-      console.error("Submission error:", error);
-      
       let errorMessage = "Submission failed. Please try again.";
       
       if (error.data && typeof error.data === 'object') {
@@ -649,8 +636,6 @@ const BookDemoPage: React.FC = () => {
                       'Submit Request'
                     )}
                   </button>
-                  
-                  {/* REMOVED DEBUG INFO SECTION */}
                 </form>
               </div>
             </div>

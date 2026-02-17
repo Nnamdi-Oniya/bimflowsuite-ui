@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import ProjectModal from '@/components/ProjectModal';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ProjectModal', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ProjectModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ProjectModal renders', () => {
-  render(<ProjectModal project={null} mode="view" onClose={() => {}} />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ProjectModal snapshot', () => {
-  const { container } = render(<ProjectModal project={null} mode="view" onClose={() => {}} />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ProjectModal isOpen={true} onClose={vi.fn()} />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { resolveMediaUrl } from "../config/api";
 import "../assets/css/DashboardHeader.css";
 
 // SVG Icons
@@ -57,7 +58,6 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  // Theme Setup
   useEffect(() => {
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -73,7 +73,6 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
     document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -89,16 +88,13 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
     try {
       await logout();
       navigate("/login", { replace: true });
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Fallback: clear everything manually and redirect
+    } catch {
       localStorage.clear();
       sessionStorage.clear();
       navigate("/login", { replace: true });
     }
   };
 
-  // Get user display name
   const getUserDisplayName = (): string => {
     if (!user) return "User";
     
@@ -120,12 +116,10 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
     return "User";
   };
 
-  // Get user email
   const getUserEmail = (): string => {
     return user?.email || "user@bimflow.com";
   };
 
-  // Get user initials for avatar
   const getUserInitials = (): string => {
     if (!user) return "U";
     
@@ -147,19 +141,11 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
     return "U";
   };
 
-  // Get avatar URL - NO BACKEND_CONFIG DEPENDENCY
   const getAvatarUrl = (): string => {
-    // If we have a profile picture from backend, use it
     if (user?.profile_picture && !avatarError) {
-      // If it's already a full URL, use it directly
-      if (user.profile_picture.startsWith('http')) {
-        return user.profile_picture;
-      }
-      // If it's a relative path, use it as-is (proxy will handle it)
-      return user.profile_picture;
+      return resolveMediaUrl(user.profile_picture);
     }
     
-    // Fallback to UI Avatar
     const initials = getUserInitials();
     const backgroundColor = theme === 'dark' ? '4ade80' : '3b82f6';
     const textColor = theme === 'dark' ? '1f2937' : 'ffffff';
@@ -171,7 +157,6 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
     setAvatarError(true);
   };
 
-  // Reset avatar error when user changes
   useEffect(() => {
     setAvatarError(false);
   }, [user?.profile_picture, user?.id]);
@@ -194,7 +179,6 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
         </div>
 
         <div className="dashboard-actions">
-          {/* Notifications */}
           <button className="action-btn" title="Notifications">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -203,7 +187,6 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
             <span className="notification-badge"></span>
           </button>
 
-          {/* Theme Toggle */}
           <button
             className="action-btn theme-toggle-btn"
             onClick={toggleTheme}
@@ -213,7 +196,6 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
             {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
 
-          {/* User Profile Dropdown */}
           <div className="user-profile-wrapper" ref={dropdownRef}>
             <button
               className={`user-profile ${isDropdownOpen ? "active" : ""}`}
@@ -230,7 +212,6 @@ const DashboardHeader: React.FC<{ onMobileToggle: () => void }> = ({ onMobileTog
               <ChevronDownIcon isOpen={isDropdownOpen} />
             </button>
 
-            {/* Dropdown Menu */}
             <div className={`user-dropdown ${isDropdownOpen ? "active" : ""}`}>
               <div className="dropdown-header">
                 <div className="dropdown-user-name">{getUserDisplayName()}</div>

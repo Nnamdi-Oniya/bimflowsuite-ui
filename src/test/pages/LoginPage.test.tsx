@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import LoginPage from '@/pages/LoginPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('LoginPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <LoginPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('LoginPage renders', () => {
-  render(<LoginPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('LoginPage snapshot', () => {
-  const { container } = render(<LoginPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <LoginPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

@@ -5,6 +5,7 @@ import "../assets/css/SetPasswordPage.css";
 import setPasswordImage from "../assets/images/setPasswordImage.jpg";
 import { authService, type SetPasswordResponse } from "../services/authService";
 import PasswordSuccessModal from "../components/PasswordSuccessModal";
+
 const SetPasswordPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,18 +23,20 @@ const SetPasswordPage: React.FC = () => {
   const [token, setToken] = useState<string>("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isAlreadyActive, setIsAlreadyActive] = useState(false);
+
   useEffect(() => {
     // Get parameters from URL
     const searchParams = new URLSearchParams(location.search);
     const tokenParam = searchParams.get("token");
     const uidParam = searchParams.get("uid");
     const emailParam = searchParams.get("email");
-    console.log("URL Parameters:", { tokenParam, uidParam, emailParam });
+
     // Check if all required parameters exist
     if (!tokenParam || !uidParam || !emailParam) {
       setApiError("Missing required parameters in the activation link.");
       return;
     }
+
     // Store parameters
     setToken(tokenParam);
     setUid(uidParam);
@@ -43,10 +46,10 @@ const SetPasswordPage: React.FC = () => {
       const decodedEmail = authService.decodeBase64(emailParam);
       setEmail(decodedEmail);
     } catch (error) {
-      console.error("Failed to decode email:", error);
       setEmail("User account"); // Fallback
     }
   }, [location.search]);
+
   const validatePassword = (password: string): string => {
     if (!password.trim()) {
       return "Password is required.";
@@ -56,9 +59,11 @@ const SetPasswordPage: React.FC = () => {
     }
     return "";
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
     // Clear field-specific error
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
@@ -68,6 +73,7 @@ const SetPasswordPage: React.FC = () => {
     if (apiError) {
       setApiError("");
     }
+
     // Real-time validation
     if (name === "password") {
       const passwordError = validatePassword(value);
@@ -83,6 +89,7 @@ const SetPasswordPage: React.FC = () => {
         setErrors({ ...errors, password: "", password_confirm: "" });
       }
     }
+
     if (name === "password_confirm") {
       if (value !== formData.password) {
         setErrors({ ...errors, password_confirm: "Passwords do not match." });
@@ -91,27 +98,34 @@ const SetPasswordPage: React.FC = () => {
       }
     }
   };
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     const passwordError = validatePassword(formData.password);
+
     if (passwordError) {
       newErrors.password = passwordError;
     }
+
     if (!formData.password_confirm.trim()) {
       newErrors.password_confirm = "Please confirm your password.";
     } else if (formData.password !== formData.password_confirm) {
       newErrors.password_confirm = "Passwords do not match.";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
    
     if (!validateForm()) return;
     if (isLoading) return;
+
     setIsLoading(true);
     setApiError("");
+
     try {
       // Get email parameter from URL
       const searchParams = new URLSearchParams(location.search);
@@ -124,7 +138,7 @@ const SetPasswordPage: React.FC = () => {
         password: formData.password,
         password_confirm: formData.password_confirm,
       });
-      console.log("Activate account response:", response);
+
       if (response.success && response.data?.success) {
         // Check if account was already active
         const activationData = response.data as SetPasswordResponse;
@@ -144,8 +158,6 @@ const SetPasswordPage: React.FC = () => {
         setApiError(errorMsg);
       }
     } catch (err: any) {
-      console.error("Activate account error:", err);
-     
       let message = "An error occurred while activating your account.";
      
       // Parse different error response formats
@@ -161,16 +173,19 @@ const SetPasswordPage: React.FC = () => {
       } else if (err.message) {
         message = err.message;
       }
+
       setApiError(message);
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleSuccessModalClose = () => {
     setShowSuccessModal(false);
     // Redirect to login page
     navigate("/login");
   };
+
   // If missing parameters, show error
   if (apiError && apiError.includes("Missing required parameters")) {
     return (
@@ -215,6 +230,7 @@ const SetPasswordPage: React.FC = () => {
       </div>
     );
   }
+
   return (
     <>
       <div className="set-password-page">
@@ -240,6 +256,7 @@ const SetPasswordPage: React.FC = () => {
                     <span className="user-email">{email}</span>
                   </div>
                 </div>
+
                 <form onSubmit={handleSubmit} className="set-password-form" noValidate>
                   {apiError && (
                     <div className="api-error-message">
@@ -249,6 +266,7 @@ const SetPasswordPage: React.FC = () => {
                       </div>
                     </div>
                   )}
+
                   <div className="form-group">
                     <label htmlFor="password" className="form-label">
                       New Password *
@@ -283,6 +301,7 @@ const SetPasswordPage: React.FC = () => {
                       </ul>
                     </div>
                   </div>
+
                   <div className="form-group">
                     <label htmlFor="password_confirm" className="form-label">
                       Confirm New Password *
@@ -311,6 +330,7 @@ const SetPasswordPage: React.FC = () => {
                       </span>
                     )}
                   </div>
+
                   <button
                     type="submit"
                     className="set-password-btn primary-btn"
@@ -328,6 +348,7 @@ const SetPasswordPage: React.FC = () => {
                     )}
                   </button>
                 </form>
+
                 <div className="additional-options">
                   <div className="login-prompt">
                     <p>
@@ -337,17 +358,13 @@ const SetPasswordPage: React.FC = () => {
                       </Link>
                     </p>
                   </div>
-                  <div className="security-note">
-                    <p className="note-text">
-                      🔒 Your password will be securely encrypted. For security reasons, this link will expire after use.
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <PasswordSuccessModal
         isOpen={showSuccessModal}
         onClose={handleSuccessModalClose}
@@ -359,4 +376,5 @@ const SetPasswordPage: React.FC = () => {
     </>
   );
 };
+
 export default SetPasswordPage;

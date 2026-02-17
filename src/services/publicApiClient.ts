@@ -39,12 +39,7 @@ class PublicApiClient {
   private timeout: number = 30000;
 
   constructor() {
-    if (typeof window !== 'undefined') {
-      console.log("🔧 Public API Client Initialized:", this.baseUrl);
-      console.log("🔧 Backend URL:", getBackendUrl());
-      console.log("🔧 API Prefix:", getApiPrefix());
-      console.log("🔧 Environment:", import.meta.env ? 'Vite' : 'React');
-    }
+    // Keep minimal initialization without console logs
   }
 
   private mapRequestTypes(data: any): any {
@@ -70,14 +65,6 @@ class PublicApiClient {
 
     const url = `${this.baseUrl}${endpoint}`;
 
-    if (typeof window !== 'undefined') {
-      console.log(`🌐 Public API Call: ${method} ${url}`);
-      console.log(`📤 Data being sent:`, mappedData ? {
-        ...mappedData,
-        phone_number: mappedData.phone_number ? '***' : undefined
-      } : 'No data');
-    }
-
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
@@ -95,20 +82,15 @@ class PublicApiClient {
     if (!safeMethods.includes(method)) {
       let csrftoken = getCookie('csrftoken');
       if (!csrftoken) {
-        console.log('🔑 No CSRF token found, fetching OPTIONS to get cookie');
         try {
           await fetch(url, { method: 'OPTIONS', credentials: 'include' });
           csrftoken = getCookie('csrftoken');
-          if (!csrftoken) {
-            console.warn('⚠️ Could not get CSRF token after OPTIONS request.');
-          }
         } catch (optionsError) {
-          console.error('❌ Failed to fetch OPTIONS for CSRF:', optionsError);
+          // Silently handle OPTIONS error
         }
       }
       if (csrftoken) {
         (config.headers as Record<string, string>)['X-CSRFToken'] = csrftoken;
-        console.log('🔑 Added CSRF token to headers');
       }
     }
 
@@ -119,19 +101,9 @@ class PublicApiClient {
     try {
       const response = await fetch(url, config);
       clearTimeout(timeoutId);
-
-      if (typeof window !== 'undefined') {
-        console.log(`📡 Public API Response: ${response.status} ${response.statusText}`);
-        console.log(`📡 Response URL: ${response.url}`);
-      }
-
       return await this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
-
-      if (typeof window !== 'undefined') {
-        console.error(`❌ Public API Error:`, error);
-      }
 
       if (error instanceof Error && error.name === 'AbortError') {
         throw { message: 'Request timeout. Please try again.', status: 408, code: 'TIMEOUT' } as PublicApiError;
@@ -139,14 +111,12 @@ class PublicApiClient {
 
       if (error instanceof TypeError && error.message.includes('fetch')) {
         throw {
-          message: 'Network error. Please check: 1) Backend is running 2) CORS is enabled 3) URL is correct',
+          message: 'Network error. Please check your connection and try again.',
           status: 0,
           code: 'NETWORK_ERROR',
           details: {
             url,
-            backendUrl: getBackendUrl(),
-            apiPrefix: getApiPrefix(),
-            suggestion: 'Make sure Django server is running on http://localhost:8000'
+            suggestion: 'Make sure the backend server is running'
           }
         } as PublicApiError;
       }
@@ -161,10 +131,6 @@ class PublicApiClient {
 
   private async handleResponse<T>(response: Response): Promise<PublicApiResponse<T>> {
     const responseText = await response.text();
-
-    if (typeof window !== 'undefined') {
-      console.log(`📄 Raw Response:`, responseText.substring(0, 500) + (responseText.length > 500 ? '...' : ''));
-    }
 
     let responseData: any = {};
     if (responseText) {

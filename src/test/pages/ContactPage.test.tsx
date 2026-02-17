@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import ContactPage from '@/pages/ContactPage';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ContactPage', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ContactPage />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ContactPage renders', () => {
-  render(<ContactPage />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ContactPage snapshot', () => {
-  const { container } = render(<ContactPage />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ContactPage />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

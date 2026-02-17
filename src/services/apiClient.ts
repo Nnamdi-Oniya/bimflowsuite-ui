@@ -1,7 +1,6 @@
-// src/service/apiClient.ts
+// src/services/apiClient.ts
 import { BACKEND_CONFIG, clearTokens, getAccessToken } from '../config/api';
 
-// Types for API responses
 export interface ApiResponse<T = any> {
   data?: T;
   message?: string;
@@ -22,7 +21,6 @@ export interface ApiError {
   data?: any;
 }
 
-// API Client Class - NO REFRESH TOKEN LOGIC
 class ApiClient {
   private baseUrl: string;
   private timeout: number;
@@ -30,6 +28,18 @@ class ApiClient {
   constructor() {
     this.baseUrl = BACKEND_CONFIG.baseUrl + BACKEND_CONFIG.apiPrefix;
     this.timeout = BACKEND_CONFIG.timeout;
+  }
+
+  private isNetworkError(error: unknown): boolean {
+    if (!(error instanceof TypeError)) return false;
+    const msg = (error.message || '').toLowerCase();
+    return (
+      msg.includes('failed to fetch') ||
+      msg.includes('networkerror') ||
+      msg.includes('load failed') ||
+      msg.includes('network request failed') ||
+      msg.includes('the internet connection appears to be offline')
+    );
   }
 
   private async request<T>(
@@ -43,12 +53,9 @@ class ApiClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
-    const requestHeaders: Record<string, string> = {
-      ...headers,
-    };
+    const requestHeaders: Record<string, string> = { ...headers };
 
     const token = getAccessToken();
-    // Add token for all requests except login
     if (token && !endpoint.includes('/auth/login/')) {
       requestHeaders['Authorization'] = `Bearer ${token}`;
     }
@@ -72,7 +79,6 @@ class ApiClient {
       const response = await fetch(url, config);
       clearTimeout(timeoutId);
 
-      // Handle 401 Unauthorized - NO REFRESH ATTEMPT, just clear tokens and throw
       if (response.status === 401 && !endpoint.includes('/auth/login/')) {
         clearTokens();
         window.dispatchEvent(new CustomEvent('auth-expired'));
@@ -87,7 +93,7 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof DOMException && error.name === 'AbortError') {
         throw {
           message: 'Request timeout. Please try again.',
           status: 408,
@@ -95,18 +101,16 @@ class ApiClient {
         } as ApiError;
       }
 
-      // If error is already an ApiError, re-throw it
-      if (error && typeof error === 'object' && 'status' in error) {
-        throw error;
-      }
-
-      // Only throw network error for actual network failures
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      if (this.isNetworkError(error)) {
         throw {
-          message: 'Network error occurred. Please check your internet connection.',
+          message: 'Network error occurred. Please check your internet connection or try again later.',
           status: 0,
           code: 'NETWORK_ERROR'
         } as ApiError;
+      }
+
+      if (error && typeof error === 'object' && 'status' in error) {
+        throw error;
       }
 
       throw {
@@ -119,16 +123,6 @@ class ApiClient {
 
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
     const responseText = await response.text();
-
-    // Debug: Log the response for troubleshooting
-    if (BACKEND_CONFIG.debug) {
-      console.log(`API Response [${response.status}]:`, {
-        url: response.url,
-        status: response.status,
-        statusText: response.statusText,
-        body: responseText.substring(0, 500) + (responseText.length > 500 ? '...' : '')
-      });
-    }
 
     if (response.status === 204) {
       return {
@@ -143,7 +137,6 @@ class ApiClient {
       try {
         responseData = JSON.parse(responseText);
       } catch {
-        // If not JSON, treat as plain text
         responseData = { detail: responseText };
       }
     }
@@ -152,7 +145,6 @@ class ApiClient {
       let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
       let validationErrors: ValidationError[] = [];
 
-      // Handle Django REST Framework error formats
       if (responseData.detail) {
         errorMessage = responseData.detail;
       } else if (responseData.error) {
@@ -162,10 +154,11 @@ class ApiClient {
       } else if (typeof responseData === 'string') {
         errorMessage = responseData;
       } else if (Array.isArray(responseData)) {
-        errorMessage = responseData.map(err => typeof err === 'object' ? JSON.stringify(err) : err).join(', ');
+        errorMessage = responseData
+          .map((err) => (typeof err === 'object' ? JSON.stringify(err) : err))
+          .join(', ');
       }
 
-      // Handle field-specific errors
       if (responseData && typeof responseData === 'object' && !Array.isArray(responseData)) {
         validationErrors = Object.entries(responseData)
           .filter(([key]) => key !== 'detail' && key !== 'error' && key !== 'message')
@@ -173,13 +166,7 @@ class ApiClient {
             field,
             messages: Array.isArray(messages) ? messages : [String(messages)],
           }));
-        
-        // If we have field errors but no general error message, create one
-        if (validationErrors.length > 0 && !errorMessage.includes('Validation')) {
-          errorMessage = 'Validation failed. Please check your input.';
-        }
-        
-        // Format error message to be more user-friendly for the first error
+
         if (validationErrors.length > 0 && errorMessage === `HTTP ${response.status}: ${response.statusText}`) {
           const firstError = validationErrors[0];
           errorMessage = `${firstError.field}: ${firstError.messages.join(', ')}`;
@@ -191,10 +178,9 @@ class ApiClient {
         status: response.status,
         errors: validationErrors.length > 0 ? validationErrors : undefined,
         code: responseData.code || `HTTP_${response.status}`,
-        data: responseData
+        data: responseData,
       };
 
-      console.error('API Error:', apiError);
       throw apiError;
     }
 
@@ -206,20 +192,34 @@ class ApiClient {
     };
   }
 
-  // HTTP methods
   async get<T>(endpoint: string, headers?: Record<string, string>): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'GET', undefined, headers);
   }
 
-  async post<T>(endpoint: string, data: any, headers?: Record<string, string>, isFormData: boolean = false): Promise<ApiResponse<T>> {
+  async post<T>(
+    endpoint: string,
+    data: any,
+    headers?: Record<string, string>,
+    isFormData = false
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'POST', data, headers, isFormData);
   }
 
-  async put<T>(endpoint: string, data: any, headers?: Record<string, string>, isFormData: boolean = false): Promise<ApiResponse<T>> {
+  async put<T>(
+    endpoint: string,
+    data: any,
+    headers?: Record<string, string>,
+    isFormData = false
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'PUT', data, headers, isFormData);
   }
 
-  async patch<T>(endpoint: string, data: any, headers?: Record<string, string>, isFormData: boolean = false): Promise<ApiResponse<T>> {
+  async patch<T>(
+    endpoint: string,
+    data: any,
+    headers?: Record<string, string>,
+    isFormData = false
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, 'PATCH', data, headers, isFormData);
   }
 
@@ -236,7 +236,7 @@ class ApiClient {
     if (!onProgress) {
       const formData = new FormData();
       formData.append('file', file);
-      Object.keys(additionalData).forEach(key => formData.append(key, additionalData[key]));
+      Object.entries(additionalData).forEach(([key, value]) => formData.append(key, value));
       return this.post(endpoint, formData, {}, true);
     }
 
@@ -273,7 +273,7 @@ class ApiClient {
 
       const formData = new FormData();
       formData.append('file', file);
-      Object.keys(additionalData).forEach(key => formData.append(key, additionalData[key]));
+      Object.entries(additionalData).forEach(([key, value]) => formData.append(key, value));
 
       xhr.send(formData);
     });

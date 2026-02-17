@@ -1,10 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ImageOptimizer snapshot 1`] = `
+exports[`ImageOptimizer > matches snapshot 1`] = `
 <div>
   <img
+    alt="Test image"
+    class="test-class"
     decoding="async"
     loading="lazy"
+    src="/test.jpg"
     style="content-visibility: auto; contain: layout style paint;"
   />
 </div>

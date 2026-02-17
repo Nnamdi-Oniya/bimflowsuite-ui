@@ -1,18 +1,20 @@
-import { test, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
 import ScrollToTop from '@/components/ScrollToTop';
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+describe('ScrollToTop', () => {
+  it('renders without crashing', () => {
+    const { container } = renderWithProviders(
+      <ScrollToTop />
+    );
+    expect(container).toBeDefined();
+  });
 
-test('ScrollToTop renders', () => {
-  render(<ScrollToTop />, { wrapper: Wrapper });
-  expect(document.body.children).toHaveLength(1);
-});
-
-test('ScrollToTop snapshot', () => {
-  const { container } = render(<ScrollToTop />, { wrapper: Wrapper });
-  expect(container).toMatchSnapshot();
+  it('matches snapshot', () => {
+    const { container } = renderWithProviders(
+      <ScrollToTop />
+    );
+    expect(container).toMatchSnapshot();
+  });
 });

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SettingsPage snapshot 1`] = `
+exports[`SettingsPage > matches snapshot 1`] = `
 <div>
   <div
     class="settings-page"
@@ -15,7 +15,7 @@ exports[`SettingsPage snapshot 1`] = `
           Settings
         </h1>
         <p>
-          Manage your account, preferences, and integrations
+          Manage your account, security, and preferences
         </p>
       </div>
     </div>
@@ -84,7 +84,7 @@ exports[`SettingsPage snapshot 1`] = `
         >
           <svg
             aria-hidden="true"
-            class="lucide lucide-link2 lucide-link-2"
+            class="lucide lucide-key"
             fill="none"
             height="20"
             stroke="currentColor"
@@ -96,19 +96,18 @@ exports[`SettingsPage snapshot 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M9 17H7A5 5 0 0 1 7 7h2"
+              d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"
             />
             <path
-              d="M15 7h2a5 5 0 1 1 0 10h-2"
+              d="m21 2-9.6 9.6"
             />
-            <line
-              x1="8"
-              x2="16"
-              y1="12"
-              y2="12"
+            <circle
+              cx="7.5"
+              cy="15.5"
+              r="5.5"
             />
           </svg>
-          Integrations
+          Change Password
         </button>
         <button
           class="tab-btn "
@@ -235,16 +234,25 @@ exports[`SettingsPage snapshot 1`] = `
               Select your preferred language
             </p>
             <select>
-              <option>
+              <option
+                selected=""
+                value="en"
+              >
                 English
               </option>
-              <option>
+              <option
+                value="es"
+              >
                 Spanish
               </option>
-              <option>
+              <option
+                value="fr"
+              >
                 French
               </option>
-              <option>
+              <option
+                value="de"
+              >
                 German
               </option>
             </select>

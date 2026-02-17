@@ -13,7 +13,7 @@ const GetStartedModal: React.FC<GetStartedModalProps> = ({ isOpen, onClose }) =>
 
   const handleCreateProject = () => {
     onClose();
-    navigate("/generate-model"); // Project creation wizard
+    navigate("/project-generate"); // Fixed: Changed from "/generate-model" to "/project-generate"
   };
 
   const handleBookDemo = () => {

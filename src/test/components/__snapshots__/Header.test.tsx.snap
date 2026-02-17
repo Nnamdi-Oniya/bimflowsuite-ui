@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Header snapshot 1`] = `
+exports[`Header > matches snapshot 1`] = `
 <div>
   <header
     class="header"
@@ -10,7 +10,6 @@ exports[`Header snapshot 1`] = `
       class="header__container"
     >
       <a
-        aria-label="BIMFlow Suite Home"
         class="logo"
         data-discover="true"
         href="/"
@@ -27,8 +26,7 @@ exports[`Header snapshot 1`] = `
         </span>
       </a>
       <nav
-        aria-label="Primary navigation"
-        class="nav"
+        class="nav nav--desktop"
       >
         <a
           class="nav__link nav__link--active"
@@ -74,7 +72,7 @@ exports[`Header snapshot 1`] = `
         </a>
       </nav>
       <div
-        class="actions"
+        class="actions actions--desktop"
       >
         <a
           class="btn btn--secondary"
@@ -91,80 +89,80 @@ exports[`Header snapshot 1`] = `
       </div>
       <button
         aria-expanded="false"
-        aria-label="Open menu"
-        class="menu-toggle"
+        aria-label="Toggle menu"
+        class="menu-toggle "
       >
         <span />
         <span />
         <span />
       </button>
     </div>
-    <div
-      class="mobile-menu "
+    <nav
+      class="mobile-nav "
     >
-      <nav
-        class="mobile-nav"
+      <div
+        class="mobile-nav__content"
       >
         <a
-          class="nav__link nav__link--active"
+          class="mobile-nav__link mobile-nav__link--active"
           data-discover="true"
           href="/"
         >
           Home
         </a>
         <a
-          class="nav__link "
+          class="mobile-nav__link "
           data-discover="true"
           href="/about"
         >
           About
         </a>
         <a
-          class="nav__link "
+          class="mobile-nav__link "
           data-discover="true"
           href="/features"
         >
           Features
         </a>
         <a
-          class="nav__link "
+          class="mobile-nav__link "
           data-discover="true"
           href="/projects"
         >
           Projects
         </a>
         <a
-          class="nav__link "
+          class="mobile-nav__link "
           data-discover="true"
           href="/blog"
         >
           Blog
         </a>
         <a
-          class="nav__link "
+          class="mobile-nav__link "
           data-discover="true"
           href="/faq"
         >
           FAQ
         </a>
         <div
-          class="mobile-actions"
+          class="mobile-nav__actions"
         >
           <a
-            class="btn btn--secondary"
+            class="btn btn--secondary btn--block"
             data-discover="true"
             href="/login"
           >
             Login
           </a>
           <button
-            class="btn btn--primary"
+            class="btn btn--primary btn--block"
           >
             Get Started
           </button>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   </header>
 </div>
 `;

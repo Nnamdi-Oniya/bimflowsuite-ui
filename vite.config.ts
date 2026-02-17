@@ -8,11 +8,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
-  console.log(`🚀 Mode: ${mode}`);
-  console.log(`🌐 Using backend target: ${env.VITE_BACKEND_URL || 'http://127.0.0.1:8000'}`);
-
   return {
-    plugins: [react()],
+    plugins: [
+      react(),
+    ],
 
     resolve: {
       alias: {
@@ -31,26 +30,11 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       host: true,
-
       proxy: {
         '/api/v1': {
-          target: 'http://127.0.0.1:8000', // IPv4 loopback – prevents ::1 issues
+          target: 'http://127.0.0.1:8000',
           changeOrigin: true,
           secure: false,
-
-          configure: (proxy, _options) => {
-            proxy.on('proxyReq', (_proxyReq, _req, _res) => {
-              console.log('[Proxy] → Sending:', _req.method, _req.url);
-            });
-
-            proxy.on('proxyRes', (_proxyRes, _req, _res) => {
-              console.log('[Proxy] ← Received:', _proxyRes.statusCode, _req.url);
-            });
-
-            proxy.on('error', (err, _req, _res) => {
-              console.log('[Proxy] Error:', err);
-            });
-          },
         },
       },
     },
@@ -68,17 +52,61 @@ export default defineConfig(({ mode }) => {
       },
     },
 
+    optimizeDeps: {
+      include: [
+        '@mui/material',
+        '@mui/icons-material',
+        '@emotion/react',
+        '@emotion/styled',
+      ],
+    },
+
     test: {
       globals: true,
-      css: true,
       environment: 'jsdom',
-      setupFiles: ['./src/setupTests'],
+      setupFiles: ['./src/setupTests.ts'],
+      
+      // Enable alias resolution in tests
+      alias: [
+        { find: '@', replacement: path.resolve(__dirname, './src') }
+      ],
+      
+      deps: {
+        inline: [
+          '@testing-library/user-event',
+          'react-pdf',
+          'pdfjs-dist'
+        ],
+        // Optimize these dependencies for tests
+        optimizer: {
+          web: {
+            include: ['react-pdf', 'pdfjs-dist']
+          }
+        }
+      },
+      
+      include: ['src/test/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+      
+      testTimeout: 10000,
+      hookTimeout: 10000,
+      
+      // Mock browser APIs that might be missing
+      environmentOptions: {
+        jsdom: {
+          resources: 'usable',
+          runScripts: 'dangerously',
+          // Add missing browser globals
+          pretendToBeVisual: true,
+        }
+      },
+      
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
         include: ['src/**/*.{ts,tsx}'],
-        exclude: ['src/main.tsx', 'src/vite-env.d.ts'],
+        exclude: ['src/main.tsx', 'src/vite-env.d.ts', 'src/test/**'],
       },
+
       exclude: ['node_modules', 'dist', '**/*.stories.{ts,tsx}'],
     },
   };

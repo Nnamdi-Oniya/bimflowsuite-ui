@@ -1,0 +1,101 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NewUserModal > matches snapshot 1`] = `
+<div>
+  <div
+    class="get-started-modal-overlay"
+  >
+    <div
+      class="get-started-modal"
+    >
+      <div
+        class="get-started-modal-header"
+      >
+        <h2>
+          Account Required
+        </h2>
+        <button
+          aria-label="Close modal"
+          class="close-btn"
+        >
+          ×
+        </button>
+      </div>
+      <div
+        class="get-started-content"
+      >
+        <div
+          class="email-notice"
+          style="background: rgb(232, 244, 255); border: 1px solid rgb(0, 123, 255); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;"
+        >
+          <span
+            style="font-size: 1.5rem;"
+          >
+            👋
+          </span>
+          <p
+            style="margin: 0px; color: var(--brown-dark);"
+          >
+            Welcome to BIMFlow Suite! To generate models, you need an account.
+          </p>
+        </div>
+        <div
+          class="get-started-options"
+        >
+          <button
+            class="option-btn option-btn--upload"
+          >
+            <div
+              class="option-icon"
+            >
+              📅
+            </div>
+            <div
+              class="option-details"
+            >
+              <h3>
+                Book a Demo
+              </h3>
+              <p>
+                Experience BIMFlow Suite in action. Book a personalized demo to get access to model generation and all platform features.
+              </p>
+            </div>
+          </button>
+          <button
+            class="option-btn option-btn--secondary"
+          >
+            <div
+              class="option-icon"
+            >
+              🔐
+            </div>
+            <div
+              class="option-details"
+            >
+              <h3>
+                Already Have an Account?
+              </h3>
+              <p>
+                If you have an account, login to submit your model generation request.
+              </p>
+            </div>
+          </button>
+        </div>
+        <div
+          style="margin-top: 1.5rem; padding: 1rem; background: rgb(248, 249, 250); border-radius: 8px; border: 1px solid rgb(233, 236, 239);"
+        >
+          <p
+            style="margin: 0px; font-size: 0.9rem; color: var(--text-light);"
+          >
+            <strong>
+              Note:
+            </strong>
+             Your project details have been saved.
+             After booking a demo, you'll get access to submit your model generation request.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

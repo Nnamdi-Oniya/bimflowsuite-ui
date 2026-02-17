@@ -9,9 +9,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get redirect path from state
   const from = (location.state as any)?.from || "/dashboard";
-  const successMessage = (location.state as any)?.message;
 
   const [formData, setFormData] = useState({
     identifier: "",
@@ -20,27 +18,14 @@ const LoginPage: React.FC = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState<string>("");
-  const [successMessageState, setSuccessMessageState] = useState<string>(successMessage || "");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Clear success message after 5 seconds
-  useEffect(() => {
-    if (successMessageState) {
-      const timer = setTimeout(() => {
-        setSuccessMessageState("");
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [successMessageState]);
-
-  // Check if already authenticated
   useEffect(() => {
     if (authService.isAuthenticated()) {
       navigate(from, { replace: true });
     }
   }, [navigate, from]);
 
-  // Listen for auth state changes
   useEffect(() => {
     const handleAuthChange = (event: CustomEvent) => {
       if (event.detail.isAuthenticated) {
@@ -66,12 +51,10 @@ const LoginPage: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear field-specific error
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
     
-    // Clear API error when user starts typing
     if (apiError) {
       setApiError("");
     }
@@ -103,7 +86,6 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     setApiError("");
-    setSuccessMessageState("");
     
     if (!validateForm()) return;
     if (isLoading) return;
@@ -119,8 +101,7 @@ const LoginPage: React.FC = () => {
       const response = await authService.login(credentials);
 
       if (response.success && response.data) {
-        // Don't navigate here - let the auth-state-changed event handle it
-        // This ensures consistency across the app
+        // Navigation handled by auth-state-changed event
       } else {
         if (response.message) {
           setApiError(response.message);
@@ -130,8 +111,6 @@ const LoginPage: React.FC = () => {
         setIsLoading(false);
       }
     } catch (err: any) {
-      console.error('Login error:', err);
-      
       let message = "An error occurred. Please try again later.";
 
       if (err.message) {
@@ -167,12 +146,6 @@ const LoginPage: React.FC = () => {
               <p className="login-subtitle">
                 Sign in to your BIMFlow Suite account to access your projects and tools.
               </p>
-
-              {successMessageState && (
-                <div className="success-message" role="alert">
-                  ✅ {successMessageState}
-                </div>
-              )}
 
               <form onSubmit={handleSubmit} className="login-form">
                 {apiError && (

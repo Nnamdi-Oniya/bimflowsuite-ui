@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DashboardLayout snapshot 1`] = `
+exports[`DashboardLayout > matches snapshot 1`] = `
 <div>
   <div
     class="dashboard-layout"
@@ -11,11 +11,17 @@ exports[`DashboardLayout snapshot 1`] = `
       <div
         class="sidebar-header"
       >
-        <h2
-          class="sidebar-title"
+        <a
+          class="sidebar-brand"
+          data-discover="true"
+          href="/"
         >
-          BIMFlow Suite
-        </h2>
+          <h2
+            class="sidebar-title"
+          >
+            BIMFlow Suite
+          </h2>
+        </a>
         <button
           aria-label="Close sidebar"
           class="sidebar-close"
@@ -533,9 +539,9 @@ exports[`DashboardLayout snapshot 1`] = `
                 class="user-profile "
               >
                 <img
-                  alt="Nnamdi Oniya"
+                  alt="test"
                   class="avatar"
-                  src="https://ui-avatars.com/api/?name=Nnamdi+Oniya&background=4ade80&color=1f2937&bold=true"
+                  src="https://ui-avatars.com/api/?name=T&background=3b82f6&color=ffffff&bold=true&length=2&size=40"
                 />
                 <svg
                   class="chevron-icon "
@@ -563,12 +569,12 @@ exports[`DashboardLayout snapshot 1`] = `
                   <div
                     class="dropdown-user-name"
                   >
-                    Nnamdi Oniya
+                    test
                   </div>
                   <div
                     class="dropdown-user-email"
                   >
-                    nnamdi.oniya@bimflow.com
+                    test@example.com
                   </div>
                 </div>
                 <div

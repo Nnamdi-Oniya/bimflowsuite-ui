@@ -6,8 +6,12 @@ import {
   setTokens,
   clearTokens,
   getAccessToken,
+  refreshTokensFromStorage,
 } from '../config/api';
 
+// ────────────────────────────────────────────────
+// Type Definitions
+// ────────────────────────────────────────────────
 
 export interface UserProfile {
   id: number;
@@ -84,9 +88,7 @@ export interface VerifyTokenResponse {
   email?: string;
 }
 
-// ────────────────────────────────────────────────
 // Backend Response Types
-// ────────────────────────────────────────────────
 type BackendAuthResponse = {
   user: {
     id: number;
@@ -105,11 +107,25 @@ type ServiceAuthResponse = {
   tokens: TokenPair;
 };
 
-
+/**
+ * Authentication Service
+ * Handles all authentication-related operations
+ */
 class AuthService {
   private endpoints = BACKEND_CONFIG.endpoints;
 
+  constructor() {
+    // Ensure tokens are loaded from storage on service initialization
+    if (typeof window !== 'undefined') {
+      refreshTokensFromStorage();
+    }
+  }
+
   // ─── Utility Methods ──────────────────────────────
+
+  /**
+   * Decode base64 string
+   */
   private decodeBase64String(encoded: string): string {
     if (!encoded) return '';
  
@@ -127,12 +143,14 @@ class AuthService {
       } catch {
         return decoded;
       }
-    } catch (error) {
-      console.error('Base64 decode error:', error);
+    } catch {
       return encoded;
     }
   }
 
+  /**
+   * Extract email from URL parameter
+   */
   extractEmailFromParam(emailParam: string | null): string {
     if (!emailParam) return 'User account';
  
@@ -147,7 +165,11 @@ class AuthService {
     }
   }
 
-  // ─── Login ────────────────────────────────────────
+  // ─── Authentication Methods ───────────────────────
+
+  /**
+   * User login
+   */
   async login(credentials: LoginCredentials): Promise<ApiResponse<ServiceAuthResponse>> {
     try {
       const raw = await apiClient.post<BackendAuthResponse>(
@@ -168,10 +190,10 @@ class AuthService {
       
       const { user: backendUser, tokens } = raw.data;
       
-      // Store tokens FIRST
+      // Store tokens (automatically encoded by setTokens)
       setTokens(tokens);
       
-      // NOW fetch the REAL user profile from /user/profile/
+      // Fetch full user profile
       let userProfile: UserProfile;
       
       try {
@@ -179,42 +201,16 @@ class AuthService {
         if (profileResponse.success && profileResponse.data) {
           userProfile = profileResponse.data;
         } else {
-          // Fallback to basic profile if profile fetch fails
-          userProfile = {
-            id: backendUser.id,
-            username: backendUser.username,
-            email: backendUser.email,
-            date_joined: backendUser.date_joined,
-            is_active: true,
-            first_name: '',
-            last_name: '',
-            phone_number: '',
-            location: '',
-            company: '',
-            job_title: '',
-          };
+          userProfile = this.createBasicProfile(backendUser);
         }
-      } catch (error) {
-        // Fallback to basic profile
-        userProfile = {
-          id: backendUser.id,
-          username: backendUser.username,
-          email: backendUser.email,
-          date_joined: backendUser.date_joined,
-          is_active: true,
-          first_name: '',
-          last_name: '',
-          phone_number: '',
-          location: '',
-          company: '',
-          job_title: '',
-        };
+      } catch {
+        userProfile = this.createBasicProfile(backendUser);
       }
       
       // Store user data
       localStorage.setItem('user_data', JSON.stringify(userProfile));
      
-      // Dispatch auth state changed event
+      // Dispatch auth state change event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('auth-state-changed', {
           detail: { isAuthenticated: true }
@@ -231,7 +227,6 @@ class AuthService {
         message: raw.message || 'Login successful',
       };
     } catch (error: any) {
-      console.error('Login service error:', error);
       return {
         success: false,
         status: error.status || 401,
@@ -240,7 +235,9 @@ class AuthService {
     }
   }
 
-  // ─── Register ─────────────────────────────────────
+  /**
+   * User registration
+   */
   async register(data: RegisterData): Promise<ApiResponse<ServiceAuthResponse>> {
     try {
       const raw = await apiClient.post<BackendAuthResponse>(
@@ -262,10 +259,10 @@ class AuthService {
       
       const { user: backendUser, tokens } = raw.data;
       
-      // Store tokens
+      // Store tokens (automatically encoded by setTokens)
       setTokens(tokens);
       
-      // Create user profile with provided registration data
+      // Create user profile
       const userProfile: UserProfile = {
         id: backendUser.id,
         username: backendUser.username,
@@ -283,17 +280,17 @@ class AuthService {
       // Store user data
       localStorage.setItem('user_data', JSON.stringify(userProfile));
       
-      // Try to fetch updated profile after registration
+      // Attempt to fetch updated profile
       try {
         const profileResponse = await this.getCurrentUser();
         if (profileResponse.success && profileResponse.data) {
           localStorage.setItem('user_data', JSON.stringify(profileResponse.data));
         }
-      } catch (error) {
-        // Silently fail - we already have basic profile
+      } catch {
+        // Silently fail - use basic profile
       }
      
-      // Dispatch auth state changed event
+      // Dispatch auth state change event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('auth-state-changed', {
           detail: { isAuthenticated: true }
@@ -318,12 +315,14 @@ class AuthService {
     }
   }
 
-  // ─── Logout ───────────────────────────────────────
+  /**
+   * User logout
+   */
   async logout(): Promise<ApiResponse> {
     try {
-      // Try to call logout endpoint, but don't wait for it
+      // Attempt to call logout endpoint
       await apiClient.post(this.endpoints.auth.logout, {}).catch(() => {
-        // Silently fail - we're logging out anyway
+        // Silently fail - proceed with local logout
       });
     } finally {
       this.clearAllData();
@@ -343,24 +342,21 @@ class AuthService {
     };
   }
 
-  // ─── Get Current User ─────────────────────────────
+  /**
+   * Get current user profile
+   */
   async getCurrentUser(): Promise<ApiResponse<UserProfile>> {
     const storedUser = this.getStoredUser();
     
-    // If we have a valid token, always fetch fresh data from API
     if (this.isAuthenticated()) {
       try {
         const resp = await apiClient.get<UserProfile>(this.endpoints.users.profile);
        
         if (resp.success && resp.data) {
-          // Update stored user with fresh data
           localStorage.setItem('user_data', JSON.stringify(resp.data));
           return resp;
         }
-      } catch (error) {
-        console.error('Failed to fetch user profile:', error);
-        
-        // If API call fails but we have stored user, return stored user
+      } catch {
         if (storedUser) {
           return {
             data: storedUser,
@@ -378,7 +374,6 @@ class AuthService {
       }
     }
     
-    // Not authenticated, return stored user if exists (for backward compatibility)
     if (storedUser) {
       return {
         data: storedUser,
@@ -395,7 +390,8 @@ class AuthService {
     };
   }
 
-  // ─── Password Reset & Activation ──────────────────
+  // ─── Password Management ──────────────────────────
+
   async requestPasswordReset(data: PasswordResetRequest): Promise<ApiResponse> {
     return apiClient.post(this.endpoints.auth.requestReset, data);
   }
@@ -434,40 +430,29 @@ class AuthService {
     );
   }
 
-  // ─── Auth Check ───────────────────────────────────
+  // ─── Token & Session Management ───────────────────
+
+  /**
+   * Check if user is authenticated
+   */
   isAuthenticated(): boolean {
     const token = getAccessToken();
     if (!token) return false;
     
     try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-     
-      let padded = base64;
-      while (padded.length % 4) {
-        padded += '=';
-      }
-     
-      const jsonPayload = decodeURIComponent(
-        atob(padded)
-          .split('')
-          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
-      );
-     
-      const payload = JSON.parse(jsonPayload);
-      const exp = payload.exp;
-     
-      if (typeof exp !== 'number') return false;
-     
-      // 5 minute buffer for network lag
-      return exp * 1000 > Date.now() + 300000;
-    } catch (err) {
-      console.warn('[auth] Failed to parse JWT', err);
+      const payload = this.decodeToken(token);
+      if (!payload || typeof payload.exp !== 'number') return false;
+      
+      // 5-minute buffer for network lag
+      return payload.exp * 1000 > Date.now() + 300000;
+    } catch {
       return false;
     }
   }
 
+  /**
+   * Get stored user from localStorage
+   */
   getStoredUser(): UserProfile | null {
     const stored = localStorage.getItem('user_data');
     if (!stored) return null;
@@ -479,6 +464,9 @@ class AuthService {
     }
   }
 
+  /**
+   * Update stored user data
+   */
   updateStoredUser(partial: Partial<UserProfile>): void {
     const current = this.getStoredUser();
     if (!current) return;
@@ -487,6 +475,9 @@ class AuthService {
     localStorage.setItem('user_data', JSON.stringify(updated));
   }
 
+  /**
+   * Clear all authentication data
+   */
   clearAllData(): void {
     clearTokens();
     localStorage.removeItem('user_data');
@@ -499,12 +490,18 @@ class AuthService {
     }
   }
 
+  /**
+   * Check if URL contains activation parameters
+   */
   hasActivationParams(): boolean {
     if (typeof window === 'undefined') return false;
     const urlParams = new URLSearchParams(window.location.search);
     return !!(urlParams.get('email') && urlParams.get('uid') && urlParams.get('token'));
   }
 
+  /**
+   * Get activation parameters from URL
+   */
   getActivationParams(): { email: string; uid: string; token: string } | null {
     if (typeof window === 'undefined') return null;
     const urlParams = new URLSearchParams(window.location.search);
@@ -519,6 +516,9 @@ class AuthService {
     return null;
   }
 
+  /**
+   * Decode JWT token
+   */
   decodeToken(token: string): any {
     try {
       const base64Url = token.split('.')[1];
@@ -542,7 +542,8 @@ class AuthService {
     }
   }
 
-  // ─── Base64 Encoding/Decoding ─────────────────
+  // ─── Base64 Encoding/Decoding ─────────────────────
+
   decodeBase64(encoded: string): string {
     return this.decodeBase64String(encoded);
   }
@@ -551,10 +552,27 @@ class AuthService {
     try {
       const utf8Bytes = unescape(encodeURIComponent(text));
       return btoa(utf8Bytes);
-    } catch (error) {
-      console.error('Base64 encode error:', error);
+    } catch {
       return btoa(text);
     }
+  }
+
+  // ─── Private Helper Methods ───────────────────────
+
+  private createBasicProfile(backendUser: any): UserProfile {
+    return {
+      id: backendUser.id,
+      username: backendUser.username,
+      email: backendUser.email,
+      date_joined: backendUser.date_joined,
+      is_active: true,
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      location: '',
+      company: '',
+      job_title: '',
+    };
   }
 }
 
