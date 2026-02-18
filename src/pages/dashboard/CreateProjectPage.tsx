@@ -7,12 +7,20 @@ import { authService } from "../../services/authService";
 import DashboardSuccessModal from "../../components/DashboardSuccessModal";
 import "../../assets/css/CreateProjectPage.css";
 
-interface ProjectFormData extends CreateProjectData {}
+interface ProjectFormData extends CreateProjectData {
+  project_number: string; // Add this field - user can input it
+}
+
+interface CreatedProject {
+  id: number;
+  name: string;
+  project_number: string; // From backend response
+}
 
 const initialFormState: ProjectFormData = {
   name: "",
   description: "",
-  // REMOVED: project_number - backend generates this
+  project_number: "", // User can input their own project number/reference
   phase: "concept",
   project_type: "",
   client_name: "",
@@ -78,7 +86,7 @@ export default function CreateProjectPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [currentSection, setCurrentSection] = useState<"basic" | "client" | "schedule">("basic");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [createdProject, setCreatedProject] = useState<{ id: number; name: string } | null>(null);
+  const [createdProject, setCreatedProject] = useState<CreatedProject | null>(null);
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -95,6 +103,11 @@ export default function CreateProjectPage() {
         err.name = "Project name is required";
       } else if (formData.name.length < 3) {
         err.name = "Project name must be at least 3 characters";
+      }
+
+      // Project Number validation (optional but if provided, validate format)
+      if (formData.project_number && formData.project_number.length < 3) {
+        err.project_number = "Project number must be at least 3 characters if provided";
       }
 
       // Project Type validation
@@ -176,10 +189,11 @@ export default function CreateProjectPage() {
 
     try {
       // IMPORTANT: Never send 'id' field - backend generates it
-      // Also, don't send project_number - backend generates it
+      // Send project_number if user provided it
       const payload = {
         name: formData.name.trim(),
         description: formData.description.trim(),
+        project_number: formData.project_number?.trim() || "", // Send user's project number
         phase: formData.phase,
         project_type: formData.project_type,
         client_name: formData.client_name?.trim() || "",
@@ -202,10 +216,11 @@ export default function CreateProjectPage() {
       const response = await projectService.createProject(payload);
       
       if (response.success && response.data) {
-        // Store the ID returned from backend - NEVER generate on frontend
+        // Store the ID and project_number returned from backend
         setCreatedProject({
           id: response.data.id,
-          name: response.data.name
+          name: response.data.name,
+          project_number: response.data.project_number // Backend may return same or modified
         });
         setShowSuccessModal(true);
       } else {
@@ -306,6 +321,24 @@ export default function CreateProjectPage() {
                       placeholder="e.g., Downtown Office Tower"
                     />
                     {errors.name && <span className="error-text">{errors.name}</span>}
+                  </div>
+
+                  {/* Project Number - ADDED BACK */}
+                  <div className="form-group">
+                    <label htmlFor="project-number" className="form-label">
+                      Project Number/Reference
+                    </label>
+                    <input
+                      id="project-number"
+                      type="text"
+                      name="project_number"
+                      value={formData.project_number}
+                      onChange={handleInputChange}
+                      className={`form-input ${errors.project_number ? "error" : ""}`}
+                      placeholder="e.g., PROJ-2024-001"
+                    />
+                    {errors.project_number && <span className="error-text">{errors.project_number}</span>}
+                    <small className="form-note">Your internal project reference (optional)</small>
                   </div>
 
                   {/* Project Type */}
@@ -601,7 +634,16 @@ export default function CreateProjectPage() {
         isOpen={showSuccessModal}
         onClose={handleSuccessModalClose}
         title="Project Created Successfully! 🎉"
-        message={`Your project "${createdProject?.name || 'New Project'}" has been created successfully.`}
+        message={
+          <div>
+            <p>Your project <strong>"{createdProject?.name}"</strong> has been created successfully.</p>
+            {createdProject?.project_number && (
+              <p style={{ marginTop: '0.5rem', color: '#F8780F', fontWeight: 600 }}>
+                Project Number: <strong>{createdProject.project_number}</strong>
+              </p>
+            )}
+          </div>
+        }
         userName={createdProject?.name}
         updatedFields={['Project Details', 'Client Info', 'Schedule']}
         autoClose={true}

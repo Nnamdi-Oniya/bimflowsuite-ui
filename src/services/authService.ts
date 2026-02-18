@@ -123,21 +123,18 @@ class AuthService {
 
   // ─── Utility Methods ──────────────────────────────
 
-  /**
-   * Decode base64 string
-   */
   private decodeBase64String(encoded: string): string {
     if (!encoded) return '';
- 
+
     try {
       let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
-   
+
       while (base64.length % 4) {
         base64 += '=';
       }
-   
+
       const decoded = atob(base64);
-   
+
       try {
         return decodeURIComponent(escape(decoded));
       } catch {
@@ -148,12 +145,9 @@ class AuthService {
     }
   }
 
-  /**
-   * Extract email from URL parameter
-   */
   extractEmailFromParam(emailParam: string | null): string {
     if (!emailParam) return 'User account';
- 
+
     try {
       const decoded = this.decodeBase64String(emailParam);
       if (decoded && decoded.includes('@') && decoded.includes('.')) {
@@ -168,34 +162,51 @@ class AuthService {
   // ─── Authentication Methods ───────────────────────
 
   /**
-   * User login
+   * User login - now with much better error messages
    */
   async login(credentials: LoginCredentials): Promise<ApiResponse<ServiceAuthResponse>> {
     try {
       const raw = await apiClient.post<BackendAuthResponse>(
         this.endpoints.auth.login,
         {
-          username_or_email: credentials.username_or_email,
+          username_or_email: credentials.username_or_email.trim(),
           password: credentials.password,
         }
       );
-      
+
       if (!raw.success || !raw.data) {
+        // Handle common backend failure cases
+        if (raw.status === 401) {
+          return {
+            success: false,
+            status: 401,
+            message: raw.message || 'Invalid email or password. Please try again.',
+          };
+        }
+
+        if (raw.status === 400) {
+          return {
+            success: false,
+            status: 400,
+            message: raw.message || 'Please check your details and try again.',
+          };
+        }
+
         return {
           success: false,
-          status: raw.status || 401,
-          message: raw.message || 'Login failed',
+          status: raw.status || 500,
+          message: raw.message || 'Login failed. Please try again later.',
         };
       }
-      
+
       const { user: backendUser, tokens } = raw.data;
-      
-      // Store tokens (automatically encoded by setTokens)
+
+      // Store tokens
       setTokens(tokens);
-      
-      // Fetch full user profile
+
+      // Fetch full profile
       let userProfile: UserProfile;
-      
+
       try {
         const profileResponse = await this.getCurrentUser();
         if (profileResponse.success && profileResponse.data) {
@@ -206,17 +217,19 @@ class AuthService {
       } catch {
         userProfile = this.createBasicProfile(backendUser);
       }
-      
-      // Store user data
+
+      // Store user
       localStorage.setItem('user_data', JSON.stringify(userProfile));
-     
-      // Dispatch auth state change event
+
+      // Notify app
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('auth-state-changed', {
-          detail: { isAuthenticated: true }
-        }));
+        window.dispatchEvent(
+          new CustomEvent('auth-state-changed', {
+            detail: { isAuthenticated: true },
+          })
+        );
       }
-      
+
       return {
         success: true,
         data: {
@@ -224,13 +237,35 @@ class AuthService {
           tokens,
         },
         status: raw.status,
-        message: raw.message || 'Login successful',
+        message: 'Login successful',
       };
     } catch (error: any) {
+      console.error('Login error caught in authService:', error);
+      
+      // If it's an ApiError from apiClient, it already has the structure we need
+      if (error && typeof error === 'object') {
+        return {
+          success: false,
+          status: error.status || 500,
+          message: error.message || 'An error occurred during login',
+          data: error.data,
+        };
+      }
+
+      // Network / connection errors
+      if (!error.response && (error.message?.includes('Network') || error.code === 'ECONNABORTED')) {
+        return {
+          success: false,
+          status: 0,
+          message: 'Cannot connect to the server. Please check your internet connection.',
+        };
+      }
+
+      // Fallback
       return {
         success: false,
-        status: error.status || 401,
-        message: error.message || 'Login failed',
+        status: 500,
+        message: 'An unexpected error occurred. Please try again later.',
       };
     }
   }
@@ -248,21 +283,19 @@ class AuthService {
           password: data.password,
         }
       );
-      
+
       if (!raw.success || !raw.data) {
         return {
           success: false,
           status: raw.status || 400,
-          message: raw.message || 'Registration failed',
+          message: raw.message || 'Registration failed. Please try again.',
         };
       }
-      
+
       const { user: backendUser, tokens } = raw.data;
-      
-      // Store tokens (automatically encoded by setTokens)
+
       setTokens(tokens);
-      
-      // Create user profile
+
       const userProfile: UserProfile = {
         id: backendUser.id,
         username: backendUser.username,
@@ -276,27 +309,26 @@ class AuthService {
         location: '',
         job_title: '',
       };
-      
-      // Store user data
+
       localStorage.setItem('user_data', JSON.stringify(userProfile));
-      
-      // Attempt to fetch updated profile
+
       try {
         const profileResponse = await this.getCurrentUser();
         if (profileResponse.success && profileResponse.data) {
           localStorage.setItem('user_data', JSON.stringify(profileResponse.data));
         }
       } catch {
-        // Silently fail - use basic profile
+        // silent fail
       }
-     
-      // Dispatch auth state change event
+
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('auth-state-changed', {
-          detail: { isAuthenticated: true }
-        }));
+        window.dispatchEvent(
+          new CustomEvent('auth-state-changed', {
+            detail: { isAuthenticated: true },
+          })
+        );
       }
-      
+
       return {
         success: true,
         data: {
@@ -304,13 +336,13 @@ class AuthService {
           tokens,
         },
         status: raw.status,
-        message: raw.message || 'Registration successful',
+        message: 'Registration successful',
       };
     } catch (error: any) {
       return {
         success: false,
         status: error.status || 400,
-        message: error.message || 'Registration failed',
+        message: error.message || 'Registration failed. Please check your details and try again.',
       };
     }
   }
@@ -320,20 +352,21 @@ class AuthService {
    */
   async logout(): Promise<ApiResponse> {
     try {
-      // Attempt to call logout endpoint
       await apiClient.post(this.endpoints.auth.logout, {}).catch(() => {
-        // Silently fail - proceed with local logout
+        // silent fail
       });
     } finally {
       this.clearAllData();
-     
+
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('auth-state-changed', {
-          detail: { isAuthenticated: false }
-        }));
+        window.dispatchEvent(
+          new CustomEvent('auth-state-changed', {
+            detail: { isAuthenticated: false },
+          })
+        );
       }
     }
-    
+
     return {
       data: null,
       message: 'Logged out successfully',
@@ -347,42 +380,36 @@ class AuthService {
    */
   async getCurrentUser(): Promise<ApiResponse<UserProfile>> {
     const storedUser = this.getStoredUser();
-    
+
     if (this.isAuthenticated()) {
       try {
         const resp = await apiClient.get<UserProfile>(this.endpoints.users.profile);
-       
+
         if (resp.success && resp.data) {
           localStorage.setItem('user_data', JSON.stringify(resp.data));
           return resp;
         }
-      } catch {
+      } catch (err: any) {
         if (storedUser) {
           return {
             data: storedUser,
             status: 200,
             success: true,
-            message: 'User retrieved from storage (API unavailable)',
+            message: 'Retrieved from storage (API unavailable)',
           };
         }
-        
-        return {
-          success: false,
-          status: 401,
-          message: 'Failed to fetch user profile',
-        };
       }
     }
-    
+
     if (storedUser) {
       return {
         data: storedUser,
         status: 200,
         success: true,
-        message: 'User retrieved from storage',
+        message: 'Retrieved from storage',
       };
     }
-    
+
     return {
       success: false,
       status: 401,
@@ -395,7 +422,7 @@ class AuthService {
   async requestPasswordReset(data: PasswordResetRequest): Promise<ApiResponse> {
     return apiClient.post(this.endpoints.auth.requestReset, data);
   }
-  
+
   async confirmPasswordReset(data: PasswordResetConfirm): Promise<ApiResponse> {
     return apiClient.post(this.endpoints.auth.confirmReset, {
       token: data.token,
@@ -403,7 +430,7 @@ class AuthService {
       password_confirm: data.confirm_new_password,
     });
   }
-  
+
   async activateAccount(data: SetPasswordData): Promise<ApiResponse<SetPasswordResponse>> {
     const payload = {
       email: data.email,
@@ -412,12 +439,9 @@ class AuthService {
       password: data.password,
       password_confirm: data.password_confirm,
     };
-    return apiClient.post<SetPasswordResponse>(
-      this.endpoints.auth.activateAccount,
-      payload
-    );
+    return apiClient.post<SetPasswordResponse>(this.endpoints.auth.activateAccount, payload);
   }
-  
+
   async verifyActivationToken(data: VerifyTokenData): Promise<ApiResponse<VerifyTokenResponse>> {
     const payload = {
       email: data.email,
@@ -432,31 +456,25 @@ class AuthService {
 
   // ─── Token & Session Management ───────────────────
 
-  /**
-   * Check if user is authenticated
-   */
   isAuthenticated(): boolean {
     const token = getAccessToken();
     if (!token) return false;
-    
+
     try {
       const payload = this.decodeToken(token);
       if (!payload || typeof payload.exp !== 'number') return false;
-      
-      // 5-minute buffer for network lag
+
+      // 5-minute buffer
       return payload.exp * 1000 > Date.now() + 300000;
     } catch {
       return false;
     }
   }
 
-  /**
-   * Get stored user from localStorage
-   */
   getStoredUser(): UserProfile | null {
     const stored = localStorage.getItem('user_data');
     if (!stored) return null;
-   
+
     try {
       return JSON.parse(stored) as UserProfile;
     } catch {
@@ -464,85 +482,68 @@ class AuthService {
     }
   }
 
-  /**
-   * Update stored user data
-   */
   updateStoredUser(partial: Partial<UserProfile>): void {
     const current = this.getStoredUser();
     if (!current) return;
-   
+
     const updated = { ...current, ...partial };
     localStorage.setItem('user_data', JSON.stringify(updated));
   }
 
-  /**
-   * Clear all authentication data
-   */
   clearAllData(): void {
     clearTokens();
     localStorage.removeItem('user_data');
-   
+
     if (typeof window !== 'undefined') {
-      ['access_token', 'refresh_token', 'user_data', 'auth_token', 'user'].forEach(key => {
+      ['access_token', 'refresh_token', 'user_data', 'auth_token', 'user'].forEach((key) => {
         localStorage.removeItem(key);
         sessionStorage.removeItem(key);
       });
     }
   }
 
-  /**
-   * Check if URL contains activation parameters
-   */
   hasActivationParams(): boolean {
     if (typeof window === 'undefined') return false;
     const urlParams = new URLSearchParams(window.location.search);
     return !!(urlParams.get('email') && urlParams.get('uid') && urlParams.get('token'));
   }
 
-  /**
-   * Get activation parameters from URL
-   */
   getActivationParams(): { email: string; uid: string; token: string } | null {
     if (typeof window === 'undefined') return null;
     const urlParams = new URLSearchParams(window.location.search);
     const email = urlParams.get('email');
     const uid = urlParams.get('uid');
     const token = urlParams.get('token');
-   
+
     if (email && uid && token) {
       return { email, uid, token };
     }
-   
+
     return null;
   }
 
-  /**
-   * Decode JWT token
-   */
   decodeToken(token: string): any {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-     
+
       let padded = base64;
       while (padded.length % 4) {
         padded += '=';
       }
-     
+
       const jsonPayload = decodeURIComponent(
         atob(padded)
           .split('')
           .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
           .join('')
       );
-     
+
       return JSON.parse(jsonPayload);
     } catch {
       return null;
     }
   }
-
-  // ─── Base64 Encoding/Decoding ─────────────────────
 
   decodeBase64(encoded: string): string {
     return this.decodeBase64String(encoded);
@@ -557,7 +558,7 @@ class AuthService {
     }
   }
 
-  // ─── Private Helper Methods ───────────────────────
+  // ─── Private Helpers ──────────────────────────────
 
   private createBasicProfile(backendUser: any): UserProfile {
     return {
@@ -576,5 +577,5 @@ class AuthService {
   }
 }
 
-// Singleton instance
+// Singleton
 export const authService = new AuthService();

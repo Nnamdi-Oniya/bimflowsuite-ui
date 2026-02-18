@@ -1,6 +1,6 @@
 // src/pages/BookDemoPage.tsx
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../assets/css/BookDemoPage.css";
 import registerImage from "../assets/images/registerImage.jpg";
 import { bookDemoService } from "../services/bookDemoService";
@@ -25,6 +25,7 @@ interface BookDemoRequest {
 
 const BookDemoPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   
   const [formData, setFormData] = useState<BookDemoRequest>({
     request_type: "request_demo",
@@ -43,7 +44,7 @@ const BookDemoPage: React.FC = () => {
     consent_privacy: false
   });
   
-  const [projectParams, setProjectParams] = useState<any>(null);
+  const [storedProjectData, setStoredProjectData] = useState<any>(null);
   const [isFromGenerateModel, setIsFromGenerateModel] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -53,59 +54,73 @@ const BookDemoPage: React.FC = () => {
   const requestTypes = bookDemoService.getRequestTypes();
 
   useEffect(() => {
-    const checkPendingRequest = () => {
-      const hasPendingRequest = bookDemoService.hasPendingModelRequest();
+    // Check if coming from project generate page
+    const projectData = bookDemoService.getStoredProjectFormData();
+    
+    if (projectData) {
+      setIsFromGenerateModel(true);
+      setStoredProjectData(projectData);
       
-      if (hasPendingRequest) {
-        setIsFromGenerateModel(true);
-        
-        const storedModelData = bookDemoService.getStoredModelFormData();
-        const storedProjectParams = bookDemoService.getStoredProjectParams();
-        
-        if (storedModelData) {
-          setFormData(prev => ({
-            ...prev,
-            email: storedModelData.contactEmail || prev.email,
-            request_type: 'request_demo',
-            additional_details: bookDemoService.formatProjectDetails(storedModelData)
-          }));
-        }
-        
-        if (storedProjectParams) {
-          setProjectParams(storedProjectParams);
-        }
-      }
+      // Format project details for additional_details field
+      const projectDetails = `
+PROJECT DETAILS:
+----------------
+Project Name: ${projectData.name || 'Not specified'}
+Project Type: ${projectData.project_type || 'Not specified'}
+Description: ${projectData.description || 'Not specified'}
+Phase: ${projectData.phase || 'concept'}
+Client: ${projectData.client_name || 'Not specified'}
+Client Type: ${projectData.client_type || 'private'}
+Project Scale: ${projectData.project_scale || 'medium'}
+Risk Classification: ${projectData.risk_classification || 'medium'}
+Address: ${projectData.project_address || 'Not specified'}
+      `.trim();
       
-      if (location.state?.fromGenerateModel) {
-        setIsFromGenerateModel(true);
-        if (location.state?.projectData) {
-          const projectData = location.state.projectData;
-          setFormData(prev => ({
-            ...prev,
-            email: projectData.contactEmail || prev.email,
-            request_type: 'request_demo',
-            additional_details: bookDemoService.formatProjectDetails(projectData)
-          }));
-          
-          bookDemoService.storeModelFormData(projectData);
-        }
+      setFormData(prev => ({
+        ...prev,
+        additional_details: projectDetails
+      }));
+    } else if (location.state?.fromGenerate) {
+      setIsFromGenerateModel(true);
+      if (location.state?.projectData) {
+        const projectData = location.state.projectData;
+        setStoredProjectData(projectData);
+        
+        const projectDetails = `
+PROJECT DETAILS:
+----------------
+Project Name: ${projectData.name || 'Not specified'}
+Project Type: ${projectData.project_type || 'Not specified'}
+Description: ${projectData.description || 'Not specified'}
+Phase: ${projectData.phase || 'concept'}
+Client: ${projectData.client_name || 'Not specified'}
+Client Type: ${projectData.client_type || 'private'}
+Project Scale: ${projectData.project_scale || 'medium'}
+Risk Classification: ${projectData.risk_classification || 'medium'}
+Address: ${projectData.project_address || 'Not specified'}
+        `.trim();
+        
+        setFormData(prev => ({
+          ...prev,
+          additional_details: projectDetails
+        }));
+        
+        bookDemoService.storeProjectFormData(projectData);
       }
-    };
-
-    checkPendingRequest();
+    }
   }, [location]);
 
   const validateEmail = (email: string): string => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) return "Email is required.";
-    if (!emailRegex.test(email)) return "Please enter a valid email address.";
+    if (!email.trim()) return "Email is required";
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
     return "";
   };
 
   const validatePhone = (phone: string): string => {
     const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{8,}$/;
-    if (!phone.trim()) return "Phone number is required.";
-    if (!phoneRegex.test(phone)) return "Please enter a valid phone number.";
+    if (!phone.trim()) return "Phone number is required";
+    if (!phoneRegex.test(phone)) return "Please enter a valid phone number";
     return "";
   };
 
@@ -128,59 +143,59 @@ const BookDemoPage: React.FC = () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.firstname.trim()) {
-      newErrors.firstname = "First name is required.";
+      newErrors.firstname = "First name is required";
     } else if (formData.firstname.length < 2) {
-      newErrors.firstname = "First name must be at least 2 characters.";
+      newErrors.firstname = "First name must be at least 2 characters";
     }
 
     if (!formData.lastname.trim()) {
-      newErrors.lastname = "Last name is required.";
+      newErrors.lastname = "Last name is required";
     } else if (formData.lastname.length < 2) {
-      newErrors.lastname = "Last name must be at least 2 characters.";
+      newErrors.lastname = "Last name must be at least 2 characters";
     }
 
     const emailError = validateEmail(formData.email);
     if (emailError) newErrors.email = emailError;
 
     if (!formData.company_name.trim()) {
-      newErrors.company_name = "Company name is required.";
+      newErrors.company_name = "Company name is required";
     } else if (formData.company_name.length < 2) {
-      newErrors.company_name = "Company name must be at least 2 characters.";
+      newErrors.company_name = "Company name must be at least 2 characters";
     }
 
     if (!formData.company_address.trim()) {
-      newErrors.company_address = "Company address is required.";
+      newErrors.company_address = "Company address is required";
     } else if (formData.company_address.length < 5) {
-      newErrors.company_address = "Please enter a valid company address (minimum 5 characters).";
+      newErrors.company_address = "Please enter a valid company address (minimum 5 characters)";
     }
 
     if (!formData.country.trim()) {
-      newErrors.country = "Country is required.";
+      newErrors.country = "Country is required";
     } else if (formData.country.length < 2) {
-      newErrors.country = "Please enter a valid country name.";
+      newErrors.country = "Please enter a valid country name";
     }
 
     if (!formData.sector.trim()) {
-      newErrors.sector = "Please select your sector.";
+      newErrors.sector = "Please select your sector";
     }
 
     if (!formData.job_title.trim()) {
-      newErrors.job_title = "Job title is required.";
+      newErrors.job_title = "Job title is required";
     } else if (formData.job_title.length < 2) {
-      newErrors.job_title = "Job title must be at least 2 characters.";
+      newErrors.job_title = "Job title must be at least 2 characters";
     }
 
     if (!formData.company_position.trim()) {
-      newErrors.company_position = "Company position is required.";
+      newErrors.company_position = "Company position is required";
     } else if (formData.company_position.length < 2) {
-      newErrors.company_position = "Company position must be at least 2 characters.";
+      newErrors.company_position = "Company position must be at least 2 characters";
     }
 
     const phoneError = validatePhone(formData.phone_number);
     if (phoneError) newErrors.phone_number = phoneError;
 
     if (!formData.consent_privacy) {
-      newErrors.consent_privacy = "You must agree to the Privacy Policy to proceed.";
+      newErrors.consent_privacy = "You must agree to the Privacy Policy to proceed";
     }
 
     setErrors(newErrors);
@@ -196,32 +211,24 @@ const BookDemoPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      let response;
-      
-      if (isFromGenerateModel && projectParams) {
-        response = await bookDemoService.submitModelGenerationRequest(
-          {
-            firstname: formData.firstname,
-            lastname: formData.lastname,
-            email: formData.email,
-            company_name: formData.company_name,
-            company_address: formData.company_address,
-            country: formData.country,
-            sector: formData.sector,
-            job_title: formData.job_title,
-            company_position: formData.company_position,
-            phone_number: formData.phone_number
-          },
-          projectParams,
-          true
-        );
-      } else {
-        response = await bookDemoService.submitDemoRequest(formData, projectParams);
+      // Prepare project params if from generate model
+      let projectParams = null;
+      if (isFromGenerateModel && storedProjectData) {
+        projectParams = {
+          project_details: storedProjectData,
+          source: "project_generate"
+        };
       }
+      
+      const response = await bookDemoService.submitDemoRequest(formData, projectParams);
       
       if (response.success) {
         setShowSuccessModal(true);
         
+        // Clear stored data
+        bookDemoService.clearStoredProjectFormData();
+        
+        // Reset form
         setFormData({
           request_type: "request_demo",
           firstname: "",
@@ -239,13 +246,11 @@ const BookDemoPage: React.FC = () => {
           consent_privacy: false
         });
         setErrors({});
-        
-        bookDemoService.clearStoredProjectParams();
       } else {
         throw new Error(response.message || "Submission failed");
       }
     } catch (error: any) {
-      let errorMessage = "Submission failed. Please try again.";
+      let errorMessage = "Submission failed. Please try again";
       
       if (error.data && typeof error.data === 'object') {
         const newErrors: Record<string, string> = {};
@@ -258,12 +263,8 @@ const BookDemoPage: React.FC = () => {
         });
         setErrors({ ...errors, ...newErrors });
         if (Object.keys(newErrors).length > 0) {
-          errorMessage = "Please check the form for errors.";
+          errorMessage = "Please check the form for errors";
         }
-      } else if (error.message?.includes('Failed to fetch')) {
-        errorMessage = "Cannot connect to server. Please try again later.";
-      } else if (error.message?.includes('timeout')) {
-        errorMessage = "Request timed out. Please try again.";
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -291,20 +292,19 @@ const BookDemoPage: React.FC = () => {
                   <div className="model-request-banner">
                     <div className="model-request-icon">🚀</div>
                     <div className="model-request-content">
-                      <strong>Model Generation Request</strong>
-                      <p>Complete this demo request to get access to your model generation.</p>
-                      <small>Your project details have been pre-filled below.</small>
+                      <strong>Complete Your Demo Request</strong>
+                      <p>Your project details have been saved. Complete this form to schedule your demo.</p>
                     </div>
                   </div>
                 )}
 
                 <h2 className="book-demo-title">
-                  {isFromGenerateModel ? 'Book Demo & Generate Model' : 'Book a Demo'}
+                  {isFromGenerateModel ? 'Complete Your Demo Request' : 'Book a Demo'}
                 </h2>
                 <p className="book-demo-subtitle">
                   {isFromGenerateModel 
-                    ? "Complete your demo request to get access to BIM model generation."
-                    : "Schedule a call with our team to explore BIMFlow Suite."}
+                    ? "Fill in your contact details to schedule a demo and start your BIM project"
+                    : "Schedule a call with our team to explore BIMFlow Suite"}
                 </p>
                 
                 <div className="login-prompt-top">
@@ -330,24 +330,10 @@ const BookDemoPage: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="book-demo-form" noValidate>
-                  {isFromGenerateModel && (
-                    <div className="form-group">
-                      <div className="request-type-highlight">
-                        <span className="request-type-label">Request Type:</span>
-                        <span className="request-type-value">Demo with Model Generation</span>
-                      </div>
-                      <input
-                        type="hidden"
-                        name="request_type"
-                        value="request_demo"
-                      />
-                    </div>
-                  )}
-
                   {!isFromGenerateModel && (
                     <div className="form-group">
                       <label htmlFor="request_type" className="form-label">
-                        Request Type *
+                        Request Type
                       </label>
                       <select
                         id="request_type"
@@ -356,7 +342,6 @@ const BookDemoPage: React.FC = () => {
                         onChange={handleChange}
                         className={`form-input ${errors.request_type ? 'error' : ''}`}
                         disabled={isFormDisabled}
-                        required
                       >
                         {requestTypes.map(type => (
                           <option key={type.value} value={type.value}>
@@ -371,7 +356,7 @@ const BookDemoPage: React.FC = () => {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="firstname" className="form-label">
-                        First Name *
+                        First Name
                       </label>
                       <input
                         type="text"
@@ -382,14 +367,13 @@ const BookDemoPage: React.FC = () => {
                         className={`form-input ${errors.firstname ? 'error' : ''}`}
                         placeholder="John"
                         disabled={isFormDisabled}
-                        required
                       />
                       {errors.firstname && <span className="error-text">{errors.firstname}</span>}
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="lastname" className="form-label">
-                        Last Name *
+                        Last Name
                       </label>
                       <input
                         type="text"
@@ -400,7 +384,6 @@ const BookDemoPage: React.FC = () => {
                         className={`form-input ${errors.lastname ? 'error' : ''}`}
                         placeholder="Doe"
                         disabled={isFormDisabled}
-                        required
                       />
                       {errors.lastname && <span className="error-text">{errors.lastname}</span>}
                     </div>
@@ -408,7 +391,7 @@ const BookDemoPage: React.FC = () => {
 
                   <div className="form-group">
                     <label htmlFor="email" className="form-label">
-                      Email *
+                      Email
                     </label>
                     <input
                       type="email"
@@ -419,14 +402,13 @@ const BookDemoPage: React.FC = () => {
                       className={`form-input ${errors.email ? 'error' : ''}`}
                       placeholder="john@company.com"
                       disabled={isFormDisabled}
-                      required
                     />
                     {errors.email && <span className="error-text">{errors.email}</span>}
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="company_name" className="form-label">
-                      Company Name *
+                      Company Name
                     </label>
                     <input
                       type="text"
@@ -437,14 +419,13 @@ const BookDemoPage: React.FC = () => {
                       className={`form-input ${errors.company_name ? 'error' : ''}`}
                       placeholder="Your Company Ltd."
                       disabled={isFormDisabled}
-                      required
                     />
                     {errors.company_name && <span className="error-text">{errors.company_name}</span>}
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="company_address" className="form-label">
-                      Company Address *
+                      Company Address
                     </label>
                     <input
                       type="text"
@@ -455,7 +436,6 @@ const BookDemoPage: React.FC = () => {
                       className={`form-input ${errors.company_address ? 'error' : ''}`}
                       placeholder="123 Main Street, City, State, ZIP"
                       disabled={isFormDisabled}
-                      required
                     />
                     {errors.company_address && <span className="error-text">{errors.company_address}</span>}
                   </div>
@@ -463,7 +443,7 @@ const BookDemoPage: React.FC = () => {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="country" className="form-label">
-                        Country *
+                        Country
                       </label>
                       <input
                         type="text"
@@ -474,14 +454,13 @@ const BookDemoPage: React.FC = () => {
                         className={`form-input ${errors.country ? 'error' : ''}`}
                         placeholder="United States"
                         disabled={isFormDisabled}
-                        required
                       />
                       {errors.country && <span className="error-text">{errors.country}</span>}
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="sector" className="form-label">
-                        Sector *
+                        Sector
                       </label>
                       <select
                         id="sector"
@@ -490,7 +469,6 @@ const BookDemoPage: React.FC = () => {
                         onChange={handleChange}
                         className={`form-input ${errors.sector ? 'error' : ''}`}
                         disabled={isFormDisabled}
-                        required
                       >
                         <option value="">Select your sector</option>
                         {sectors.map(sector => (
@@ -506,7 +484,7 @@ const BookDemoPage: React.FC = () => {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="job_title" className="form-label">
-                        Job Title *
+                        Job Title
                       </label>
                       <input
                         type="text"
@@ -517,14 +495,13 @@ const BookDemoPage: React.FC = () => {
                         className={`form-input ${errors.job_title ? 'error' : ''}`}
                         placeholder="BIM Manager"
                         disabled={isFormDisabled}
-                        required
                       />
                       {errors.job_title && <span className="error-text">{errors.job_title}</span>}
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="company_position" className="form-label">
-                        Company Position *
+                        Company Position
                       </label>
                       <input
                         type="text"
@@ -535,7 +512,6 @@ const BookDemoPage: React.FC = () => {
                         className={`form-input ${errors.company_position ? 'error' : ''}`}
                         placeholder="e.g., Director, Manager, Engineer"
                         disabled={isFormDisabled}
-                        required
                       />
                       {errors.company_position && <span className="error-text">{errors.company_position}</span>}
                     </div>
@@ -543,7 +519,7 @@ const BookDemoPage: React.FC = () => {
 
                   <div className="form-group">
                     <label htmlFor="phone_number" className="form-label">
-                      Phone Number *
+                      Phone Number
                     </label>
                     <input
                       type="tel"
@@ -552,17 +528,16 @@ const BookDemoPage: React.FC = () => {
                       value={formData.phone_number}
                       onChange={handleChange}
                       className={`form-input ${errors.phone_number ? 'error' : ''}`}
-                      placeholder="+1 123 456 7890 or 0123 456 789"
+                      placeholder="+1 123 456 7890"
                       disabled={isFormDisabled}
-                      required
                     />
-                    <small className="form-note">Enter your phone number with country code</small>
+                    <small className="form-note">Include country code for international numbers</small>
                     {errors.phone_number && <span className="error-text">{errors.phone_number}</span>}
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="additional_details" className="form-label">
-                      Additional Details {isFromGenerateModel && '(Project Details Pre-filled)'}
+                      Additional Details
                     </label>
                     <textarea
                       id="additional_details"
@@ -572,14 +547,14 @@ const BookDemoPage: React.FC = () => {
                       className="form-input"
                       rows={6}
                       placeholder={isFromGenerateModel 
-                        ? "Project details have been pre-filled. Add any additional comments or requirements here..."
+                        ? "Your project details have been pre-filled. Add any additional comments here..."
                         : "Tell us more about your needs, specific requirements, or questions..."
                       }
                       disabled={isFormDisabled}
                     />
                     {isFromGenerateModel && (
                       <small className="form-note">
-                        Your project specifications have been included. You can add more details if needed.
+                        Your project details have been automatically included
                       </small>
                     )}
                   </div>
@@ -592,10 +567,9 @@ const BookDemoPage: React.FC = () => {
                         checked={formData.consent_privacy}
                         onChange={handleChange}
                         disabled={isFormDisabled}
-                        required
                       />
                       <span>
-                        I agree to the <Link to="/privacy-policy" className="privacy-link">Privacy Policy</Link>.
+                        I agree to the <Link to="/privacy-policy" className="privacy-link">Privacy Policy</Link>
                       </span>
                     </label>
                     {errors.consent_privacy && <span className="error-text">{errors.consent_privacy}</span>}
@@ -609,14 +583,14 @@ const BookDemoPage: React.FC = () => {
                         disabled={isFormDisabled}
                       />
                       <span>
-                        I agree to receive marketing communications from BIMFlow Suite.
+                        I agree to receive marketing communications from BIMFlow Suite
                       </span>
                     </label>
 
                     <p className="consent-disclaimer">
                       By submitting this form, you acknowledge that you have read and agree to our 
                       <Link to="/terms" className="privacy-link"> Terms of Service</Link> and 
-                      <Link to="/privacy-policy" className="privacy-link"> Privacy Policy</Link>.
+                      <Link to="/privacy-policy" className="privacy-link"> Privacy Policy</Link>
                     </p>
                   </div>
 
@@ -630,8 +604,6 @@ const BookDemoPage: React.FC = () => {
                         <div className="loading-spinner"></div>
                         Processing...
                       </>
-                    ) : isFromGenerateModel ? (
-                      'Submit Demo & Model Request'
                     ) : (
                       'Submit Request'
                     )}
@@ -645,13 +617,15 @@ const BookDemoPage: React.FC = () => {
 
       <SuccessModal
         isOpen={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
-        title={isFromGenerateModel 
-          ? "Demo & Model Request Submitted!" 
-          : "Demo Request Submitted Successfully!"
-        }
+        onClose={() => {
+          setShowSuccessModal(false);
+          if (isFromGenerateModel) {
+            navigate("/");
+          }
+        }}
+        title="Request Submitted Successfully!"
         message={isFromGenerateModel
-          ? "Thank you for your interest in BIMFlow Suite. Our team will review your model generation request and contact you within 24 hours to schedule your personalized demo and discuss your project."
+          ? "Thank you for your interest in BIMFlow Suite. Our team will contact you within 24 hours to schedule your personalized demo and discuss your project requirements."
           : "Thank you for your interest in BIMFlow Suite. Our team will contact you within 24 hours to schedule your personalized demo."
         }
       />
