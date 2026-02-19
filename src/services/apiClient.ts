@@ -82,11 +82,12 @@ class ApiClient {
       if (response.status === 401 && !endpoint.includes('/auth/login/')) {
         clearTokens();
         window.dispatchEvent(new CustomEvent('auth-expired'));
-        throw {
+        const error: ApiError = {
           message: 'Session expired. Please login again.',
           status: 401,
           code: 'SESSION_EXPIRED'
-        } as ApiError;
+        };
+        throw error;
       }
 
       return await this.handleResponse<T>(response);
@@ -94,30 +95,36 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       if (error instanceof DOMException && error.name === 'AbortError') {
-        throw {
+        const abortError: ApiError = {
           message: 'Request timeout. Please try again.',
           status: 408,
           code: 'TIMEOUT'
-        } as ApiError;
+        };
+        throw abortError;
       }
 
       if (this.isNetworkError(error)) {
-        throw {
+        const networkError: ApiError = {
           message: 'Network error occurred. Please check your internet connection or try again later.',
           status: 0,
           code: 'NETWORK_ERROR'
-        } as ApiError;
+        };
+        throw networkError;
       }
 
-      if (error && typeof error === 'object' && 'status' in error) {
+      // If it's already an ApiError, rethrow it
+      if (error && typeof error === 'object' && 'status' in error && 'message' in error) {
         throw error;
       }
 
-      throw {
+      // Convert unknown errors to ApiError
+      const unknownError: ApiError = {
         message: error instanceof Error ? error.message : 'An unexpected error occurred',
         status: 0,
-        code: 'UNKNOWN_ERROR'
-      } as ApiError;
+        code: 'UNKNOWN_ERROR',
+        data: error
+      };
+      throw unknownError;
     }
   }
 
@@ -145,10 +152,11 @@ class ApiClient {
       let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
       let validationErrors: ValidationError[] = [];
 
+      // Extract error message from various possible formats
       if (responseData.detail) {
         errorMessage = responseData.detail;
       } else if (responseData.error) {
-        errorMessage = responseData.error;
+        errorMessage = responseData.error; // This captures "Invalid credentials"
       } else if (responseData.message) {
         errorMessage = responseData.message;
       } else if (typeof responseData === 'string') {
@@ -159,6 +167,7 @@ class ApiClient {
           .join(', ');
       }
 
+      // Build validation errors for field-specific errors
       if (responseData && typeof responseData === 'object' && !Array.isArray(responseData)) {
         validationErrors = Object.entries(responseData)
           .filter(([key]) => key !== 'detail' && key !== 'error' && key !== 'message')
@@ -173,12 +182,13 @@ class ApiClient {
         }
       }
 
+      // Create a proper ApiError object
       const apiError: ApiError = {
         message: errorMessage,
         status: response.status,
         errors: validationErrors.length > 0 ? validationErrors : undefined,
         code: responseData.code || `HTTP_${response.status}`,
-        data: responseData,
+        data: responseData, // Include the full response data for debugging
       };
 
       throw apiError;
@@ -263,12 +273,22 @@ class ApiClient {
             resolve({ data: xhr.responseText, status: xhr.status, success: true });
           }
         } else {
-          reject({ message: `Upload failed: ${xhr.statusText}`, status: xhr.status } as ApiError);
+          const error: ApiError = {
+            message: `Upload failed: ${xhr.statusText}`,
+            status: xhr.status,
+            code: 'UPLOAD_ERROR'
+          };
+          reject(error);
         }
       };
 
       xhr.onerror = () => {
-        reject({ message: 'Network error during upload', status: 0, code: 'UPLOAD_ERROR' } as ApiError);
+        const error: ApiError = {
+          message: 'Network error during upload',
+          status: 0,
+          code: 'UPLOAD_ERROR'
+        };
+        reject(error);
       };
 
       const formData = new FormData();
@@ -287,7 +307,12 @@ class ApiClient {
     const response = await fetch(url, { headers });
 
     if (!response.ok) {
-      throw { message: `Download failed: ${response.statusText}`, status: response.status } as ApiError;
+      const error: ApiError = {
+        message: `Download failed: ${response.statusText}`,
+        status: response.status,
+        code: 'DOWNLOAD_ERROR'
+      };
+      throw error;
     }
 
     return response.blob();

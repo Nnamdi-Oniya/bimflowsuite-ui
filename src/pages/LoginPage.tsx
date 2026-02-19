@@ -20,12 +20,14 @@ const LoginPage: React.FC = () => {
   const [apiError, setApiError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Redirect if already logged in
   useEffect(() => {
     if (authService.isAuthenticated()) {
       navigate(from, { replace: true });
     }
   }, [navigate, from]);
 
+  // Listen for auth state changes
   useEffect(() => {
     const handleAuthChange = (event: CustomEvent) => {
       if (event.detail.isAuthenticated) {
@@ -40,13 +42,6 @@ const LoginPage: React.FC = () => {
     };
   }, [navigate, from]);
 
-  const validateIdentifier = (identifier: string): string => {
-    if (!identifier.trim()) {
-      return "Email or username is required.";
-    }
-    return "";
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -54,14 +49,8 @@ const LoginPage: React.FC = () => {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-    
     if (apiError) {
       setApiError("");
-    }
-
-    if (name === "identifier" && value.trim()) {
-      const identifierError = validateIdentifier(value);
-      setErrors((prev) => ({ ...prev, identifier: identifierError }));
     }
   };
 
@@ -86,7 +75,6 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     setApiError("");
-    
     if (!validateForm()) return;
     if (isLoading) return;
 
@@ -100,34 +88,48 @@ const LoginPage: React.FC = () => {
 
       const response = await authService.login(credentials);
 
-      if (response.success && response.data) {
+      if (response.success) {
         // Navigation handled by auth-state-changed event
-      } else {
-        if (response.message) {
-          setApiError(response.message);
-        } else {
-          setApiError("Login failed. Please check your credentials.");
-        }
-        setIsLoading(false);
+        return;
       }
-    } catch (err: any) {
-      let message = "An error occurred. Please try again later.";
 
-      if (err.message) {
+      // Service returned failure — show backend message if present
+      setApiError(
+        response.message ||
+        "Invalid email or password. Please try again."
+      );
+    } catch (err: any) {
+      console.log("LOGIN ERROR FULL DETAILS:", {
+        message: err.message,
+        status: err.status,
+        data: err.data,
+        code: err.code,
+      });
+
+      let message = "An unexpected error occurred. Please try again.";
+
+      // Extract the exact backend message — your case uses "error" field
+      if (err.data) {
+        message = err.data.error || err.data.message || err.data.detail || message;
+      } else if (err.message) {
         message = err.message;
       }
 
-      if (err.status === 401) {
-        message = "Invalid email/username or password.";
+      // Status-based fallback
+      if (err.status === 401 || err.status === 403) {
+        message = "Invalid email or password. Please try again.";
       } else if (err.status === 400) {
-        message = "Please check your input and try again.";
-      } else if (err.status === 0 || err.code === "NETWORK_ERROR") {
-        message = "Cannot connect to the server. Please check your internet connection.";
-      } else if (err.status === 404) {
-        message = "Login service not available. Please try again later.";
+        // Keep the extracted message
+      } else if (err.status === 429) {
+        message = "Too many attempts. Please wait and try again.";
+      } else if (err.status && err.status >= 500) {
+        message = "Server error — please try again later.";
+      } else if (err.status === 0 || err.code === 'NETWORK_ERROR') {
+        message = "Cannot connect to the server. Please check your internet.";
       }
 
       setApiError(message);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -168,13 +170,9 @@ const LoginPage: React.FC = () => {
                     placeholder="Enter your email or username"
                     autoComplete="username"
                     disabled={isLoading}
-                    aria-invalid={!!errors.identifier}
-                    aria-describedby={errors.identifier ? "identifier-error" : undefined}
                   />
                   {errors.identifier && (
-                    <span id="identifier-error" className="error-text">
-                      {errors.identifier}
-                    </span>
+                    <span className="error-text">{errors.identifier}</span>
                   )}
                 </div>
 
@@ -193,8 +191,6 @@ const LoginPage: React.FC = () => {
                       placeholder="Enter your password"
                       autoComplete="current-password"
                       disabled={isLoading}
-                      aria-invalid={!!errors.password}
-                      aria-describedby={errors.password ? "password-error" : undefined}
                     />
                   </div>
 
@@ -203,9 +199,7 @@ const LoginPage: React.FC = () => {
                   </Link>
 
                   {errors.password && (
-                    <span id="password-error" className="error-text">
-                      {errors.password}
-                    </span>
+                    <span className="error-text">{errors.password}</span>
                   )}
                 </div>
 
@@ -216,16 +210,19 @@ const LoginPage: React.FC = () => {
                 >
                   {isLoading ? (
                     <>
-                      <span className="loading-spinner" style={{ 
-                        display: "inline-block",
-                        width: "20px", 
-                        height: "20px", 
-                        border: "2px solid rgba(255,255,255,0.3)", 
-                        borderTop: "2px solid white", 
-                        borderRadius: "50%", 
-                        animation: "spin 0.8s linear infinite",
-                        marginRight: "8px"
-                      }} />
+                      <span
+                        className="loading-spinner"
+                        style={{
+                          display: "inline-block",
+                          width: "20px",
+                          height: "20px",
+                          border: "2px solid rgba(255,255,255,0.3)",
+                          borderTop: "2px solid white",
+                          borderRadius: "50%",
+                          animation: "spin 0.8s linear infinite",
+                          marginRight: "8px",
+                        }}
+                      />
                       Signing In...
                     </>
                   ) : (
@@ -250,7 +247,7 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>  
+    </div>
   );
 };
 

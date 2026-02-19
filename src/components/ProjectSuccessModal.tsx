@@ -18,6 +18,8 @@ interface ProjectSuccessModalProps {
   showConfirmation?: boolean;
   confirmationMessage?: string;
   projectId?: number | string;
+  projectNumber?: string;
+  numberOfModels?: number;
 }
 
 const ProjectSuccessModal: React.FC<ProjectSuccessModalProps> = ({
@@ -33,6 +35,8 @@ const ProjectSuccessModal: React.FC<ProjectSuccessModalProps> = ({
   showConfirmation = false,
   confirmationMessage,
   projectId,
+  projectNumber,
+  numberOfModels,
 }) => {
   if (!isOpen) return null;
 
@@ -62,7 +66,7 @@ const ProjectSuccessModal: React.FC<ProjectSuccessModalProps> = ({
           </svg>
         </button>
 
-        {/* Header */}
+        {/* Header with Orange Icon */}
         <div className="project-success-modal-header">
           <div className="project-success-icon">
             <svg
@@ -87,18 +91,33 @@ const ProjectSuccessModal: React.FC<ProjectSuccessModalProps> = ({
           {/* Message */}
           <div className="project-success-message">
             {typeof message === "string" ? <p>{message}</p> : message}
-            {projectId && (
-              <p
-                style={{
-                  marginTop: "0.75rem",
-                  fontSize: "0.95rem",
-                  color: "#666",
-                }}
-              >
-                Project ID: <strong>{projectId}</strong>
-              </p>
-            )}
           </div>
+
+          {/* Project Details - Show when we have project info */}
+          {(projectId || projectNumber || numberOfModels) && (
+            <div className="project-user-info">
+              {projectId && (
+                <div className="project-info-row">
+                  <span className="project-info-label">Project ID:</span>
+                  <span className="project-info-value">{projectId}</span>
+                </div>
+              )}
+              {projectNumber && (
+                <div className="project-info-row">
+                  <span className="project-info-label">Project Number:</span>
+                  <span className="project-info-value">{projectNumber}</span>
+                </div>
+              )}
+              {numberOfModels && (
+                <div className="project-info-row">
+                  <span className="project-info-label">Models to Generate:</span>
+                  <span className="project-info-value">
+                    {numberOfModels} {numberOfModels === 1 ? 'Model' : 'Models'}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* User Info Section - Conditional */}
           {showUserInfo && (userName || userEmail) && (
@@ -178,11 +197,12 @@ const ProjectSuccessModal: React.FC<ProjectSuccessModalProps> = ({
           )}
         </div>
 
-        {/* Footer - Only one button (Dashboard / primary action) */}
+        {/* Footer - Single Button */}
         <div className="project-success-modal-footer">
           <button
             onClick={primaryAction.onClick}
-            className="project-success-modal-btn primary"
+            className="project-success-modal-btn"
+            style={{ width: '100%' }}
           >
             {primaryAction.label}
           </button>

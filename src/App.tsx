@@ -1,6 +1,12 @@
 // src/App.tsx
-import React, { Component, Suspense, type ReactNode, useEffect } from "react";
-import { Routes, Route, useLocation, Link } from "react-router-dom";
+import React, { Component, Suspense, type ReactNode, useEffect, useState } from "react";
+import {
+  Routes,
+  Route,
+  useLocation,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import "./App.css";
 
 import Header from "./components/Header";
@@ -12,7 +18,9 @@ import CTANewsSection from "./components/CTANewsSection";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Lazy imports
+import { useAuth } from "./contexts/AuthContext";
+
+// Lazy imports – public pages
 const FeaturesPage = React.lazy(() => import("./pages/FeaturesPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
 const FAQPage = React.lazy(() => import("./pages/FAQPage"));
@@ -24,14 +32,14 @@ const ForgotPasswordPage = React.lazy(() => import("./pages/ForgotPasswordPage")
 const ResetPasswordPage = React.lazy(() => import("./pages/ResetPasswordPage"));
 const SetPasswordPage = React.lazy(() => import("./pages/SetPasswordPage"));
 const ProjectGeneratePage = React.lazy(() => import("./pages/ProjectGeneratePage"));
-const BookDemoPage = React.lazy(() => import("./pages/BookDemoPage")); // Added BookDemoPage
+const BookDemoPage = React.lazy(() => import("./pages/BookDemoPage"));
 
-// Dashboard imports
+// Dashboard lazy imports
 const DashboardLayout = React.lazy(() => import("./components/DashboardLayout"));
 const DashboardOverview = React.lazy(() => import("./pages/dashboard/DashboardPage"));
 const DashboardProjects = React.lazy(() => import("./pages/dashboard/ProjectsPage"));
 const DashboardCreateProject = React.lazy(() => import("./pages/dashboard/CreateProjectPage"));
-const DashboardGenerate = React.lazy(() => import("./pages/dashboard/GenerateModelPage")); 
+const DashboardGenerate = React.lazy(() => import("./pages/dashboard/GenerateModelPage"));
 const DashboardCompliance = React.lazy(() => import("./pages/dashboard/ComplianceChecksPage"));
 const DashboardUploadIFCPage = React.lazy(() => import("./pages/dashboard/UploadIFCPage"));
 const ClashDetectionPage = React.lazy(() => import("./pages/dashboard/ClashDetectionPage"));
@@ -93,11 +101,11 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-  
+
   return null;
 };
 
@@ -111,70 +119,133 @@ const LoadingFallback: React.FC = () => (
       fontSize: "1.2rem",
       color: "#F8780F",
       flexDirection: "column",
-      gap: "1rem"
+      gap: "1rem",
     }}
   >
-    <div className="loading-spinner" style={{ 
-      width: "50px", 
-      height: "50px", 
-      border: "3px solid #f3f3f3", 
-      borderTop: "3px solid #F8780F", 
-      borderRadius: "50%", 
-      animation: "spin 1s linear infinite" 
-    }} />
+    <div
+      className="loading-spinner"
+      style={{
+        width: "50px",
+        height: "50px",
+        border: "3px solid #f3f3f3",
+        borderTop: "3px solid #F8780F",
+        borderRadius: "50%",
+        animation: "spin 1s linear infinite",
+      }}
+    />
     <p>Loading BIMFlow Suite...</p>
   </div>
 );
 
-const NotFoundPage: React.FC = () => (
-  <div style={{ 
-    padding: "4rem 2rem", 
-    textAlign: "center", 
-    minHeight: "60vh", 
-    display: "flex", 
-    flexDirection: "column", 
-    justifyContent: "center", 
-    alignItems: "center",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    color: "white"
-  }}>
-    <h1 style={{ fontSize: "6rem", fontWeight: 800, margin: 0, textShadow: "2px 2px 4px rgba(0,0,0,0.2)" }}>404</h1>
-    <p style={{ fontSize: "1.5rem", maxWidth: "500px", margin: "1rem 0 2rem" }}>
-      Oops! The page you're looking for doesn't exist or has been moved.
-    </p>
-    <Link 
-      to="/" 
-      style={{ 
-        marginTop: "1rem", 
-        color: "white", 
-        border: "2px solid white", 
-        padding: "0.75rem 2rem", 
-        borderRadius: "50px", 
-        textDecoration: "none",
-        fontSize: "1.1rem",
-        fontWeight: 500,
-        transition: "all 0.3s ease",
-        backgroundColor: "rgba(255,255,255,0.1)",
-        backdropFilter: "blur(10px)"
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "white";
-        e.currentTarget.style.color = "#667eea";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)";
-        e.currentTarget.style.color = "white";
+// ────────────────────────────────────────────────
+//  FAST 404 – "Page not found" + redirect in 5 seconds
+// ────────────────────────────────────────────────
+const NotFoundPage: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isInsideDashboard = location.pathname.startsWith("/dashboard");
+
+  const redirectPath = isAuthenticated && isInsideDashboard ? "/dashboard" : "/";
+  const countdownSeconds = 5;
+
+  const [secondsLeft, setSecondsLeft] = useState(countdownSeconds);
+
+  useEffect(() => {
+    if (secondsLeft <= 0) {
+      navigate(redirectPath, { replace: true });
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setSecondsLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [secondsLeft, navigate, redirectPath]);
+
+  const showDashboardButton = isAuthenticated && isInsideDashboard;
+
+  return (
+    <div
+      style={{
+        padding: "4rem 1.5rem",
+        textAlign: "center",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        color: "white",
       }}
     >
-      Return to Homepage
-    </Link>
-  </div>
-);
+      <h1
+        style={{
+          fontSize: "6.5rem",
+          fontWeight: 900,
+          margin: "0 0 0.8rem",
+        }}
+      >
+        Page not found
+      </h1>
+
+      <p style={{ fontSize: "1.15rem", marginBottom: "2.2rem" }}>
+        Redirecting to the{" "}
+        <strong style={{ color: "#F8780F" }}>
+          {isInsideDashboard && isAuthenticated ? "dashboard" : "homepage"}
+        </strong>{" "}
+        in {secondsLeft} seconds...
+      </p>
+
+      <div style={{ display: "flex", gap: "1.2rem", flexWrap: "wrap", justifyContent: "center" }}>
+        <Link
+          to="/"
+          style={{
+            padding: "0.85rem 2rem",
+            background: "#F8780F",
+            color: "white",
+            borderRadius: "50px",
+            textDecoration: "none",
+            fontSize: "1.05rem",
+            fontWeight: 600,
+          }}
+        >
+          Go to Homepage
+        </Link>
+
+        {showDashboardButton && (
+          <Link
+            to="/dashboard"
+            style={{
+              padding: "0.85rem 2rem",
+              color: "white",
+              border: "2px solid white",
+              borderRadius: "50px",
+              textDecoration: "none",
+              fontSize: "1.05rem",
+              fontWeight: 500,
+            }}
+          >
+            Go to Dashboard
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const AppContent: React.FC = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard");
-  const hideFooterPaths = ["/login", "/forgot-password", "/set-password", "/reset-password", "/book-demo"]; // Added /book-demo to hide footer paths
+  const hideFooterPaths = [
+    "/login",
+    "/forgot-password",
+    "/set-password",
+    "/reset-password",
+    "/book-demo",
+  ];
   const hideFooter = isDashboard || hideFooterPaths.includes(location.pathname);
 
   return (
@@ -204,7 +275,7 @@ const AppContent: React.FC = () => {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/project-generate" element={<ProjectGeneratePage />} />
-            <Route path="/book-demo" element={<BookDemoPage />} /> {/* Added BookDemoPage route */}
+            <Route path="/book-demo" element={<BookDemoPage />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<LoginPage />} />
@@ -232,7 +303,7 @@ const AppContent: React.FC = () => {
               </Route>
             </Route>
 
-            {/* 404 Route */}
+            {/* Catch-all 404 */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

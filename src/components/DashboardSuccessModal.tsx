@@ -6,11 +6,22 @@ interface DashboardSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  message: string;
+  message: string | React.ReactNode; // Can be string or JSX
   userName?: string;
+  userEmail?: string;
+  projectId?: number | string;
+  projectNumber?: string;
+  numberOfModels?: number;
   updatedFields?: string[];
+  showConfirmation?: boolean;
+  confirmationMessage?: string;
   autoClose?: boolean;
   autoCloseDelay?: number;
+  showSecondaryButton?: boolean;
+  secondaryButtonText?: string;
+  onSecondaryAction?: () => void;
+  primaryButtonText?: string;
+  showProjectDetails?: boolean;
 }
 
 const DashboardSuccessModal: React.FC<DashboardSuccessModalProps> = ({
@@ -19,9 +30,20 @@ const DashboardSuccessModal: React.FC<DashboardSuccessModalProps> = ({
   title,
   message,
   userName,
+  userEmail,
+  projectId,
+  projectNumber,
+  numberOfModels,
   updatedFields = [],
+  showConfirmation = true,
+  confirmationMessage = "Your changes have been saved successfully",
   autoClose = true,
   autoCloseDelay = 3000,
+  showSecondaryButton = false,
+  secondaryButtonText = "Continue Editing",
+  onSecondaryAction,
+  primaryButtonText = "Done",
+  showProjectDetails = false,
 }) => {
   useEffect(() => {
     if (isOpen && autoClose) {
@@ -105,15 +127,54 @@ const DashboardSuccessModal: React.FC<DashboardSuccessModalProps> = ({
 
         {/* Body */}
         <div className="dashboard-success-modal-body">
-          <p className="dashboard-success-message">{message}</p>
+          {/* Message - Can be string or JSX */}
+          <div className="dashboard-success-message">
+            {typeof message === "string" ? <p>{message}</p> : message}
+          </div>
           
-          {/* User Info - Only show if userName exists */}
-          {userName && (
+          {/* Project Details - Show when project info exists */}
+          {showProjectDetails && (projectId || projectNumber || numberOfModels) && (
+            <div className="dashboard-user-info"> {/* Reusing existing user-info class */}
+              {projectId && (
+                <div className="dashboard-info-row">
+                  <span className="dashboard-info-label">Project ID:</span>
+                  <span className="dashboard-info-value">{projectId}</span>
+                </div>
+              )}
+              {projectNumber && (
+                <div className="dashboard-info-row">
+                  <span className="dashboard-info-label">Project Number:</span>
+                  <span className="dashboard-info-value" style={{ color: 'var(--orange, #F8780F)', fontWeight: 700 }}>
+                    {projectNumber}
+                  </span>
+                </div>
+              )}
+              {numberOfModels && (
+                <div className="dashboard-info-row">
+                  <span className="dashboard-info-label">Models to Generate:</span>
+                  <span className="dashboard-info-value">
+                    {numberOfModels} {numberOfModels === 1 ? 'Model' : 'Models'}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* User Info - Show if userName or userEmail exists */}
+          {(userName || userEmail) && !showProjectDetails && (
             <div className="dashboard-user-info">
-              <div className="dashboard-info-row">
-                <span className="dashboard-info-label">User</span>
-                <span className="dashboard-info-value">{userName}</span>
-              </div>
+              {userName && (
+                <div className="dashboard-info-row">
+                  <span className="dashboard-info-label">User</span>
+                  <span className="dashboard-info-value">{userName}</span>
+                </div>
+              )}
+              {userEmail && (
+                <div className="dashboard-info-row">
+                  <span className="dashboard-info-label">Email</span>
+                  <span className="dashboard-info-value">{userEmail}</span>
+                </div>
+              )}
             </div>
           )}
 
@@ -134,25 +195,32 @@ const DashboardSuccessModal: React.FC<DashboardSuccessModalProps> = ({
             </div>
           )}
 
-          {/* Confirmation Note */}
-          <div className="dashboard-confirmation-note">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2"/>
-              <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="12" cy="8" r="1" fill="currentColor"/>
-            </svg>
-            <span>Your changes have been saved successfully</span>
-          </div>
+          {/* Confirmation Note - Optional */}
+          {showConfirmation && (
+            <div className="dashboard-confirmation-note">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2"/>
+                <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="12" cy="8" r="1" fill="currentColor"/>
+              </svg>
+              <span>{confirmationMessage}</span>
+            </div>
+          )}
         </div>
 
-        {/* Footer Buttons */}
+        {/* Footer Buttons - Flexible based on props */}
         <div className="dashboard-success-modal-footer">
           <button className="dashboard-success-modal-btn" onClick={onClose}>
-            Done
+            {primaryButtonText}
           </button>
-          <button className="dashboard-success-modal-btn-secondary" onClick={onClose}>
-            Continue Editing
-          </button>
+          {showSecondaryButton && (
+            <button 
+              className="dashboard-success-modal-btn-secondary" 
+              onClick={onSecondaryAction || onClose}
+            >
+              {secondaryButtonText}
+            </button>
+          )}
         </div>
       </div>
     </div>
