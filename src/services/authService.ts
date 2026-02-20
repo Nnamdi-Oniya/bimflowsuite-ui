@@ -1,4 +1,3 @@
-// src/services/authService.ts
 import { apiClient, type ApiResponse } from './apiClient';
 import {
   BACKEND_CONFIG,
@@ -8,10 +7,6 @@ import {
   getAccessToken,
   refreshTokensFromStorage,
 } from '../config/api';
-
-// ────────────────────────────────────────────────
-// Type Definitions
-// ────────────────────────────────────────────────
 
 export interface UserProfile {
   id: number;
@@ -88,7 +83,6 @@ export interface VerifyTokenResponse {
   email?: string;
 }
 
-// Backend Response Types
 type BackendAuthResponse = {
   user: {
     id: number;
@@ -107,34 +101,24 @@ type ServiceAuthResponse = {
   tokens: TokenPair;
 };
 
-/**
- * Authentication Service
- * Handles all authentication-related operations
- */
 class AuthService {
   private endpoints = BACKEND_CONFIG.endpoints;
 
   constructor() {
-    // Ensure tokens are loaded from storage on service initialization
     if (typeof window !== 'undefined') {
       refreshTokensFromStorage();
     }
   }
-
-  // ─── Utility Methods ──────────────────────────────
 
   private decodeBase64String(encoded: string): string {
     if (!encoded) return '';
 
     try {
       let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
-
       while (base64.length % 4) {
         base64 += '=';
       }
-
       const decoded = atob(base64);
-
       try {
         return decodeURIComponent(escape(decoded));
       } catch {
@@ -159,11 +143,6 @@ class AuthService {
     }
   }
 
-  // ─── Authentication Methods ───────────────────────
-
-  /**
-   * User login - now with much better error messages
-   */
   async login(credentials: LoginCredentials): Promise<ApiResponse<ServiceAuthResponse>> {
     try {
       const raw = await apiClient.post<BackendAuthResponse>(
@@ -175,20 +154,27 @@ class AuthService {
       );
 
       if (!raw.success || !raw.data) {
-        // Handle common backend failure cases
-        if (raw.status === 401) {
-          return {
-            success: false,
-            status: 401,
-            message: raw.message || 'Invalid email or password. Please try again.',
-          };
-        }
-
         if (raw.status === 400) {
           return {
             success: false,
             status: 400,
-            message: raw.message || 'Please check your details and try again.',
+            message: 'Invalid email or password. Please try again.',
+          };
+        }
+        
+        if (raw.status === 401) {
+          return {
+            success: false,
+            status: 401,
+            message: 'Your session has expired. Please login again.',
+          };
+        }
+
+        if (raw.status === 403) {
+          return {
+            success: false,
+            status: 403,
+            message: 'You do not have permission to access this account.',
           };
         }
 
@@ -200,28 +186,21 @@ class AuthService {
       }
 
       const { user: backendUser, tokens } = raw.data;
-
-      // Store tokens
       setTokens(tokens);
 
-      // Fetch full profile
       let userProfile: UserProfile;
 
       try {
         const profileResponse = await this.getCurrentUser();
-        if (profileResponse.success && profileResponse.data) {
-          userProfile = profileResponse.data;
-        } else {
-          userProfile = this.createBasicProfile(backendUser);
-        }
+        userProfile = profileResponse.success && profileResponse.data 
+          ? profileResponse.data 
+          : this.createBasicProfile(backendUser);
       } catch {
         userProfile = this.createBasicProfile(backendUser);
       }
 
-      // Store user
       localStorage.setItem('user_data', JSON.stringify(userProfile));
 
-      // Notify app
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
           new CustomEvent('auth-state-changed', {
@@ -232,17 +211,13 @@ class AuthService {
 
       return {
         success: true,
-        data: {
-          user: userProfile,
-          tokens,
-        },
+        data: { user: userProfile, tokens },
         status: raw.status,
         message: 'Login successful',
       };
     } catch (error: any) {
-      console.error('Login error caught in authService:', error);
+      console.error('Login error:', error);
       
-      // If it's an ApiError from apiClient, it already has the structure we need
       if (error && typeof error === 'object') {
         return {
           success: false,
@@ -252,7 +227,6 @@ class AuthService {
         };
       }
 
-      // Network / connection errors
       if (!error.response && (error.message?.includes('Network') || error.code === 'ECONNABORTED')) {
         return {
           success: false,
@@ -261,7 +235,6 @@ class AuthService {
         };
       }
 
-      // Fallback
       return {
         success: false,
         status: 500,
@@ -270,9 +243,6 @@ class AuthService {
     }
   }
 
-  /**
-   * User registration
-   */
   async register(data: RegisterData): Promise<ApiResponse<ServiceAuthResponse>> {
     try {
       const raw = await apiClient.post<BackendAuthResponse>(
@@ -293,7 +263,6 @@ class AuthService {
       }
 
       const { user: backendUser, tokens } = raw.data;
-
       setTokens(tokens);
 
       const userProfile: UserProfile = {
@@ -331,10 +300,7 @@ class AuthService {
 
       return {
         success: true,
-        data: {
-          user: userProfile,
-          tokens,
-        },
+        data: { user: userProfile, tokens },
         status: raw.status,
         message: 'Registration successful',
       };
@@ -347,9 +313,6 @@ class AuthService {
     }
   }
 
-  /**
-   * User logout
-   */
   async logout(): Promise<ApiResponse> {
     try {
       await apiClient.post(this.endpoints.auth.logout, {}).catch(() => {
@@ -375,9 +338,6 @@ class AuthService {
     };
   }
 
-  /**
-   * Get current user profile
-   */
   async getCurrentUser(): Promise<ApiResponse<UserProfile>> {
     const storedUser = this.getStoredUser();
 
@@ -390,6 +350,15 @@ class AuthService {
           return resp;
         }
       } catch (err: any) {
+        if (err.status === 401 || err.status === 403) {
+          this.clearAllData();
+          return {
+            success: false,
+            status: err.status,
+            message: err.message || 'Authentication failed',
+          };
+        }
+        
         if (storedUser) {
           return {
             data: storedUser,
@@ -417,44 +386,76 @@ class AuthService {
     };
   }
 
-  // ─── Password Management ──────────────────────────
-
   async requestPasswordReset(data: PasswordResetRequest): Promise<ApiResponse> {
-    return apiClient.post(this.endpoints.auth.requestReset, data);
+    try {
+      const response = await apiClient.post(this.endpoints.auth.requestReset, data);
+      return response;
+    } catch (error: any) {
+      return {
+        success: false,
+        status: error.status || 500,
+        message: error.message || 'Failed to request password reset',
+      };
+    }
   }
 
   async confirmPasswordReset(data: PasswordResetConfirm): Promise<ApiResponse> {
-    return apiClient.post(this.endpoints.auth.confirmReset, {
-      token: data.token,
-      password: data.new_password,
-      password_confirm: data.confirm_new_password,
-    });
+    try {
+      const response = await apiClient.post(this.endpoints.auth.confirmReset, {
+        token: data.token,
+        password: data.new_password,
+        password_confirm: data.confirm_new_password,
+      });
+      return response;
+    } catch (error: any) {
+      return {
+        success: false,
+        status: error.status || 500,
+        message: error.message || 'Failed to reset password',
+      };
+    }
   }
 
   async activateAccount(data: SetPasswordData): Promise<ApiResponse<SetPasswordResponse>> {
-    const payload = {
-      email: data.email,
-      uid: data.uid,
-      token: data.token,
-      password: data.password,
-      password_confirm: data.password_confirm,
-    };
-    return apiClient.post<SetPasswordResponse>(this.endpoints.auth.activateAccount, payload);
+    try {
+      const payload = {
+        email: data.email,
+        uid: data.uid,
+        token: data.token,
+        password: data.password,
+        password_confirm: data.password_confirm,
+      };
+      const response = await apiClient.post<SetPasswordResponse>(this.endpoints.auth.activateAccount, payload);
+      return response;
+    } catch (error: any) {
+      return {
+        success: false,
+        status: error.status || 500,
+        message: error.message || 'Failed to activate account',
+      };
+    }
   }
 
   async verifyActivationToken(data: VerifyTokenData): Promise<ApiResponse<VerifyTokenResponse>> {
-    const payload = {
-      email: data.email,
-      uid: data.uid,
-      token: data.token,
-    };
-    return apiClient.post<VerifyTokenResponse>(
-      this.endpoints.auth.verifyActivationToken,
-      payload
-    );
+    try {
+      const payload = {
+        email: data.email,
+        uid: data.uid,
+        token: data.token,
+      };
+      const response = await apiClient.post<VerifyTokenResponse>(
+        this.endpoints.auth.verifyActivationToken,
+        payload
+      );
+      return response;
+    } catch (error: any) {
+      return {
+        success: false,
+        status: error.status || 500,
+        message: error.message || 'Failed to verify activation token',
+      };
+    }
   }
-
-  // ─── Token & Session Management ───────────────────
 
   isAuthenticated(): boolean {
     const token = getAccessToken();
@@ -463,8 +464,6 @@ class AuthService {
     try {
       const payload = this.decodeToken(token);
       if (!payload || typeof payload.exp !== 'number') return false;
-
-      // 5-minute buffer
       return payload.exp * 1000 > Date.now() + 300000;
     } catch {
       return false;
@@ -558,8 +557,6 @@ class AuthService {
     }
   }
 
-  // ─── Private Helpers ──────────────────────────────
-
   private createBasicProfile(backendUser: any): UserProfile {
     return {
       id: backendUser.id,
@@ -577,5 +574,4 @@ class AuthService {
   }
 }
 
-// Singleton
 export const authService = new AuthService();

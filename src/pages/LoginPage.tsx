@@ -1,4 +1,3 @@
-// src/pages/LoginPage.tsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../assets/css/LoginPage.css";
@@ -8,7 +7,6 @@ import { authService } from "../services/authService";
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const from = (location.state as any)?.from || "/dashboard";
 
   const [formData, setFormData] = useState({
@@ -20,14 +18,12 @@ const LoginPage: React.FC = () => {
   const [apiError, setApiError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Redirect if already logged in
   useEffect(() => {
     if (authService.isAuthenticated()) {
       navigate(from, { replace: true });
     }
   }, [navigate, from]);
 
-  // Listen for auth state changes
   useEffect(() => {
     const handleAuthChange = (event: CustomEvent) => {
       if (event.detail.isAuthenticated) {
@@ -36,7 +32,6 @@ const LoginPage: React.FC = () => {
     };
 
     window.addEventListener('auth-state-changed', handleAuthChange as EventListener);
-    
     return () => {
       window.removeEventListener('auth-state-changed', handleAuthChange as EventListener);
     };
@@ -89,37 +84,29 @@ const LoginPage: React.FC = () => {
       const response = await authService.login(credentials);
 
       if (response.success) {
-        // Navigation handled by auth-state-changed event
         return;
       }
 
-      // Service returned failure — show backend message if present
       setApiError(
-        response.message ||
-        "Invalid email or password. Please try again."
+        response.message || "Login failed. Please try again."
       );
     } catch (err: any) {
-      console.log("LOGIN ERROR FULL DETAILS:", {
-        message: err.message,
-        status: err.status,
-        data: err.data,
-        code: err.code,
-      });
-
       let message = "An unexpected error occurred. Please try again.";
 
-      // Extract the exact backend message — your case uses "error" field
       if (err.data) {
         message = err.data.error || err.data.message || err.data.detail || message;
       } else if (err.message) {
         message = err.message;
       }
 
-      // Status-based fallback
-      if (err.status === 401 || err.status === 403) {
-        message = "Invalid email or password. Please try again.";
-      } else if (err.status === 400) {
-        // Keep the extracted message
+      if (err.status === 400) {
+        message = message.includes("unexpected error") 
+          ? "Invalid email or password. Please try again." 
+          : message;
+      } else if (err.status === 401) {
+        message = "Your session has expired. Please login again.";
+      } else if (err.status === 403) {
+        message = "You don't have permission to access this resource.";
       } else if (err.status === 429) {
         message = "Too many attempts. Please wait and try again.";
       } else if (err.status && err.status >= 500) {
@@ -158,7 +145,7 @@ const LoginPage: React.FC = () => {
 
                 <div className="form-group">
                   <label htmlFor="identifier" className="form-label">
-                    Email or Username *
+                    Email or Username
                   </label>
                   <input
                     type="text"
@@ -178,7 +165,7 @@ const LoginPage: React.FC = () => {
 
                 <div className="form-group">
                   <label htmlFor="password" className="form-label">
-                    Password *
+                    Password
                   </label>
                   <div className="password-wrapper">
                     <input

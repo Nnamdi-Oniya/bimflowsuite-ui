@@ -1,4 +1,3 @@
-// src/hooks/useAuthState.ts
 import { useState, useEffect } from "react";
 import { authService } from "../services/authService";
 
@@ -9,10 +8,8 @@ export const useAuthState = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set loading to false after initial check
     setIsLoading(false);
 
-    // Listen for auth state changes
     const handleAuthChange = (event: CustomEvent) => {
       setIsAuthenticated(event.detail.isAuthenticated);
     };
