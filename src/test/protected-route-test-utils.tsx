@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, type RenderResult } from '@testing-library/react';
 import type { RenderOptions } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi } from 'vitest';
@@ -20,7 +20,7 @@ export function renderWithMemoryRouter(
   ui: React.ReactElement,
   initialEntries: string[] = ['/dashboard'],
   options?: Omit<RenderOptions, 'wrapper'>
-) {
+): RenderResult {
   return render(
     <MemoryRouter initialEntries={initialEntries}>
       <Routes>

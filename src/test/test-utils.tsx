@@ -1,10 +1,10 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, type RenderResult } from '@testing-library/react';
 import type { RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
-// --- 1️⃣ Define explicit types for mockAuth ---
+// 1. Define explicit types for mockAuth
 interface MockUser {
   id: string;
   name: string;
@@ -23,7 +23,7 @@ interface MockAuth {
   error: string | null;
 }
 
-// --- 2️⃣ Create the mockAuth object with proper typing ---
+// 2. Create the mockAuth object
 export const mockAuth: MockAuth = {
   isAuthenticated: true,
   user: { id: '1', name: 'Test User', email: 'test@example.com' },
@@ -36,25 +36,25 @@ export const mockAuth: MockAuth = {
   error: null,
 };
 
-// --- 3️⃣ Mock the AuthContext module ---
+// 3. Mock the AuthContext module
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => mockAuth,
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-// --- 4️⃣ Custom render function with providers ---
+// 4. Custom render function with providers
 export function renderWithProviders(
   ui: React.ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
-) {
+): RenderResult {
   return render(ui, {
     wrapper: ({ children }) => <BrowserRouter>{children}</BrowserRouter>,
     ...options,
   });
 }
 
-// --- 5️⃣ Hook for using mock auth in tests ---
+// 5. Hook for using mock auth in tests
 export const useMockAuth = (): MockAuth => mockAuth;
 
-// --- 6️⃣ Re-export testing-library helpers ---
+// 6. Re-export testing-library helpers
 export * from '@testing-library/react';
