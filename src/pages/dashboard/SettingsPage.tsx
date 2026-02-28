@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Settings as SettingsIcon, User, Palette, Key, FileCode } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { authService } from "../../services/authService";
 import DashboardSuccessModal from "../../components/DashboardSuccessModal";
 import "../../assets/css/SettingsPage.css";
 
@@ -23,7 +24,7 @@ const SettingsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Password change state - DESIGN ONLY (logic commented out)
+  // Password change state
   const [passwordData, setPasswordData] = useState<PasswordChangeData>({
     currentPassword: '',
     newPassword: '',
@@ -80,12 +81,10 @@ const SettingsPage: React.FC = () => {
     setShowSuccessModal(true);
   };
 
-  // Password input handlers - DESIGN ONLY
   const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPasswordData(prev => ({ ...prev, [name]: value }));
     
-    // Clear error for this field
     if (passwordErrors[name as keyof PasswordChangeData]) {
       setPasswordErrors(prev => ({ ...prev, [name]: undefined }));
     }
@@ -124,11 +123,6 @@ const SettingsPage: React.FC = () => {
     return Object.keys(errors).length === 0;
   };
 
-  /* 🔒 PASSWORD CHANGE LOGIC - DISABLED UNTIL BACKEND READY
-   * Backend endpoint: /api/v1/auth/change-password/
-   * Expected: POST request with { old_password, new_password, confirm_new_password }
-   * To enable: Uncomment this function and import authService
-   */
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -136,28 +130,9 @@ const SettingsPage: React.FC = () => {
       return;
     }
 
-    // Show loading state
     setIsLoading(true);
+    setError(null);
     
-    // Simulate API delay for better UX
-    setTimeout(() => {
-      // ⚠️ BACKEND NOT READY - SHOW COMING SOON MODAL
-      setSuccessModalTitle('Coming Soon! 🚧');
-      setSuccessModalMessage('Password change feature will be available tomorrow. Please check back later.');
-      setUpdatedFieldsList([]);
-      setShowSuccessModal(true);
-      
-      // Reset form
-      setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
-      setPasswordErrors({});
-      setIsLoading(false);
-    }, 800);
-    
-    /* 🔧 UNCOMMENT WHEN BACKEND IS READY
     try {
       const response = await authService.changePassword({
         old_password: passwordData.currentPassword,
@@ -183,11 +158,11 @@ const SettingsPage: React.FC = () => {
         setError(response.message || 'Failed to update password');
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred while changing password');
+      const errorMessage = err?.data?.message || err?.message || 'An error occurred while changing password';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
-    */
   };
 
   const handleSaveGeneral = () => {
@@ -230,7 +205,6 @@ const SettingsPage: React.FC = () => {
     { id: 'rules', label: 'Rule Packs', icon: FileCode },
   ];
 
-  // Get user full name for modal
   const getFullName = (): string => {
     if (!user) return "User";
     if (user.first_name && user.last_name) {
@@ -240,6 +214,17 @@ const SettingsPage: React.FC = () => {
     if (user.last_name) return user.last_name;
     return user.username || "User";
   };
+
+  const checkPasswordStrength = (password: string): { hasUpperCase: boolean; hasLowerCase: boolean; hasNumber: boolean; hasSpecial: boolean } => {
+    return {
+      hasUpperCase: /[A-Z]/.test(password),
+      hasLowerCase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecial: /[!@#$%^&*]/.test(password)
+    };
+  };
+
+  const strength = checkPasswordStrength(passwordData.newPassword);
 
   return (
     <>
@@ -335,7 +320,7 @@ const SettingsPage: React.FC = () => {
                   <p className="setting-description">Your primary email address</p>
                   <input 
                     type="email" 
-                    defaultValue={user?.email || "user@bimflow.com"} 
+                    value={user?.email || ""} 
                     disabled={true}
                     className="input-disabled"
                   />
@@ -346,7 +331,7 @@ const SettingsPage: React.FC = () => {
                   <p className="setting-description">Your unique username</p>
                   <input 
                     type="text" 
-                    defaultValue={user?.username || "username"} 
+                    value={user?.username || ""} 
                     disabled={true}
                     className="input-disabled"
                   />
@@ -357,7 +342,7 @@ const SettingsPage: React.FC = () => {
                   <p className="setting-description">Your company or organization name</p>
                   <input 
                     type="text" 
-                    defaultValue={user?.company || "BIMFlow Solutions"} 
+                    defaultValue={user?.company || ""} 
                     placeholder="Enter your organization name"
                     disabled={isLoading}
                   />
@@ -372,7 +357,7 @@ const SettingsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Password Change Tab - DESIGN COMPLETE, LOGIC DISABLED */}
+            {/* Password Change Tab */}
             {activeTab === 'password' && (
               <div className="tab-panel">
                 <h2>
@@ -382,12 +367,6 @@ const SettingsPage: React.FC = () => {
                 <p className="tab-description">
                   Ensure your account is secure by using a strong password that you don't use elsewhere.
                 </p>
-                
-                {/* Coming Soon Badge */}
-                <div className="coming-soon-badge">
-                  <span className="badge-icon">🚧</span>
-                  <span className="badge-text">Coming Soon - Available Tomorrow</span>
-                </div>
                 
                 {error && (
                   <div className="error-message">
@@ -488,16 +467,16 @@ const SettingsPage: React.FC = () => {
                       <li className={passwordData.newPassword.length >= 8 ? 'met' : ''}>
                         • At least 8 characters
                       </li>
-                      <li className={/[A-Z]/.test(passwordData.newPassword) ? 'met' : ''}>
+                      <li className={strength.hasUpperCase ? 'met' : ''}>
                         • At least one uppercase letter
                       </li>
-                      <li className={/[a-z]/.test(passwordData.newPassword) ? 'met' : ''}>
+                      <li className={strength.hasLowerCase ? 'met' : ''}>
                         • At least one lowercase letter
                       </li>
-                      <li className={/[0-9]/.test(passwordData.newPassword) ? 'met' : ''}>
+                      <li className={strength.hasNumber ? 'met' : ''}>
                         • At least one number
                       </li>
-                      <li className={/[!@#$%^&*]/.test(passwordData.newPassword) ? 'met' : ''}>
+                      <li className={strength.hasSpecial ? 'met' : ''}>
                         • At least one special character (!@#$%^&*)
                       </li>
                     </ul>
@@ -525,7 +504,6 @@ const SettingsPage: React.FC = () => {
                   Upload YAML/JSON rule packs for custom compliance checking.
                 </p>
                 
-                {/* Coming Soon Badge */}
                 <div className="coming-soon-badge">
                   <span className="badge-icon">🚧</span>
                   <span className="badge-text">Coming Soon - In Development</span>

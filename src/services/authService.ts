@@ -1,3 +1,4 @@
+// src/services/authService.ts
 import { apiClient, type ApiResponse } from './apiClient';
 import {
   BACKEND_CONFIG,
@@ -44,6 +45,11 @@ export interface PasswordChangeData {
   old_password: string;
   new_password: string;
   confirm_new_password: string;
+}
+
+export interface PasswordChangeResponse {
+  success: boolean;
+  message: string;
 }
 
 export interface PasswordResetRequest {
@@ -158,8 +164,6 @@ class AuthService {
         }
       );
 
-      // Check if the response contains user and tokens (successful login)
-      // This works even if status is 401 but the response has user data
       if (raw.data && 'user' in raw.data && 'tokens' in raw.data) {
         const { user: backendUser, tokens } = raw.data as BackendAuthResponse;
         setTokens(tokens);
@@ -335,6 +339,47 @@ class AuthService {
       status: 200,
       success: true,
     };
+  }
+
+  async changePassword(data: PasswordChangeData): Promise<ApiResponse<PasswordChangeResponse>> {
+    try {
+      const response = await apiClient.post<PasswordChangeResponse>(
+        this.endpoints.auth.changePassword,
+        {
+          current_password: data.old_password,
+          new_password: data.new_password,
+          new_password_confirm: data.confirm_new_password
+        }
+      );
+
+      if (response.success) {
+        return {
+          success: true,
+          data: response.data,
+          status: response.status,
+          message: response.data?.message || 'Password changed successfully',
+        };
+      }
+
+      return {
+        success: false,
+        status: response.status || 400,
+        message: response.message || 'Failed to change password',
+        data: undefined,
+      };
+
+    } catch (error: any) {
+      console.error('Change password error:', error);
+      
+      const errorMessage = error.data?.message || error.data?.error || error.message || 'An error occurred while changing password';
+      
+      return {
+        success: false,
+        status: error.status || 500,
+        message: errorMessage,
+        data: undefined,
+      };
+    }
   }
 
   async getCurrentUser(): Promise<ApiResponse<UserProfile>> {

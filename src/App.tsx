@@ -17,8 +17,12 @@ import ProjectsTestimonialsSection from "./components/ProjectsTestimonialsSectio
 import CTANewsSection from "./components/CTANewsSection";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop"; // Fixed import
 
 import { useAuth } from "./contexts/AuthContext";
+import { usePerformance } from "./hooks/usePerformance";
+import { useResourceHints } from "./hooks/useResourceHints";
+import { injectCriticalCSS } from "./utils/criticalCSS";
 
 // Lazy imports – public pages
 const FeaturesPage = React.lazy(() => import("./pages/FeaturesPage"));
@@ -33,6 +37,7 @@ const ResetPasswordPage = React.lazy(() => import("./pages/ResetPasswordPage"));
 const SetPasswordPage = React.lazy(() => import("./pages/SetPasswordPage"));
 const ProjectGeneratePage = React.lazy(() => import("./pages/ProjectGeneratePage"));
 const BookDemoPage = React.lazy(() => import("./pages/BookDemoPage"));
+const DemoPage = React.lazy(() => import("./pages/DemoPage"));
 
 // Dashboard lazy imports
 const DashboardLayout = React.lazy(() => import("./components/DashboardLayout"));
@@ -99,16 +104,6 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
   }
 }
 
-const ScrollToTop: React.FC = () => {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-};
-
 const LoadingFallback: React.FC = () => (
   <div
     style={{
@@ -123,7 +118,6 @@ const LoadingFallback: React.FC = () => (
     }}
   >
     <div
-      className="loading-spinner"
       style={{
         width: "50px",
         height: "50px",
@@ -137,9 +131,6 @@ const LoadingFallback: React.FC = () => (
   </div>
 );
 
-// ────────────────────────────────────────────────
-//  FAST 404 – "Page not found" + redirect in 5 seconds
-// ────────────────────────────────────────────────
 const NotFoundPage: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
@@ -188,8 +179,11 @@ const NotFoundPage: React.FC = () => {
           margin: "0 0 0.8rem",
         }}
       >
-        Page not found
+        404
       </h1>
+      <h2 style={{ fontSize: "2.5rem", margin: "0 0 1rem" }}>
+        Page not found
+      </h2>
 
       <p style={{ fontSize: "1.15rem", marginBottom: "2.2rem" }}>
         Redirecting to the{" "}
@@ -239,6 +233,34 @@ const NotFoundPage: React.FC = () => {
 const AppContent: React.FC = () => {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard");
+  
+  // Track performance
+  usePerformance(import.meta.env.PROD);
+  
+  // Inject critical CSS
+  useEffect(() => {
+    injectCriticalCSS();
+  }, []);
+  
+  // Resource hints
+  useResourceHints(
+    // Preloads
+    [
+      { href: '/fonts/main-font.woff2', as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' },
+    ],
+    // Preconnects
+    [
+      { href: 'https://fonts.googleapis.com', crossOrigin: true },
+      { href: 'https://fonts.gstatic.com', crossOrigin: true },
+    ],
+    // Prefetches
+    [
+      '/dashboard',
+      '/projects',
+    ]
+  );
+  
+  // Only hide footer on these specific paths (auth pages, dashboard)
   const hideFooterPaths = [
     "/login",
     "/forgot-password",
@@ -246,12 +268,23 @@ const AppContent: React.FC = () => {
     "/reset-password",
     "/book-demo",
   ];
+  
   const hideFooter = isDashboard || hideFooterPaths.includes(location.pathname);
+  
+  // Only hide header on dashboard
+  const hideHeader = isDashboard;
+
+  // Disable scroll restoration
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  }, []);
 
   return (
     <div className="app-container">
-      {!isDashboard && <Header />}
-      <ScrollToTop />
+      {!hideHeader && <Header />}
+      <ScrollToTop /> {/* This now works without errors */}
       <main className="main-content">
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
@@ -276,6 +309,7 @@ const AppContent: React.FC = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/project-generate" element={<ProjectGeneratePage />} />
             <Route path="/book-demo" element={<BookDemoPage />} />
+            <Route path="/demo" element={<DemoPage />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<LoginPage />} />

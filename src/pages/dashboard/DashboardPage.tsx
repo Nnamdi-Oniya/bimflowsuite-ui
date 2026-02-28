@@ -1,11 +1,23 @@
+// src/pages/dashboard/DashboardPage.tsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import "../../assets/css/DashboardPage.css";
 
 // RESTORED DEMO IMAGES
 import officeTower from "../../assets/images/office-tower.jpg";
 import bridgeExpansion from "../../assets/images/bridge-expansion.jpg";
 import urbanRoad from "../../assets/images/urban-road.jpg";
+
+// Define UserProfile type based on your actual user structure
+interface UserProfile {
+  id?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  profile_picture?: string;
+}
 
 // Icons (consistent with sidebar)
 const ProjectsIcon = () => (
@@ -82,6 +94,35 @@ const TemplatesIcon = () => (
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth() as { user: UserProfile | null };
+
+  // Helper function to get user's display name
+  const getUserDisplayName = (): string => {
+    if (!user) return "User";
+    
+    // If we have both first and last name
+    if (user.first_name && user.last_name) {
+      return `${user.first_name} ${user.last_name}`;
+    }
+    
+    // If we have only first name
+    if (user.first_name) {
+      return user.first_name;
+    }
+    
+    // If we have only last name
+    if (user.last_name) {
+      return user.last_name;
+    }
+    
+    // If we have username
+    if (user.username) {
+      return user.username;
+    }
+    
+    // Default fallback
+    return "User";
+  };
 
   // Updated stats with real BIMFlow metrics
   const stats = [
@@ -95,15 +136,11 @@ const DashboardPage: React.FC = () => {
 
   // Quick actions updated to match new sidebar routes
   const quickActions = [
-    // ⚠️ Updated to match sidebar route: /dashboard/upload-ifc
     { id: "upload", label: "Upload & Validate IFC", icon: <UploadIcon />, onClick: () => navigate('/dashboard/upload-ifc') },
     { id: "generate", label: "Generate New Model", icon: <GenerateIcon />, onClick: () => navigate('/dashboard/generate') },
     { id: "compliance", label: "Run Compliance Check", icon: <ComplianceIcon />, onClick: () => navigate('/dashboard/compliance') },
-    // ⚠️ Updated to match sidebar route: /dashboard/clash-detection
     { id: "clash", label: "Clash Detection", icon: <ClashIcon />, onClick: () => navigate('/dashboard/clash-detection') },
-    // ⚠️ Updated to match sidebar route: /dashboard/cost-estimation
     { id: "cost", label: "Cost Estimation", icon: <CostIcon />, onClick: () => navigate('/dashboard/cost-estimation') },
-    // ⚠️ Updated to match sidebar route: /dashboard/scheduling
     { id: "schedule", label: "Project Scheduling", icon: <ScheduleIcon />, onClick: () => navigate('/dashboard/scheduling') },
     { id: "reports", label: "Reports Center", icon: <ReportsIcon />, onClick: () => navigate('/dashboard/reports') },
     { id: "templates", label: "Asset Packs", icon: <TemplatesIcon />, onClick: () => navigate('/dashboard/templates') },
@@ -145,7 +182,9 @@ const DashboardPage: React.FC = () => {
       <section className="dashboard-hero">
         <div className="dashboard-hero__content">
           <div className="dashboard-hero__welcome">
-            <h1>Welcome back, Nnamdi</h1>
+            <h1>
+              Welcome back, <span className="welcome-name">{getUserDisplayName()}</span>
+            </h1>
             <p>Your open-source BIM automation hub — generate, validate, analyze, and deliver faster than ever.</p>
           </div>
           <div className="dashboard-hero__quick-actions">
@@ -158,8 +197,6 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* --- */}
 
       {/* Stats Grid */}
       <section className="dashboard-stats">
@@ -183,8 +220,6 @@ const DashboardPage: React.FC = () => {
           ))}
         </div>
       </section>
-
-      {/* --- */}
 
       {/* Recent Projects */}
       <section className="dashboard-recent">
@@ -232,8 +267,6 @@ const DashboardPage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- */}
-
       {/* Two Column Bottom */}
       <div className="dashboard-columns">
         <section className="dashboard-tasks">
@@ -247,7 +280,6 @@ const DashboardPage: React.FC = () => {
               </div>
               <div className="task-meta">
                 <span className="task-time">Due today</span>
-                {/* ⚠️ Updated route */}
                 <button className="task-action" onClick={() => navigate('/dashboard/upload-ifc')}>Upload Now</button>
               </div>
             </div>
@@ -270,7 +302,6 @@ const DashboardPage: React.FC = () => {
               </div>
               <div className="task-meta">
                 <span className="task-time">Due in 3 days</span>
-                {/* ⚠️ Updated route */}
                 <button className="task-action" onClick={() => navigate('/dashboard/cost-estimation')}>Review</button>
               </div>
             </div>
