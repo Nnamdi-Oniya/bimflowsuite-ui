@@ -55,6 +55,12 @@ class BookDemoService {
                       data.request_type === 'others' ? 'other' : data.request_type,
       };
 
+      // Remove project_params from the main request body if it exists
+      if ('project_params' in requestData) {
+        delete requestData.project_params;
+      }
+
+      // If we have projectParams, send them separately or as a nested object
       if (projectParams) {
         requestData.project_params = projectParams;
       }
@@ -69,7 +75,10 @@ class BookDemoService {
   // Store project form data from generate page
   storeProjectFormData(data: any): void {
     try {
-      sessionStorage.setItem('pending_project_data', JSON.stringify(data));
+      // Ensure we're not storing additional_details
+      const cleanData = { ...data };
+      delete cleanData.additional_details;
+      sessionStorage.setItem('pending_project_data', JSON.stringify(cleanData));
     } catch (error) {
       // Silently handle storage error
     }

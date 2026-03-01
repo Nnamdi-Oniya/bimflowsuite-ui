@@ -5,6 +5,7 @@ import "../assets/css/BookDemoPage.css";
 import registerImage from "../assets/images/registerImage.jpg";
 import { bookDemoService } from "../services/bookDemoService";
 import SuccessModal from "../components/SuccessModal";
+import PhoneInput from "../components/PhoneInput";
 
 interface BookDemoRequest {
   request_type: 'request_demo' | 'compliance_validation' | 'request_a_trial' | 'general_inquiry' | 'others';
@@ -54,57 +55,16 @@ const BookDemoPage: React.FC = () => {
   const requestTypes = bookDemoService.getRequestTypes();
 
   useEffect(() => {
-    // Check if coming from project generate page
     const projectData = bookDemoService.getStoredProjectFormData();
     
     if (projectData) {
       setIsFromGenerateModel(true);
       setStoredProjectData(projectData);
-      
-      // Format project details for additional_details field
-      const projectDetails = `
-PROJECT DETAILS:
-----------------
-Project Name: ${projectData.name || 'Not specified'}
-Project Type: ${projectData.project_type || 'Not specified'}
-Description: ${projectData.description || 'Not specified'}
-Phase: ${projectData.phase || 'concept'}
-Client: ${projectData.client_name || 'Not specified'}
-Client Type: ${projectData.client_type || 'private'}
-Project Scale: ${projectData.project_scale || 'medium'}
-Risk Classification: ${projectData.risk_classification || 'medium'}
-Address: ${projectData.project_address || 'Not specified'}
-      `.trim();
-      
-      setFormData(prev => ({
-        ...prev,
-        additional_details: projectDetails
-      }));
     } else if (location.state?.fromGenerate) {
       setIsFromGenerateModel(true);
       if (location.state?.projectData) {
         const projectData = location.state.projectData;
         setStoredProjectData(projectData);
-        
-        const projectDetails = `
-PROJECT DETAILS:
-----------------
-Project Name: ${projectData.name || 'Not specified'}
-Project Type: ${projectData.project_type || 'Not specified'}
-Description: ${projectData.description || 'Not specified'}
-Phase: ${projectData.phase || 'concept'}
-Client: ${projectData.client_name || 'Not specified'}
-Client Type: ${projectData.client_type || 'private'}
-Project Scale: ${projectData.project_scale || 'medium'}
-Risk Classification: ${projectData.risk_classification || 'medium'}
-Address: ${projectData.project_address || 'Not specified'}
-        `.trim();
-        
-        setFormData(prev => ({
-          ...prev,
-          additional_details: projectDetails
-        }));
-        
         bookDemoService.storeProjectFormData(projectData);
       }
     }
@@ -118,9 +78,24 @@ Address: ${projectData.project_address || 'Not specified'}
   };
 
   const validatePhone = (phone: string): string => {
-    const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{8,}$/;
     if (!phone.trim()) return "Phone number is required";
-    if (!phoneRegex.test(phone)) return "Please enter a valid phone number";
+    
+    // Check if it has a country code (starts with +)
+    if (!phone.startsWith('+')) {
+      return "Please select a country code";
+    }
+    
+    // Remove country code and check if remaining number is valid
+    const parts = phone.split(' ');
+    if (parts.length < 2) {
+      return "Please enter a phone number after the country code";
+    }
+    
+    const number = parts.slice(1).join('').replace(/[\s\-\(\)]/g, '');
+    if (number.length < 5) {
+      return "Phone number must be at least 5 digits";
+    }
+    
     return "";
   };
 
@@ -136,6 +111,13 @@ Address: ${projectData.project_address || 'Not specified'}
 
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setFormData({ ...formData, phone_number: value });
+    if (errors.phone_number) {
+      setErrors({ ...errors, phone_number: "" });
     }
   };
 
@@ -211,7 +193,6 @@ Address: ${projectData.project_address || 'Not specified'}
     setIsLoading(true);
 
     try {
-      // Prepare project params if from generate model
       let projectParams = null;
       if (isFromGenerateModel && storedProjectData) {
         projectParams = {
@@ -224,11 +205,8 @@ Address: ${projectData.project_address || 'Not specified'}
       
       if (response.success) {
         setShowSuccessModal(true);
-        
-        // Clear stored data
         bookDemoService.clearStoredProjectFormData();
         
-        // Reset form
         setFormData({
           request_type: "request_demo",
           firstname: "",
@@ -521,23 +499,19 @@ Address: ${projectData.project_address || 'Not specified'}
                     <label htmlFor="phone_number" className="form-label">
                       Phone Number
                     </label>
-                    <input
-                      type="tel"
-                      id="phone_number"
-                      name="phone_number"
+                    <PhoneInput
                       value={formData.phone_number}
-                      onChange={handleChange}
-                      className={`form-input ${errors.phone_number ? 'error' : ''}`}
-                      placeholder="+1 123 456 7890"
+                      onChange={handlePhoneChange}
+                      error={errors.phone_number}
                       disabled={isFormDisabled}
+                      name="phone_number"
+                      placeholder="Enter phone number"
                     />
-                    <small className="form-note">Include country code for international numbers</small>
-                    {errors.phone_number && <span className="error-text">{errors.phone_number}</span>}
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="additional_details" className="form-label">
-                      Additional Details
+                      Additional Details <span className="optional-label">(optional)</span>
                     </label>
                     <textarea
                       id="additional_details"
@@ -545,19 +519,25 @@ Address: ${projectData.project_address || 'Not specified'}
                       value={formData.additional_details || ""}
                       onChange={handleChange}
                       className="form-input"
-                      rows={6}
-                      placeholder={isFromGenerateModel 
-                        ? "Your project details have been pre-filled. Add any additional comments here..."
-                        : "Tell us more about your needs, specific requirements, or questions..."
-                      }
+                      rows={4}
+                      placeholder="Tell us more about your needs, specific requirements, or questions..."
                       disabled={isFormDisabled}
                     />
-                    {isFromGenerateModel && (
-                      <small className="form-note">
-                        Your project details have been automatically included
-                      </small>
-                    )}
+                    <small className="form-note">
+                      Add any specific requirements or questions about your demo request
+                    </small>
                   </div>
+
+                  {isFromGenerateModel && (
+                    <div className="project-summary-info">
+                      <p className="project-summary-title">📋 Your project has been saved</p>
+                      <p className="project-summary-text">
+                        Your project details will be reviewed during the demo. You can add any specific questions 
+                        about your {storedProjectData?.numberOfModels || 1} model{storedProjectData?.numberOfModels !== 1 ? 's' : ''} 
+                        in the additional details field above.
+                      </p>
+                    </div>
+                  )}
 
                   <div className="consent-group">
                     <label className="consent-label">

@@ -1,3 +1,4 @@
+// src/services/authService.ts
 import { apiClient, type ApiResponse } from './apiClient';
 import {
   BACKEND_CONFIG,
@@ -46,6 +47,11 @@ export interface PasswordChangeData {
   confirm_new_password: string;
 }
 
+export interface PasswordChangeResponse {
+  success: boolean;
+  message: string;
+}
+
 export interface PasswordResetRequest {
   email: string;
 }
@@ -83,6 +89,13 @@ export interface VerifyTokenResponse {
   email?: string;
 }
 
+export interface ErrorResponseData {
+  error?: string;
+  message?: string;
+  detail?: string;
+  [key: string]: any;
+}
+
 type BackendAuthResponse = {
   user: {
     id: number;
@@ -112,7 +125,6 @@ class AuthService {
 
   private decodeBase64String(encoded: string): string {
     if (!encoded) return '';
-
     try {
       let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
       while (base64.length % 4) {
@@ -131,7 +143,6 @@ class AuthService {
 
   extractEmailFromParam(emailParam: string | null): string {
     if (!emailParam) return 'User account';
-
     try {
       const decoded = this.decodeBase64String(emailParam);
       if (decoded && decoded.includes('@') && decoded.includes('.')) {
@@ -153,77 +164,63 @@ class AuthService {
         }
       );
 
-      if (!raw.success || !raw.data) {
-        if (raw.status === 400) {
-          return {
-            success: false,
-            status: 400,
-            message: 'Invalid email or password. Please try again.',
-          };
-        }
-        
-        if (raw.status === 401) {
-          return {
-            success: false,
-            status: 401,
-            message: 'Your session has expired. Please login again.',
-          };
+      if (raw.data && 'user' in raw.data && 'tokens' in raw.data) {
+        const { user: backendUser, tokens } = raw.data as BackendAuthResponse;
+        setTokens(tokens);
+
+        let userProfile: UserProfile;
+
+        try {
+          const profileResponse = await this.getCurrentUser();
+          userProfile = profileResponse.success && profileResponse.data 
+            ? profileResponse.data 
+            : this.createBasicProfile(backendUser);
+        } catch {
+          userProfile = this.createBasicProfile(backendUser);
         }
 
-        if (raw.status === 403) {
-          return {
-            success: false,
-            status: 403,
-            message: 'You do not have permission to access this account.',
-          };
+        localStorage.setItem('user_data', JSON.stringify(userProfile));
+
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('auth-state-changed', {
+              detail: { isAuthenticated: true },
+            })
+          );
         }
+
+        const serviceResponse: ServiceAuthResponse = {
+          user: userProfile,
+          tokens: tokens
+        };
 
         return {
-          success: false,
-          status: raw.status || 500,
-          message: raw.message || 'Login failed. Please try again later.',
+          success: true,
+          data: serviceResponse,
+          status: raw.status,
+          message: 'Login successful',
         };
       }
 
-      const { user: backendUser, tokens } = raw.data;
-      setTokens(tokens);
-
-      let userProfile: UserProfile;
-
-      try {
-        const profileResponse = await this.getCurrentUser();
-        userProfile = profileResponse.success && profileResponse.data 
-          ? profileResponse.data 
-          : this.createBasicProfile(backendUser);
-      } catch {
-        userProfile = this.createBasicProfile(backendUser);
-      }
-
-      localStorage.setItem('user_data', JSON.stringify(userProfile));
-
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(
-          new CustomEvent('auth-state-changed', {
-            detail: { isAuthenticated: true },
-          })
-        );
-      }
-
+      const errorData = raw.data as unknown as ErrorResponseData;
       return {
-        success: true,
-        data: { user: userProfile, tokens },
-        status: raw.status,
-        message: 'Login successful',
+        success: false,
+        status: raw.status || 401,
+        message: errorData?.error || raw.message || 'Invalid credentials',
+        data: undefined,
       };
+
     } catch (error: any) {
       console.error('Login error:', error);
       
       if (error && typeof error === 'object') {
+        const errorData = error.data as ErrorResponseData;
+        const backendMessage = errorData?.error || errorData?.message || errorData?.detail;
         return {
           success: false,
           status: error.status || 500,
-          message: error.message || 'An error occurred during login',
-          data: error.data,
+          message: backendMessage || error.message || 'An error occurred during login',
+          data: undefined,
         };
       }
 
@@ -232,6 +229,7 @@ class AuthService {
           success: false,
           status: 0,
           message: 'Cannot connect to the server. Please check your internet connection.',
+          data: undefined,
         };
       }
 
@@ -239,6 +237,7 @@ class AuthService {
         success: false,
         status: 500,
         message: 'An unexpected error occurred. Please try again later.',
+        data: undefined,
       };
     }
   }
@@ -254,70 +253,74 @@ class AuthService {
         }
       );
 
-      if (!raw.success || !raw.data) {
+      if (raw.success && raw.data) {
+        const { user: backendUser, tokens } = raw.data;
+        setTokens(tokens);
+
+        const userProfile: UserProfile = {
+          id: backendUser.id,
+          username: backendUser.username,
+          email: backendUser.email,
+          date_joined: backendUser.date_joined,
+          is_active: true,
+          first_name: data.first_name || '',
+          last_name: data.last_name || '',
+          company: data.company || '',
+          phone_number: data.phone || '',
+          location: '',
+          job_title: '',
+        };
+
+        localStorage.setItem('user_data', JSON.stringify(userProfile));
+
+        try {
+          const profileResponse = await this.getCurrentUser();
+          if (profileResponse.success && profileResponse.data) {
+            localStorage.setItem('user_data', JSON.stringify(profileResponse.data));
+          }
+        } catch {}
+
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('auth-state-changed', {
+              detail: { isAuthenticated: true },
+            })
+          );
+        }
+
+        const serviceResponse: ServiceAuthResponse = {
+          user: userProfile,
+          tokens: tokens
+        };
+
         return {
-          success: false,
-          status: raw.status || 400,
-          message: raw.message || 'Registration failed. Please try again.',
+          success: true,
+          data: serviceResponse,
+          status: raw.status,
+          message: 'Registration successful',
         };
       }
 
-      const { user: backendUser, tokens } = raw.data;
-      setTokens(tokens);
-
-      const userProfile: UserProfile = {
-        id: backendUser.id,
-        username: backendUser.username,
-        email: backendUser.email,
-        date_joined: backendUser.date_joined,
-        is_active: true,
-        first_name: data.first_name || '',
-        last_name: data.last_name || '',
-        company: data.company || '',
-        phone_number: data.phone || '',
-        location: '',
-        job_title: '',
-      };
-
-      localStorage.setItem('user_data', JSON.stringify(userProfile));
-
-      try {
-        const profileResponse = await this.getCurrentUser();
-        if (profileResponse.success && profileResponse.data) {
-          localStorage.setItem('user_data', JSON.stringify(profileResponse.data));
-        }
-      } catch {
-        // silent fail
-      }
-
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(
-          new CustomEvent('auth-state-changed', {
-            detail: { isAuthenticated: true },
-          })
-        );
-      }
-
       return {
-        success: true,
-        data: { user: userProfile, tokens },
-        status: raw.status,
-        message: 'Registration successful',
+        success: false,
+        status: raw.status || 400,
+        message: raw.message || 'Registration failed. Please try again.',
+        data: undefined,
       };
+
     } catch (error: any) {
       return {
         success: false,
         status: error.status || 400,
         message: error.message || 'Registration failed. Please check your details and try again.',
+        data: undefined,
       };
     }
   }
 
-  async logout(): Promise<ApiResponse> {
+  async logout(): Promise<ApiResponse<null>> {
     try {
-      await apiClient.post(this.endpoints.auth.logout, {}).catch(() => {
-        // silent fail
-      });
+      await apiClient.post(this.endpoints.auth.logout, {}).catch(() => {});
     } finally {
       this.clearAllData();
 
@@ -338,6 +341,47 @@ class AuthService {
     };
   }
 
+  async changePassword(data: PasswordChangeData): Promise<ApiResponse<PasswordChangeResponse>> {
+    try {
+      const response = await apiClient.post<PasswordChangeResponse>(
+        this.endpoints.auth.changePassword,
+        {
+          current_password: data.old_password,
+          new_password: data.new_password,
+          new_password_confirm: data.confirm_new_password
+        }
+      );
+
+      if (response.success) {
+        return {
+          success: true,
+          data: response.data,
+          status: response.status,
+          message: response.data?.message || 'Password changed successfully',
+        };
+      }
+
+      return {
+        success: false,
+        status: response.status || 400,
+        message: response.message || 'Failed to change password',
+        data: undefined,
+      };
+
+    } catch (error: any) {
+      console.error('Change password error:', error);
+      
+      const errorMessage = error.data?.message || error.data?.error || error.message || 'An error occurred while changing password';
+      
+      return {
+        success: false,
+        status: error.status || 500,
+        message: errorMessage,
+        data: undefined,
+      };
+    }
+  }
+
   async getCurrentUser(): Promise<ApiResponse<UserProfile>> {
     const storedUser = this.getStoredUser();
 
@@ -356,6 +400,7 @@ class AuthService {
             success: false,
             status: err.status,
             message: err.message || 'Authentication failed',
+            data: undefined,
           };
         }
         
@@ -383,35 +428,38 @@ class AuthService {
       success: false,
       status: 401,
       message: 'Not authenticated',
+      data: undefined,
     };
   }
 
-  async requestPasswordReset(data: PasswordResetRequest): Promise<ApiResponse> {
+  async requestPasswordReset(data: PasswordResetRequest): Promise<ApiResponse<null>> {
     try {
       const response = await apiClient.post(this.endpoints.auth.requestReset, data);
-      return response;
+      return response as ApiResponse<null>;
     } catch (error: any) {
       return {
         success: false,
         status: error.status || 500,
         message: error.message || 'Failed to request password reset',
+        data: undefined,
       };
     }
   }
 
-  async confirmPasswordReset(data: PasswordResetConfirm): Promise<ApiResponse> {
+  async confirmPasswordReset(data: PasswordResetConfirm): Promise<ApiResponse<null>> {
     try {
       const response = await apiClient.post(this.endpoints.auth.confirmReset, {
         token: data.token,
         password: data.new_password,
         password_confirm: data.confirm_new_password,
       });
-      return response;
+      return response as ApiResponse<null>;
     } catch (error: any) {
       return {
         success: false,
         status: error.status || 500,
         message: error.message || 'Failed to reset password',
+        data: undefined,
       };
     }
   }
@@ -432,6 +480,7 @@ class AuthService {
         success: false,
         status: error.status || 500,
         message: error.message || 'Failed to activate account',
+        data: undefined,
       };
     }
   }
@@ -453,6 +502,7 @@ class AuthService {
         success: false,
         status: error.status || 500,
         message: error.message || 'Failed to verify activation token',
+        data: undefined,
       };
     }
   }
@@ -484,7 +534,6 @@ class AuthService {
   updateStoredUser(partial: Partial<UserProfile>): void {
     const current = this.getStoredUser();
     if (!current) return;
-
     const updated = { ...current, ...partial };
     localStorage.setItem('user_data', JSON.stringify(updated));
   }

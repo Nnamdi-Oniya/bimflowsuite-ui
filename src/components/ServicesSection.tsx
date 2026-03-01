@@ -1,19 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "../assets/css/ServicesSection.css";
 import room3 from "../assets/images/Livingdrawing.png";
 
 const ServicesSection: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleDemoClick = () => {
-    navigate('/demo');
-  };
-
-  const handleGenerateClick = () => {
-    navigate('/generate-model');
-  };
-
   return (
     <section className="services" id="services">
       <div className="services__container">
@@ -45,22 +34,6 @@ const ServicesSection: React.FC = () => {
             checks, and collaborate in real-time—all in one open-source platform built 
             for the future of digital construction.
           </p>
-          
-          {/* Updated Buttons with Navigation */}
-          <div className="services__buttons">
-            <button 
-              className="services__btn services__btn--primary services__btn--gradient"
-              onClick={handleDemoClick}
-            >
-              Try Interactive Demo
-            </button>
-            <button 
-              className="services__btn services__btn--secondary"
-              onClick={handleGenerateClick}
-            >
-              Generate BIM Model
-            </button>
-          </div>
 
           {/* Core BIM Capabilities */}
           <div className="services__cards">

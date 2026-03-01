@@ -1,16 +1,35 @@
 // src/components/ScrollToTop.tsx
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
-const ScrollToTop = () => {
+const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
+  // Use ReturnType<typeof setTimeout> instead of NodeJS.Timeout
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    // Ensures window scrolls to top after navigation
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // can change to "auto" if you want instant jump
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Use requestAnimationFrame for better performance
+    const rafId = requestAnimationFrame(() => {
+      timeoutRef.current = setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'auto'
+        });
+      }, 10);
     });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, [pathname]);
 
   return null;

@@ -7,8 +7,20 @@ import { authService } from "../../services/authService";
 import DashboardSuccessModal from "../../components/DashboardSuccessModal";
 import "../../assets/css/CreateProjectPage.css";
 
-interface ProjectFormData extends CreateProjectData {
-  project_number: string; // Add this field - user can input it
+interface ProjectFormData {
+  name: string;
+  description: string;
+  project_number: string; // User MUST provide this - required
+  phase: string;
+  project_type: string;
+  client_name: string;
+  client_type: string;
+  project_scale: string;
+  risk_classification: string;
+  project_address: string;
+  project_start_date: string;
+  expected_completion_date: string;
+  approval_status: string;
 }
 
 interface CreatedProject {
@@ -20,7 +32,7 @@ interface CreatedProject {
 const initialFormState: ProjectFormData = {
   name: "",
   description: "",
-  project_number: "", // User can input their own project number/reference
+  project_number: "", // User must provide this
   phase: "concept",
   project_type: "",
   client_name: "",
@@ -29,7 +41,6 @@ const initialFormState: ProjectFormData = {
   risk_classification: "medium",
   project_address: "",
   project_start_date: "",
-  construction_start_date: "",
   expected_completion_date: "",
   approval_status: "pending",
 };
@@ -81,7 +92,7 @@ export default function CreateProjectPage() {
     return { ...initialFormState };
   });
   
-  const [errors, setErrors] = useState<Partial<Record<keyof ProjectFormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof ProjectFormData | 'date_validation', string>>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [currentSection, setCurrentSection] = useState<"basic" | "client" | "schedule">("basic");
@@ -94,8 +105,26 @@ export default function CreateProjectPage() {
     }
   }, [navigate]);
 
+  const validateDates = (): string | null => {
+    const { project_start_date, expected_completion_date } = formData;
+    
+    if (project_start_date && expected_completion_date) {
+      const start = new Date(project_start_date);
+      const end = new Date(expected_completion_date);
+      
+      // Reset time part to compare dates only
+      start.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+      
+      if (end < start) {
+        return "Expected completion date cannot be before project start date";
+      }
+    }
+    return null;
+  };
+
   const validateSection = (): boolean => {
-    const err: Partial<Record<keyof ProjectFormData, string>> = {};
+    const err: Partial<Record<keyof ProjectFormData | 'date_validation', string>> = {};
 
     if (currentSection === "basic") {
       // Project Name validation
@@ -105,9 +134,13 @@ export default function CreateProjectPage() {
         err.name = "Project name must be at least 3 characters";
       }
 
-      // Project Number validation (optional but if provided, validate format)
-      if (formData.project_number && formData.project_number.length < 3) {
-        err.project_number = "Project number must be at least 3 characters if provided";
+      // Project Number validation - REQUIRED field
+      if (!formData.project_number.trim()) {
+        err.project_number = "Project number is required";
+      } else if (formData.project_number.length < 3) {
+        err.project_number = "Project number must be at least 3 characters";
+      } else if (!/^[A-Za-z0-9-_]+$/.test(formData.project_number)) {
+        err.project_number = "Project number can only contain letters, numbers, hyphens, and underscores";
       }
 
       // Project Type validation
@@ -124,28 +157,63 @@ export default function CreateProjectPage() {
     }
 
     if (currentSection === "schedule") {
-      // Date logic validation
-      if (formData.project_start_date && formData.expected_completion_date) {
-        const start = new Date(formData.project_start_date);
-        const end = new Date(formData.expected_completion_date);
-        
-        if (start > end) {
-          err.expected_completion_date = "Completion date must be after start date";
-        }
-      }
-
-      if (formData.project_start_date && formData.construction_start_date) {
-        const start = new Date(formData.project_start_date);
-        const construction = new Date(formData.construction_start_date);
-        
-        if (construction < start) {
-          err.construction_start_date = "Construction date cannot be before project start";
-        }
+      // Date validation - check if completion date is after start date
+      const dateError = validateDates();
+      if (dateError) {
+        err.date_validation = dateError;
       }
     }
 
     setErrors(err);
     return Object.keys(err).length === 0;
+  };
+
+  const validateAllSections = (): boolean => {
+    let isValid = true;
+    const allErrors: Partial<Record<keyof ProjectFormData | 'date_validation', string>> = {};
+
+    // Validate Basic Info
+    if (!formData.name.trim()) {
+      allErrors.name = "Project name is required";
+      isValid = false;
+    } else if (formData.name.length < 3) {
+      allErrors.name = "Project name must be at least 3 characters";
+      isValid = false;
+    }
+
+    if (!formData.project_number.trim()) {
+      allErrors.project_number = "Project number is required";
+      isValid = false;
+    } else if (formData.project_number.length < 3) {
+      allErrors.project_number = "Project number must be at least 3 characters";
+      isValid = false;
+    } else if (!/^[A-Za-z0-9-_]+$/.test(formData.project_number)) {
+      allErrors.project_number = "Project number can only contain letters, numbers, hyphens, and underscores";
+      isValid = false;
+    }
+
+    if (!formData.project_type) {
+      allErrors.project_type = "Project type is required";
+      isValid = false;
+    }
+
+    if (!formData.description.trim()) {
+      allErrors.description = "Project description is required";
+      isValid = false;
+    } else if (formData.description.length < 20) {
+      allErrors.description = "Description must be at least 20 characters";
+      isValid = false;
+    }
+
+    // Validate Dates
+    const dateError = validateDates();
+    if (dateError) {
+      allErrors.date_validation = dateError;
+      isValid = false;
+    }
+
+    setErrors(allErrors);
+    return isValid;
   };
 
   const handleInputChange = (
@@ -157,28 +225,35 @@ export default function CreateProjectPage() {
     if (errors[name as keyof ProjectFormData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
+    // Clear date validation error when dates change
+    if (name === 'project_start_date' || name === 'expected_completion_date') {
+      if (errors.date_validation) {
+        setErrors((prev) => ({ ...prev, date_validation: undefined }));
+      }
+    }
     // Clear submit error when user makes changes
     if (submitError) {
       setSubmitError(null);
     }
   };
 
+  const handleNext = () => {
+    if (validateSection()) {
+      if (currentSection === "basic") setCurrentSection("client");
+      if (currentSection === "client") setCurrentSection("schedule");
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentSection === "client") setCurrentSection("basic");
+    if (currentSection === "schedule") setCurrentSection("client");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate all sections before submission
-    let isValid = true;
-    
-    setCurrentSection("basic");
-    if (!validateSection()) isValid = false;
-    
-    setCurrentSection("client");
-    if (!validateSection()) isValid = false;
-    
-    setCurrentSection("schedule");
-    if (!validateSection()) isValid = false;
-    
-    if (!isValid) {
+    if (!validateAllSections()) {
       // Return to first section with errors
       setCurrentSection("basic");
       return;
@@ -188,12 +263,11 @@ export default function CreateProjectPage() {
     setSubmitError(null);
 
     try {
-      // IMPORTANT: Never send 'id' field - backend generates it
-      // Send project_number if user provided it
-      const payload = {
+      // Send ALL fields EXCEPT id (backend generates id)
+      const payload: CreateProjectData = {
         name: formData.name.trim(),
+        project_number: formData.project_number.trim(), // User provided - required
         description: formData.description.trim(),
-        project_number: formData.project_number?.trim() || "", // Send user's project number
         phase: formData.phase,
         project_type: formData.project_type,
         client_name: formData.client_name?.trim() || "",
@@ -204,44 +278,71 @@ export default function CreateProjectPage() {
         project_start_date: formData.project_start_date 
           ? new Date(formData.project_start_date).toISOString() 
           : null,
-        construction_start_date: formData.construction_start_date 
-          ? new Date(formData.construction_start_date).toISOString() 
-          : null,
+        construction_start_date: null, // Explicitly set to null as it's removed
         expected_completion_date: formData.expected_completion_date 
           ? new Date(formData.expected_completion_date).toISOString() 
           : null,
         approval_status: "pending",
       };
 
+      console.log("Sending payload to backend:", payload); // For debugging
+
       const response = await projectService.createProject(payload);
+      
+      console.log("Create project response:", response); // For debugging
       
       if (response.success && response.data) {
         // Store the ID and project_number returned from backend
         setCreatedProject({
           id: response.data.id,
           name: response.data.name,
-          project_number: response.data.project_number // Backend may return same or modified
+          project_number: response.data.project_number // Should match what user provided
         });
         setShowSuccessModal(true);
       } else {
         // Handle backend validation errors
+        let errorMessage = response.message || "Failed to create project";
+        
+        // Check if there are field-specific errors in response.data
         if (response.data && typeof response.data === 'object') {
-          const backendErrors: string[] = [];
+          const fieldErrors: string[] = [];
           Object.entries(response.data).forEach(([field, messages]) => {
             if (Array.isArray(messages)) {
-              backendErrors.push(`${field}: ${messages.join(', ')}`);
+              fieldErrors.push(`${field}: ${messages.join(', ')}`);
             } else if (typeof messages === 'string') {
-              backendErrors.push(`${field}: ${messages}`);
+              fieldErrors.push(`${field}: ${messages}`);
             }
           });
-          if (backendErrors.length > 0) {
-            throw new Error(backendErrors.join('\n'));
+          
+          if (fieldErrors.length > 0) {
+            errorMessage = fieldErrors.join('\n');
           }
         }
-        throw new Error(response.message || "Failed to create project");
+        
+        throw new Error(errorMessage);
       }
     } catch (err: any) {
-      setSubmitError(err.message || "An error occurred while creating the project");
+      console.error("Project creation error:", err);
+      
+      // Extract meaningful error message
+      let errorMessage = err.message || "An error occurred while creating the project";
+      
+      // Handle network errors
+      if (err.message?.includes('Network error') || err.status === 0) {
+        errorMessage = "Cannot connect to server. Please check your internet connection.";
+      }
+      
+      // Handle timeout errors
+      if (err.code === 'TIMEOUT') {
+        errorMessage = "Request timed out. Please try again.";
+      }
+      
+      // Handle 500 errors gracefully
+      if (err.status === 500 || errorMessage.includes('500')) {
+        errorMessage = "Server error occurred. Our team has been notified. Please try again later.";
+      }
+      
+      setSubmitError(errorMessage);
     } finally {
       setSubmitting(false);
     }
@@ -249,7 +350,13 @@ export default function CreateProjectPage() {
 
   const handleSuccessModalClose = () => {
     setShowSuccessModal(false);
-    navigate("/dashboard/projects");
+    // Navigate with success state
+    navigate("/dashboard/projects", { 
+      state: { 
+        success: true, 
+        message: `Project "${createdProject?.name}" created successfully!` 
+      } 
+    });
   };
 
   return (
@@ -292,8 +399,22 @@ export default function CreateProjectPage() {
           {submitError && (
             <div className="error-banner">
               <span>⚠️</span>
-              <p>{submitError}</p>
+              <div className="error-content">
+                <p>{submitError}</p>
+                {submitError.includes('Server error') && (
+                  <p className="error-help">Please try again in a few moments.</p>
+                )}
+              </div>
               <button className="close-btn" onClick={() => setSubmitError(null)}>×</button>
+            </div>
+          )}
+
+          {errors.date_validation && currentSection === "schedule" && (
+            <div className="error-banner">
+              <span>⚠️</span>
+              <div className="error-content">
+                <p>{errors.date_validation}</p>
+              </div>
             </div>
           )}
 
@@ -323,10 +444,10 @@ export default function CreateProjectPage() {
                     {errors.name && <span className="error-text">{errors.name}</span>}
                   </div>
 
-                  {/* Project Number - ADDED BACK */}
+                  {/* Project Number - REQUIRED field */}
                   <div className="form-group">
-                    <label htmlFor="project-number" className="form-label">
-                      Project Number/Reference
+                    <label htmlFor="project-number" className="form-label required">
+                      Project Number
                     </label>
                     <input
                       id="project-number"
@@ -338,7 +459,6 @@ export default function CreateProjectPage() {
                       placeholder="e.g., PROJ-2024-001"
                     />
                     {errors.project_number && <span className="error-text">{errors.project_number}</span>}
-                    <small className="form-note">Your internal project reference (optional)</small>
                   </div>
 
                   {/* Project Type */}
@@ -528,32 +648,14 @@ export default function CreateProjectPage() {
                       name="project_start_date"
                       value={formData.project_start_date || ""}
                       onChange={handleInputChange}
-                      className="form-input"
+                      className={`form-input ${errors.date_validation ? "error" : ""}`}
                     />
                   </div>
 
-                  {/* Construction Start Date */}
-                  <div className="form-group">
-                    <label htmlFor="construction-start-date" className="form-label">
-                      Construction Start Date
-                    </label>
-                    <input
-                      id="construction-start-date"
-                      type="date"
-                      name="construction_start_date"
-                      value={formData.construction_start_date || ""}
-                      onChange={handleInputChange}
-                      className={`form-input ${errors.construction_start_date ? "error" : ""}`}
-                    />
-                    {errors.construction_start_date && (
-                      <span className="error-text">{errors.construction_start_date}</span>
-                    )}
-                  </div>
-
-                  {/* Expected Completion */}
+                  {/* Expected Completion - REMOVED construction_start_date */}
                   <div className="form-group">
                     <label htmlFor="expected-completion" className="form-label">
-                      Expected Completion
+                      Expected Completion Date
                     </label>
                     <input
                       id="expected-completion"
@@ -561,10 +663,10 @@ export default function CreateProjectPage() {
                       name="expected_completion_date"
                       value={formData.expected_completion_date || ""}
                       onChange={handleInputChange}
-                      className={`form-input ${errors.expected_completion_date ? "error" : ""}`}
+                      className={`form-input ${errors.date_validation ? "error" : ""}`}
                     />
-                    {errors.expected_completion_date && (
-                      <span className="error-text">{errors.expected_completion_date}</span>
+                    {errors.date_validation && (
+                      <span className="error-text">{errors.date_validation}</span>
                     )}
                   </div>
                 </div>
@@ -584,10 +686,7 @@ export default function CreateProjectPage() {
                   <button
                     type="button"
                     className="btn btn-outline"
-                    onClick={() => {
-                      if (currentSection === "client") setCurrentSection("basic");
-                      if (currentSection === "schedule") setCurrentSection("client");
-                    }}
+                    onClick={handlePrevious}
                   >
                     ← Previous
                   </button>
@@ -596,12 +695,7 @@ export default function CreateProjectPage() {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={() => {
-                      if (validateSection()) {
-                        if (currentSection === "basic") setCurrentSection("client");
-                        if (currentSection === "client") setCurrentSection("schedule");
-                      }
-                    }}
+                    onClick={handleNext}
                   >
                     Next →
                   </button>

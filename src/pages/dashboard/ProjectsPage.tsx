@@ -8,7 +8,6 @@ import {
   Calendar,
   DollarSign,
   CheckCircle,
-  AlertCircle,
 } from "lucide-react";
 
 import { projectService, type Project } from "../../services/projectService";
@@ -43,7 +42,6 @@ const ProjectsPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [projects, setProjects] = useState<DisplayProject[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -132,7 +130,6 @@ const ProjectsPage: React.FC = () => {
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        setError(null);
         
         const response = await projectService.getProjects();
         
@@ -152,10 +149,12 @@ const ProjectsPage: React.FC = () => {
           
           setProjects(transformedProjects);
         } else {
-          setError(response.message || "Failed to load projects");
+          // Silent fail → show empty state instead of error
+          setProjects([]);
         }
-      } catch (err: any) {
-        setError(err.message || "An error occurred while fetching projects");
+      } catch (err) {
+        // Silent fail on network/auth/500/etc → show empty state
+        setProjects([]);
       } finally {
         setLoading(false);
       }
@@ -214,13 +213,6 @@ const ProjectsPage: React.FC = () => {
   return (
     <>
       <div className="projects-dashboard-pro">
-        {error && (
-          <div className="error-banner">
-            <AlertCircle size={24} />
-            <p>{error}</p>
-            <button className="close-btn" onClick={() => setError(null)}>×</button>
-          </div>
-        )}
 
         <div className="projects-header-pro">
           <div className="header-content">

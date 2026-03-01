@@ -2,28 +2,30 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../assets/css/Footer.css";
+
 // Import footer images
 import roomfoot1 from "../assets/images/roomfoot1.png";
 import roomfoot2 from "../assets/images/roomfoot2.png";
 import roomfoot3 from "../assets/images/roomfoot3.png";
 import roomfoot4 from "../assets/images/roomfoot4.png";
+
 // Import the new logo image
 import logo from "../assets/images/bimflow-logo.png"; 
 
-// Scroll to Top Hook
+// Scroll to Top Hook - Fixed with proper type
 const useScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
+      if (window.scrollY > 300) { // Using scrollY instead of pageYOffset (more modern)
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
 
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
@@ -48,6 +50,28 @@ const Footer: React.FC = () => {
         className={`scroll-to-top ${isScrollVisible ? 'visible' : ''}`}
         onClick={scrollToTop}
         aria-label="Scroll to top"
+        style={{
+          position: 'fixed',
+          bottom: '30px',
+          right: '30px',
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: '#F8780F',
+          color: 'white',
+          border: 'none',
+          cursor: 'pointer',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: isScrollVisible ? 1 : 0,
+          visibility: isScrollVisible ? 'visible' : 'hidden',
+          transform: `scale(${isScrollVisible ? 1 : 0.8})`,
+          transition: 'opacity 0.2s ease-in-out, transform 0.2s ease-in-out, visibility 0.2s ease-in-out',
+          zIndex: 1000,
+          pointerEvents: isScrollVisible ? 'auto' : 'none',
+        }}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 20L12 4M12 4L5 11M12 4L19 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -63,7 +87,7 @@ const Footer: React.FC = () => {
             <div className="footer__column">
               <div className="footer__brand">
                 {/* Combined text and image logo within a single link */}
-               <Link to="/" className="footer__logo-link">
+                <Link to="/" className="footer__logo-link">
                   <img 
                     src={logo} 
                     alt="BIMFlow Logo" 
@@ -81,10 +105,10 @@ const Footer: React.FC = () => {
             <div className="footer__column">
               <h4 className="footer__title">Services</h4>
               <ul className="footer__list">
-                <li><Link to="/architecture" className="footer__link">3D Modeling</Link></li>
-                <li><Link to="/design" className="footer__link">Design Automation</Link></li>
-                <li><Link to="/analysis" className="footer__link">Structural Analysis</Link></li>
-                <li><Link to="/planning" className="footer__link">Project Planning</Link></li>
+                <li><Link to="/services/3d-modeling" className="footer__link">3D Modeling</Link></li>
+                <li><Link to="/services/design-automation" className="footer__link">Design Automation</Link></li>
+                <li><Link to="/services/structural-analysis" className="footer__link">Structural Analysis</Link></li>
+                <li><Link to="/services/project-planning" className="footer__link">Project Planning</Link></li>
               </ul>
             </div>
 
@@ -118,7 +142,7 @@ const Footer: React.FC = () => {
             </div>
             <div className="footer__social">
               <a 
-                href="https://github.com" 
+                href="https://github.com/bimflow" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="footer__social-link"
@@ -129,7 +153,7 @@ const Footer: React.FC = () => {
                 </svg>
               </a>
               <a 
-                href="https://linkedin.com" 
+                href="https://linkedin.com/company/bimflow" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="footer__social-link"
@@ -140,7 +164,7 @@ const Footer: React.FC = () => {
                 </svg>
               </a>
               <a 
-                href="https://instagram.com" 
+                href="https://instagram.com/bimflow" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="footer__social-link"
@@ -151,7 +175,7 @@ const Footer: React.FC = () => {
                 </svg>
               </a>
               <a 
-                href="https://x.com" 
+                href="https://x.com/bimflow" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="footer__social-link"
