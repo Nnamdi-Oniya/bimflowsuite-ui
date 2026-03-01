@@ -179,11 +179,9 @@ const NotFoundPage: React.FC = () => {
           margin: "0 0 0.8rem",
         }}
       >
-        404
-      </h1>
-      <h2 style={{ fontSize: "2.5rem", margin: "0 0 1rem" }}>
         Page not found
-      </h2>
+      </h1>
+     
 
       <p style={{ fontSize: "1.15rem", marginBottom: "2.2rem" }}>
         Redirecting to the{" "}

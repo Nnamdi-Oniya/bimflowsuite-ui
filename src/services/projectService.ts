@@ -1,9 +1,9 @@
 import { apiClient, type ApiResponse, type ApiError } from './apiClient';
 
 export interface Project {
-  id: number;  // Backend generates this - NEVER send from frontend
+  id: number;  
   name: string;
-  project_number: string; // Client provides this - required
+  project_number: string; 
   description: string;
   phase: string;
   project_type: string;
@@ -23,7 +23,7 @@ export interface Project {
 
 export interface CreateProjectData {
   name: string;
-  project_number: string; // Client must provide this - required
+  project_number: string; 
   description: string;
   phase: string;
   project_type: string;
@@ -54,25 +54,25 @@ class ProjectService {
       };
 
       if (response.success) {
-        // Case 1: response.data is already an array
+      
         if (Array.isArray(response.data)) {
           result.success = true;
           result.data = response.data as Project[];
           result.message = response.message;
         }
-        // Case 2: response.data has a results property (pagination)
+        
         else if (response.data && typeof response.data === 'object' && 'results' in response.data) {
           result.success = true;
           result.data = response.data.results as Project[];
           result.message = response.message;
         }
-        // Case 3: response.data is a single object (wrap in array)
+       
         else if (response.data && typeof response.data === 'object' && 'id' in response.data) {
           result.success = true;
           result.data = [response.data] as Project[];
           result.message = response.message;
         }
-        // Case 4: response.data is something else
+        
         else {
           result.success = false;
           result.message = 'Unexpected API response structure';
@@ -83,8 +83,7 @@ class ProjectService {
       
       return result;
     } catch (error) {
-      // Handle errors thrown by apiClient
-      // If it's an ApiError, convert to our standard format
+    
       if (error && typeof error === 'object' && 'status' in error) {
         const apiError = error as ApiError;
         return {
@@ -130,22 +129,18 @@ class ProjectService {
 
   async createProject(data: CreateProjectData): Promise<ApiResponse<Project>> {
     try {
-      // IMPORTANT: Never send 'id' field - backend generates it
-      // But DO send project_number - client provides this
+  
       const response = await apiClient.post<Project>(`${this.base}/create/`, data);
       return response;
     } catch (error) {
-      // Handle errors thrown by apiClient
+     
       if (error && typeof error === 'object' && 'status' in error) {
         const apiError = error as ApiError;
-        
-        // Check if this is a validation error with field-specific messages
         if (apiError.errors && apiError.errors.length > 0) {
-          // Format validation errors into a readable message
           const errorMessages = apiError.errors.map(e => `${e.field}: ${e.messages.join(', ')}`).join('; ');
           return {
             success: false,
-            data: undefined, // Changed from null to undefined to match type
+            data: undefined, 
             message: errorMessages || apiError.message || 'Validation failed',
             status: apiError.status
           };
