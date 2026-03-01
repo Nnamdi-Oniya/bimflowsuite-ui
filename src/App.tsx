@@ -17,7 +17,7 @@ import ProjectsTestimonialsSection from "./components/ProjectsTestimonialsSectio
 import CTANewsSection from "./components/CTANewsSection";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ScrollToTop from "./components/ScrollToTop"; // Fixed import
+import ScrollToTop from "./components/ScrollToTop"; 
 
 import { useAuth } from "./contexts/AuthContext";
 import { usePerformance } from "./hooks/usePerformance";
