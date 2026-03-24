@@ -511,7 +511,7 @@ const BookDemoPage: React.FC = () => {
 
                   <div className="form-group">
                     <label htmlFor="additional_details" className="form-label">
-                      Additional Details <span className="optional-label">(optional)</span>
+                      Additional Details
                     </label>
                     <textarea
                       id="additional_details"

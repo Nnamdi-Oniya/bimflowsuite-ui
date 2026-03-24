@@ -146,18 +146,15 @@ const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/* Actions - always visible on desktop */}
+          {/* Desktop Actions */}
           <div className="actions actions--desktop">
             {isLoggedIn && user ? (
-              <>
-                <Link to="/dashboard" className="btn btn--primary">
-                  Dashboard
-                </Link>
-                <button className="btn btn--secondary" onClick={() => setModalOpen(true)}>
-                  Get Started
-                </button>
-              </>
+              // Logged in: show Dashboard only (no Get Started)
+              <Link to="/dashboard" className="btn btn--primary">
+                Dashboard
+              </Link>
             ) : (
+              // Not logged in: show Login + Get Started
               <>
                 <Link to="/login" className="btn btn--secondary">
                   Login
@@ -198,25 +195,16 @@ const Header: React.FC = () => {
 
             <div className="mobile-nav__actions">
               {isLoggedIn && user ? (
-                <>
-                  <Link
-                    to="/dashboard"
-                    className="btn btn--primary btn--block"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    className="btn btn--secondary btn--block"
-                    onClick={() => {
-                      setModalOpen(true);
-                      setMobileOpen(false);
-                    }}
-                  >
-                    Get Started
-                  </button>
-                </>
+                // Logged in: show Dashboard only (no Get Started)
+                <Link
+                  to="/dashboard"
+                  className="btn btn--primary btn--block"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Dashboard
+                </Link>
               ) : (
+                // Not logged in: show Login + Get Started
                 <>
                   <Link
                     to="/login"

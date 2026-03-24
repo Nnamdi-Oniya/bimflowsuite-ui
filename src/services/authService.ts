@@ -1,4 +1,3 @@
-// src/services/authService.ts
 import { apiClient, type ApiResponse } from './apiClient';
 import {
   BACKEND_CONFIG,
@@ -353,6 +352,12 @@ class AuthService {
       );
 
       if (response.success) {
+        try {
+          await apiClient.post(this.endpoints.auth.refresh, {
+            refresh: localStorage.getItem('refresh_token')
+          }).catch(() => {});
+        } catch (refreshError) {}
+
         return {
           success: true,
           data: response.data,
