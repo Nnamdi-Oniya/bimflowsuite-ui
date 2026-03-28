@@ -253,7 +253,7 @@ const AboutPage: React.FC = () => {
                 </button>
                 <button 
                   className="cta-btn cta-btn--secondary"
-                  onClick={() => window.open('https://github.com', '_blank')}
+                  onClick={() => window.open('https://github.com/Nnamdi-Oniya?tab=repositories', '_blank')}
                 >
                   View on GitHub
                 </button>

@@ -142,7 +142,7 @@ const Footer: React.FC = () => {
             </div>
             <div className="footer__social">
               <a 
-                href="https://github.com/bimflow" 
+                href="https://github.com/Nnamdi-Oniya?tab=repositories" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="footer__social-link"

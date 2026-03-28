@@ -1,6 +1,5 @@
-// src/pages/FeaturesPage.tsx (Updated: Contact Sales links to /book-demo)
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../assets/css/FeaturesPage.css";
 import featuresHero from "../assets/images/features-hero.jpg";
 import intentModeling from "../assets/images/intent-modeling.jpg";
@@ -8,7 +7,35 @@ import complianceCheck from "../assets/images/compliance-check.jpg";
 import multiAsset from "../assets/images/multi-asset.jpg";
 
 const FeaturesPage: React.FC = () => {
-  const [activeFeature, setActiveFeature] = useState<string>("intent");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const getFeatureFromHash = () => {
+    const hash = location.hash.replace("#", "");
+    return hash || "intent";
+  };
+
+  const [activeFeature, setActiveFeature] = React.useState<string>(getFeatureFromHash());
+
+  useEffect(() => {
+    setActiveFeature(getFeatureFromHash());
+  }, [location.hash]);
+
+  useEffect(() => {
+    if (!activeFeature) return;
+
+    const sectionId = `feature-${activeFeature}`;
+    const element = document.getElementById(sectionId);
+
+    if (element) {
+      setTimeout(() => {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
+  }, [activeFeature]);
 
   const features = [
     {
@@ -21,13 +48,13 @@ const FeaturesPage: React.FC = () => {
         "Natural language processing for project descriptions",
         "Instant IFC 4.3 compliant model generation",
         "Support for buildings, bridges, roads, and infrastructure",
-        "Real-time preview and adjustments"
+        "Real-time preview and adjustments",
       ],
       capabilities: [
         { name: "Language Understanding", value: 95 },
         { name: "Model Accuracy", value: 92 },
-        { name: "Generation Speed", value: 98 }
-      ]
+        { name: "Generation Speed", value: 98 },
+      ],
     },
     {
       id: "compliance",
@@ -39,13 +66,13 @@ const FeaturesPage: React.FC = () => {
         "Rule-based compliance engine with YAML/JSON packs",
         "Building codes and standards validation",
         "Real-time compliance scoring",
-        "Detailed violation reports with suggestions"
+        "Detailed violation reports with suggestions",
       ],
       capabilities: [
         { name: "Check Accuracy", value: 97 },
         { name: "Processing Speed", value: 99 },
-        { name: "Coverage", value: 94 }
-      ]
+        { name: "Coverage", value: 94 },
+      ],
     },
     {
       id: "multi-asset",
@@ -57,13 +84,13 @@ const FeaturesPage: React.FC = () => {
         "BuildingPack for residential and commercial structures",
         "BridgePack for span and load analysis",
         "RoadPack for alignment and corridor design",
-        "HighRisePack for tall building optimization"
+        "HighRisePack for tall building optimization",
       ],
       capabilities: [
         { name: "Asset Types", value: 100 },
         { name: "Interoperability", value: 96 },
-        { name: "Workflow Integration", value: 93 }
-      ]
+        { name: "Workflow Integration", value: 93 },
+      ],
     },
     {
       id: "analytics",
@@ -75,13 +102,13 @@ const FeaturesPage: React.FC = () => {
         "Automatic material quantity calculations",
         "Cost estimation and scheduling",
         "Performance analytics and optimization",
-        "Scenario comparison and what-if analysis"
+        "Scenario comparison and what-if analysis",
       ],
       capabilities: [
         { name: "Calculation Accuracy", value: 96 },
         { name: "Processing Time", value: 95 },
-        { name: "Insight Quality", value: 94 }
-      ]
+        { name: "Insight Quality", value: 94 },
+      ],
     },
     {
       id: "collaboration",
@@ -93,13 +120,13 @@ const FeaturesPage: React.FC = () => {
         "BCF integration for Revit and BlenderBIM",
         "Real-time commenting and markups",
         "Version control and change tracking",
-        "Multi-user simultaneous editing"
+        "Multi-user simultaneous editing",
       ],
       capabilities: [
         { name: "Team Coordination", value: 95 },
         { name: "File Compatibility", value: 98 },
-        { name: "Real-time Sync", value: 97 }
-      ]
+        { name: "Real-time Sync", value: 97 },
+      ],
     },
     {
       id: "open-source",
@@ -111,34 +138,39 @@ const FeaturesPage: React.FC = () => {
         "MIT licensed for commercial use",
         "Extensible API for custom integrations",
         "Community rule packs and templates",
-        "Transparent development process"
+        "Transparent development process",
       ],
       capabilities: [
         { name: "Customization", value: 100 },
         { name: "Community Support", value: 90 },
-        { name: "Documentation", value: 88 }
-      ]
-    }
+        { name: "Documentation", value: 88 },
+      ],
+    },
   ];
 
-  const currentFeature = features.find(f => f.id === activeFeature);
+  const handleFeatureClick = (featureId: string) => {
+    setActiveFeature(featureId);
+    navigate(`#${featureId}`, { replace: true });
+  };
+
+  const currentFeature = features.find((f) => f.id === activeFeature);
 
   return (
     <div className="features-page">
-      {/* Hero Section */}
-      <section 
-  className="features-hero"
-  style={{
-    backgroundImage: `linear-gradient(rgba(78, 68, 60, 0.6), rgba(42, 36, 32, 0.6)), url(${featuresHero})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center'
-  }}
->
-
+      <section
+        className="features-hero"
+        style={{
+          backgroundImage: `linear-gradient(rgba(78, 68, 60, 0.6), rgba(42, 36, 32, 0.6)), url(${featuresHero})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="features-hero__overlay"></div>
         <div className="features-hero__content">
           <h1>Powerful Features for Modern Construction</h1>
-          <p>Discover how BIMFlow Suite transforms digital construction with advanced automation, compliance, and collaboration tools built for the future.</p>
+          <p>
+            Discover how BIMFlow Suite transforms digital construction with advanced automation, compliance, and collaboration tools built for the future.
+          </p>
           <div className="hero-stats">
             <div className="stat">
               <span className="stat-number">100%</span>
@@ -156,15 +188,14 @@ const FeaturesPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Features Navigation */}
       <section className="features-nav">
         <div className="container">
           <div className="features-grid">
             {features.map((feature) => (
               <button
                 key={feature.id}
-                className={`feature-tab ${activeFeature === feature.id ? 'feature-tab--active' : ''}`}
-                onClick={() => setActiveFeature(feature.id)}
+                className={`feature-tab ${activeFeature === feature.id ? "feature-tab--active" : ""}`}
+                onClick={() => handleFeatureClick(feature.id)}
               >
                 <span className="feature-tab__icon">{feature.icon}</span>
                 <div className="feature-tab__content">
@@ -177,9 +208,8 @@ const FeaturesPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Feature Details */}
       {currentFeature && (
-        <section className="feature-details">
+        <section className="feature-details" id={`feature-${currentFeature.id}`}>
           <div className="container">
             <div className="feature-details__content">
               <div className="feature-details__visual">
@@ -190,7 +220,7 @@ const FeaturesPage: React.FC = () => {
                     <span>{currentFeature.title}</span>
                   </div>
                 </div>
-                
+
                 <div className="capabilities">
                   <h4>Performance Metrics</h4>
                   {currentFeature.capabilities.map((capability, index) => (
@@ -200,8 +230,8 @@ const FeaturesPage: React.FC = () => {
                         <span className="capability__value">{capability.value}%</span>
                       </div>
                       <div className="capability__bar">
-                        <div 
-                          className="capability__fill" 
+                        <div
+                          className="capability__fill"
                           style={{ width: `${capability.value}%` }}
                         ></div>
                       </div>
@@ -213,7 +243,7 @@ const FeaturesPage: React.FC = () => {
               <div className="feature-details__info">
                 <h2>{currentFeature.title}</h2>
                 <p className="feature-description">{currentFeature.description}</p>
-                
+
                 <div className="feature-highlights">
                   <h4>Key Capabilities</h4>
                   <ul className="highlights-list">
@@ -227,11 +257,11 @@ const FeaturesPage: React.FC = () => {
                 </div>
 
                 <div className="feature-actions">
-                  <Link to="/demo" className="btn btn--primary">
-                    Try Live Demo
-                  </Link>
-                  <Link to="/generate-model" className="btn btn--secondary">
+                  <Link to="/project-generate" className="btn btn--primary">
                     Generate Model
+                  </Link>
+                  <Link to="/demo" className="btn btn--secondary">
+                    Try Live Demo
                   </Link>
                 </div>
               </div>
@@ -240,14 +270,15 @@ const FeaturesPage: React.FC = () => {
         </section>
       )}
 
-      {/* CTA Section */}
       <section className="features-cta">
         <div className="container">
           <div className="cta-content">
             <h2>Ready to Transform Your Construction Workflow?</h2>
-            <p>Join thousands of architects, engineers, and contractors already using BIMFlow Suite to streamline their digital construction processes.</p>
+            <p>
+              Join thousands of architects, engineers, and contractors already using BIMFlow Suite to streamline their digital construction processes.
+            </p>
             <div className="cta-actions">
-              <Link to="/generate-model" className="btn btn--primary btn--large">
+              <Link to="/project-generate" className="btn btn--primary btn--large">
                 Start Your First Project
               </Link>
               <Link to="/book-demo" className="btn btn--secondary">

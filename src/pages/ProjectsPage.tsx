@@ -222,9 +222,9 @@ const ProjectsPage: React.FC = () => {
                 </button>
                 <button 
                   className="cta-btn cta-btn--secondary"
-                  onClick={() => navigate('/generate-model')}
+                  onClick={() => navigate('/project-generate')}
                 >
-                  Generate Model
+                  Create Project
                 </button>
               </div>
             </div>

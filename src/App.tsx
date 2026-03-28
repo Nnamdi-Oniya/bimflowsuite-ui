@@ -17,7 +17,7 @@ import ProjectsTestimonialsSection from "./components/ProjectsTestimonialsSectio
 import CTANewsSection from "./components/CTANewsSection";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ScrollToTop from "./components/ScrollToTop"; // Fixed import
+import ScrollToTop from "./components/ScrollToTop"; 
 
 import { useAuth } from "./contexts/AuthContext";
 import { usePerformance } from "./hooks/usePerformance";
@@ -179,11 +179,9 @@ const NotFoundPage: React.FC = () => {
           margin: "0 0 0.8rem",
         }}
       >
-        404
-      </h1>
-      <h2 style={{ fontSize: "2.5rem", margin: "0 0 1rem" }}>
         Page not found
-      </h2>
+      </h1>
+     
 
       <p style={{ fontSize: "1.15rem", marginBottom: "2.2rem" }}>
         Redirecting to the{" "}

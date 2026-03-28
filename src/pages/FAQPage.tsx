@@ -213,7 +213,7 @@ const FAQPage: React.FC = () => {
                 </button>
                 <button 
                   className="cta-btn cta-btn--secondary"
-                  onClick={() => navigate('/contact')}
+                  onClick={() => navigate('/book-demo')}
                 >
                   Contact Sales
                 </button>

@@ -1,6 +1,5 @@
-// src/pages/dashboard/SettingsPage.tsx
 import React, { useState, useEffect } from "react";
-import { Settings as SettingsIcon, User, Palette, Key, FileCode } from "lucide-react";
+import { Settings as SettingsIcon, User, Palette, Key, FileCode, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { authService } from "../../services/authService";
 import DashboardSuccessModal from "../../components/DashboardSuccessModal";
@@ -14,8 +13,16 @@ interface PasswordChangeData {
   confirmPassword: string;
 }
 
+interface PasswordStrength {
+  hasUpperCase: boolean;
+  hasLowerCase: boolean;
+  hasNumber: boolean;
+  hasSpecial: boolean;
+  isLongEnough: boolean;
+}
+
 const SettingsPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [activeTab, setActiveTab] = useState('general');
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme') as Theme;
@@ -24,7 +31,6 @@ const SettingsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Password change state
   const [passwordData, setPasswordData] = useState<PasswordChangeData>({
     currentPassword: '',
     newPassword: '',
@@ -37,13 +43,12 @@ const SettingsPage: React.FC = () => {
     confirm: false
   });
 
-  // Modal states
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successModalTitle, setSuccessModalTitle] = useState('');
   const [successModalMessage, setSuccessModalMessage] = useState('');
   const [updatedFieldsList, setUpdatedFieldsList] = useState<string[]>([]);
+  const [justSubmitted, setJustSubmitted] = useState(false);
 
-  // Apply theme on mount and when theme changes
   useEffect(() => {
     const applyTheme = (selectedTheme: Theme) => {
       const root = document.documentElement;
@@ -73,6 +78,10 @@ const SettingsPage: React.FC = () => {
     }
   }, [theme]);
 
+  useEffect(() => {
+    setJustSubmitted(false);
+  }, [activeTab]);
+
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
     setSuccessModalTitle('Theme Updated! 🎨');
@@ -88,7 +97,10 @@ const SettingsPage: React.FC = () => {
     if (passwordErrors[name as keyof PasswordChangeData]) {
       setPasswordErrors(prev => ({ ...prev, [name]: undefined }));
     }
-    setError(null);
+    
+    if (error) {
+      setError(null);
+    }
   };
 
   const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
@@ -106,6 +118,11 @@ const SettingsPage: React.FC = () => {
       errors.newPassword = 'New password is required';
     } else if (passwordData.newPassword.length < 8) {
       errors.newPassword = 'Password must be at least 8 characters';
+    } else {
+      const strength = checkPasswordStrength(passwordData.newPassword);
+      if (!strength.hasUpperCase || !strength.hasLowerCase || !strength.hasNumber || !strength.hasSpecial) {
+        errors.newPassword = 'Password must meet all requirements below';
+      }
     }
 
     if (!passwordData.confirmPassword) {
@@ -141,7 +158,8 @@ const SettingsPage: React.FC = () => {
       });
 
       if (response.success) {
-        // Clear form
+        await refreshUser();
+        
         setPasswordData({
           currentPassword: '',
           newPassword: '',
@@ -149,7 +167,14 @@ const SettingsPage: React.FC = () => {
         });
         setPasswordErrors({});
         
-        // Show success modal
+        setShowPassword({
+          current: false,
+          new: false,
+          confirm: false
+        });
+        
+        setJustSubmitted(true);
+        
         setSuccessModalTitle('Password Updated! 🔐');
         setSuccessModalMessage('Your password has been changed successfully.');
         setUpdatedFieldsList(['password']);
@@ -215,16 +240,37 @@ const SettingsPage: React.FC = () => {
     return user.username || "User";
   };
 
-  const checkPasswordStrength = (password: string): { hasUpperCase: boolean; hasLowerCase: boolean; hasNumber: boolean; hasSpecial: boolean } => {
+  const checkPasswordStrength = (password: string): PasswordStrength => {
     return {
       hasUpperCase: /[A-Z]/.test(password),
       hasLowerCase: /[a-z]/.test(password),
       hasNumber: /[0-9]/.test(password),
-      hasSpecial: /[!@#$%^&*]/.test(password)
+      hasSpecial: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+      isLongEnough: password.length >= 8
     };
   };
 
   const strength = checkPasswordStrength(passwordData.newPassword);
+  
+  const getPasswordStrengthPercentage = (): number => {
+    const requirements = [
+      strength.isLongEnough,
+      strength.hasUpperCase,
+      strength.hasLowerCase,
+      strength.hasNumber,
+      strength.hasSpecial
+    ];
+    const metCount = requirements.filter(Boolean).length;
+    return (metCount / requirements.length) * 100;
+  };
+
+  const getPasswordStrengthLabel = (): { text: string; color: string } => {
+    const percentage = getPasswordStrengthPercentage();
+    if (percentage === 100) return { text: 'Strong', color: '#10b981' };
+    if (percentage >= 60) return { text: 'Medium', color: '#f59e0b' };
+    if (percentage > 0) return { text: 'Weak', color: '#ef4444' };
+    return { text: 'Enter password', color: '#6b7280' };
+  };
 
   return (
     <>
@@ -254,7 +300,6 @@ const SettingsPage: React.FC = () => {
           </div>
 
           <div className="settings-content">
-            {/* General Settings Tab */}
             {activeTab === 'general' && (
               <div className="tab-panel">
                 <h2>
@@ -308,7 +353,6 @@ const SettingsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Account Settings Tab */}
             {activeTab === 'account' && (
               <div className="tab-panel">
                 <h2>
@@ -357,7 +401,6 @@ const SettingsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Password Change Tab */}
             {activeTab === 'password' && (
               <div className="tab-panel">
                 <h2>
@@ -374,7 +417,7 @@ const SettingsPage: React.FC = () => {
                   </div>
                 )}
 
-                <form onSubmit={handlePasswordChange}>
+                <form onSubmit={handlePasswordChange} key={justSubmitted ? 'submitted' : 'active'}>
                   <div className="setting-group">
                     <label htmlFor="currentPassword">Current Password</label>
                     <div className="password-input-wrapper">
@@ -387,6 +430,7 @@ const SettingsPage: React.FC = () => {
                         placeholder="Enter your current password"
                         className={passwordErrors.currentPassword ? 'error' : ''}
                         disabled={isLoading}
+                        autoComplete="current-password"
                       />
                       <button
                         type="button"
@@ -395,7 +439,7 @@ const SettingsPage: React.FC = () => {
                         aria-label={showPassword.current ? "Hide password" : "Show password"}
                         disabled={isLoading}
                       >
-                        {showPassword.current ? "👁️" : "👁️‍🗨️"}
+                        {showPassword.current ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
                     {passwordErrors.currentPassword && (
@@ -415,6 +459,7 @@ const SettingsPage: React.FC = () => {
                         placeholder="Enter new password"
                         className={passwordErrors.newPassword ? 'error' : ''}
                         disabled={isLoading}
+                        autoComplete="new-password"
                       />
                       <button
                         type="button"
@@ -423,13 +468,30 @@ const SettingsPage: React.FC = () => {
                         aria-label={showPassword.new ? "Hide password" : "Show password"}
                         disabled={isLoading}
                       >
-                        {showPassword.new ? "👁️" : "👁️‍🗨️"}
+                        {showPassword.new ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
+                    
+                    {passwordData.newPassword && (
+                      <div className="password-strength-meter">
+                        <div 
+                          className="strength-bar"
+                          style={{ 
+                            width: `${getPasswordStrengthPercentage()}%`,
+                            backgroundColor: getPasswordStrengthLabel().color
+                          }}
+                        />
+                      </div>
+                    )}
+                    
                     {passwordErrors.newPassword ? (
                       <span className="field-error">{passwordErrors.newPassword}</span>
                     ) : (
-                      <small className="field-note">Must be at least 8 characters</small>
+                      passwordData.newPassword && (
+                        <span className="password-strength-label" style={{ color: getPasswordStrengthLabel().color }}>
+                          Password strength: {getPasswordStrengthLabel().text}
+                        </span>
+                      )
                     )}
                   </div>
 
@@ -445,6 +507,7 @@ const SettingsPage: React.FC = () => {
                         placeholder="Confirm your new password"
                         className={passwordErrors.confirmPassword ? 'error' : ''}
                         disabled={isLoading}
+                        autoComplete="new-password"
                       />
                       <button
                         type="button"
@@ -453,31 +516,39 @@ const SettingsPage: React.FC = () => {
                         aria-label={showPassword.confirm ? "Hide password" : "Show password"}
                         disabled={isLoading}
                       >
-                        {showPassword.confirm ? "👁️" : "👁️‍🗨️"}
+                        {showPassword.confirm ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
                     {passwordErrors.confirmPassword && (
                       <span className="field-error">{passwordErrors.confirmPassword}</span>
+                    )}
+                    {passwordData.confirmPassword && passwordData.newPassword === passwordData.confirmPassword && passwordData.newPassword && (
+                      <span className="field-success">✓ Passwords match</span>
                     )}
                   </div>
 
                   <div className="password-requirements">
                     <h4>Password Requirements:</h4>
                     <ul>
-                      <li className={passwordData.newPassword.length >= 8 ? 'met' : ''}>
-                        • At least 8 characters
+                      <li className={strength.isLongEnough ? 'met' : ''}>
+                        <span className="requirement-icon">{strength.isLongEnough ? '✓' : '•'}</span>
+                        At least 8 characters
                       </li>
                       <li className={strength.hasUpperCase ? 'met' : ''}>
-                        • At least one uppercase letter
+                        <span className="requirement-icon">{strength.hasUpperCase ? '✓' : '•'}</span>
+                        At least one uppercase letter
                       </li>
                       <li className={strength.hasLowerCase ? 'met' : ''}>
-                        • At least one lowercase letter
+                        <span className="requirement-icon">{strength.hasLowerCase ? '✓' : '•'}</span>
+                        At least one lowercase letter
                       </li>
                       <li className={strength.hasNumber ? 'met' : ''}>
-                        • At least one number
+                        <span className="requirement-icon">{strength.hasNumber ? '✓' : '•'}</span>
+                        At least one number
                       </li>
                       <li className={strength.hasSpecial ? 'met' : ''}>
-                        • At least one special character (!@#$%^&*)
+                        <span className="requirement-icon">{strength.hasSpecial ? '✓' : '•'}</span>
+                        At least one special character (!@#$%^&*)
                       </li>
                     </ul>
                   </div>
@@ -485,7 +556,7 @@ const SettingsPage: React.FC = () => {
                   <button 
                     type="submit" 
                     className="save-btn"
-                    disabled={isLoading}
+                    disabled={isLoading || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
                   >
                     {isLoading ? 'Updating Password...' : 'Update Password'}
                   </button>
@@ -493,7 +564,6 @@ const SettingsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Rule Packs Tab */}
             {activeTab === 'rules' && (
               <div className="tab-panel">
                 <h2>
@@ -531,7 +601,6 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Success Modal */}
       <DashboardSuccessModal
         isOpen={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}

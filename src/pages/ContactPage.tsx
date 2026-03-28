@@ -49,25 +49,6 @@ const ContactPage: React.FC = () => {
     }
   ];
 
-  const faqs = [
-    {
-      question: "Is BIMFlow Suite really free?",
-      answer: "Yes! BIMFlow Suite is 100% open-source and free to use. No hidden costs, no premium tiers. We believe in democratizing BIM technology for everyone."
-    },
-    {
-      question: "What file formats do you support?",
-      answer: "We support IFC 4.0 and IFC 4.3 for import/export, along with BCF for issue validation. We're working on adding support for Revit and other proprietary formats."
-    },
-    {
-      question: "Can I use this for commercial projects?",
-      answer: "Absolutely! BIMFlow Suite is licensed under MIT, allowing both personal and commercial use without restrictions."
-    },
-    {
-      question: "Do you offer enterprise support?",
-      answer: "Yes, we offer dedicated enterprise support packages including SLAs, custom integrations, and training. Contact us for details."
-    }
-  ];
-
   return (
     <div className="app-container">
      
@@ -223,26 +204,6 @@ const ContactPage: React.FC = () => {
                     Send Message
                   </button>
                 </form>
-              </div>
-            </div>
-          </section>
-
-          {/* FAQs */}
-          <section className="faq-section">
-            <div className="section-container">
-              <div className="section-header">
-                <h2 className="section-title">Frequently Asked Questions</h2>
-                <p className="section-subtitle">
-                  Quick answers to common questions
-                </p>
-              </div>
-              <div className="faq-grid">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="faq-item">
-                    <h3 className="faq-question">{faq.question}</h3>
-                    <p className="faq-answer">{faq.answer}</p>
-                  </div>
-                ))}
               </div>
             </div>
           </section>
